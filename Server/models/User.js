@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
     {
-        name: {
+        firstName: {
+            type: String,
+            required: true,
+            min: 2,
+            max: 100,
+        },
+        lastName: {
             type: String,
             required: true,
             min: 2,
@@ -10,7 +16,13 @@ const UserSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: true,
+            required: false,
+            max: 50,
+            unique: true,
+        },
+        phoneNumber: {
+            type: String,
+            required: false,
             max: 50,
             unique: true,
         },
@@ -19,16 +31,17 @@ const UserSchema = new mongoose.Schema(
             required: true,
             min: 5,
         },
+        picturePath:{
+            type: String,
+            default: "",
+        },
         city: String,
-        state: String,
-        country: String,
         occupation: String,
-        phoneNumber: String,
         transactions: Array,
         role: {
             type: String,
-            enum: ["user", "admin", "superadmin"],
-            default: "admin",
+            enum: ["user", "admin"],
+            default: "user",
         },
     },
     { timestamps: true }
