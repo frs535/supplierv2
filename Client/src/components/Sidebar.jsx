@@ -211,7 +211,7 @@ const Sidebar = ({
                                     fontSize="0.9rem"
                                     sx={{ color: theme.palette.secondary[100] }}
                                 >
-                                    {user.name}
+                                    {user.firstName}
                                 </Typography>
                                 <Typography
                                     fontSize="0.8rem"
@@ -225,6 +225,7 @@ const Sidebar = ({
                                     color: theme.palette.secondary[300],
                                     fontSize: "25px ",
                                 }}
+
                             />
                         </FlexBetween>
                     </Box>

@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import OverallStat from "../models/OverallStat.js";
 import Transaction from "../models/Transaction.js";
+import Profile from "../models/Profile.js";
 
 export const getUser = async (req, res) => {
     try {
@@ -14,6 +15,58 @@ export const getUser = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
+
+export const getProfile = async (req, res) =>{
+  try {
+      const {id } = req.params;
+      const profile = await Profile.findOne({userId:req.user.id});
+      res.status(200).json(profile);
+  }
+  catch (error){
+      res.status(404).json({message: error.message});
+  }
+};
+
+export const postProfile = async (req, res)=>{
+    try {
+        const {
+            userId,
+            companyName,
+            phoneNumber,
+            email,
+            deliveryAddress,
+            managerName,
+            managerPhone,
+            managerEmail,
+            managerPicturePath,
+        } = req.body;
+
+        const profile = await Profile.findOne({userId: userId});
+        if (profile!=null)
+            await Profile.deleteOne( { "_id" : profile._id } )
+
+        const newProfile = new Profile(
+        {
+            userId,
+            companyName,
+            phoneNumber,
+            email,
+            deliveryAddress,
+            managerName,
+            managerPhone,
+            managerEmail,
+            managerPicturePath
+        });
+
+        const savedProfile = await newProfile.save();
+
+        res.status(200).json(savedProfile);
+    }
+    catch (error)
+    {
+        res.stat(400).json({message: error.message});
+    }
+}
 
 export const getDashboardStats = async (req, res) => {
     try {

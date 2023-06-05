@@ -21,8 +21,8 @@ const registerSchema = yup.object().shape({
     lastName: yup.string().required("required"),
     email: yup.string().email("invalid email").required("required"),
     password: yup.string().required("required"),
-    city: yup.string().required("required"),
-    occupation: yup.string().required("required"),
+    //city: yup.string().required("required"),
+    //occupation: yup.string().required("required"),
     picture: yup.string().required("required"),
 });
 
@@ -37,8 +37,8 @@ const initialValuesRegister = {
     email: "",
     phoneNumber: "",
     password: "",
-    city: "",
-    occupation: "",
+    //city: "",
+    //occupation: "",
     picture: "",
 };
 
@@ -92,7 +92,7 @@ const LoginForm = () => {
             return;
         }
 
-        onSubmitProps.resetForm();
+        //onSubmitProps.resetForm();
         if (loggedIn) {
             dispatch(
                 setLogin({
@@ -158,28 +158,28 @@ const LoginForm = () => {
                                     helperText={touched.lastName && errors.lastName}
                                     sx={{ gridColumn: "span 2" }}
                                 />
-                                <TextField
-                                    label="City"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.city}
-                                    name="city"
-                                    error={Boolean(touched.city) && Boolean(errors.city)}
-                                    helperText={touched.city && errors.city}
-                                    sx={{ gridColumn: "span 4" }}
-                                />
-                                <TextField
-                                    label="Occupation"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.occupation}
-                                    name="occupation"
-                                    error={
-                                        Boolean(touched.occupation) && Boolean(errors.occupation)
-                                    }
-                                    helperText={touched.occupation && errors.occupation}
-                                    sx={{ gridColumn: "span 4" }}
-                                />
+                                {/*<TextField*/}
+                                {/*    label="City"*/}
+                                {/*    onBlur={handleBlur}*/}
+                                {/*    onChange={handleChange}*/}
+                                {/*    value={values.city}*/}
+                                {/*    name="city"*/}
+                                {/*    error={Boolean(touched.city) && Boolean(errors.city)}*/}
+                                {/*    helperText={touched.city && errors.city}*/}
+                                {/*    sx={{ gridColumn: "span 4" }}*/}
+                                {/*/>*/}
+                                {/*<TextField*/}
+                                {/*    label="Occupation"*/}
+                                {/*    onBlur={handleBlur}*/}
+                                {/*    onChange={handleChange}*/}
+                                {/*    value={values.occupation}*/}
+                                {/*    name="occupation"*/}
+                                {/*    error={*/}
+                                {/*        Boolean(touched.occupation) && Boolean(errors.occupation)*/}
+                                {/*    }*/}
+                                {/*    helperText={touched.occupation && errors.occupation}*/}
+                                {/*    sx={{ gridColumn: "span 4" }}*/}
+                                {/*/>*/}
                                 <Box
                                     gridColumn="span 4"
                                     border={`1px solid ${palette.neutral.medium}`}
