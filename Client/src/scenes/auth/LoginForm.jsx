@@ -65,7 +65,7 @@ const LoginForm = () => {
         formData.append("picturePath", values.picture.name);
 
         const savedUserResponse = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/auth/register`,
+            `${process.env.REACT_APP_BASE_URL}auth/register`,
             {
                 method: "POST",
                 body: formData,
@@ -80,7 +80,7 @@ const LoginForm = () => {
     };
 
     const login = async (values, onSubmitProps) => {
-        const loggedInResponse = await fetch( `${process.env.REACT_APP_BASE_URL}/auth/login`, {
+        const loggedInResponse = await fetch( `${process.env.REACT_APP_BASE_URL}auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),
@@ -92,7 +92,7 @@ const LoginForm = () => {
             return;
         }
 
-        //onSubmitProps.resetForm();
+        onSubmitProps.resetForm();
         if (loggedIn) {
             dispatch(
                 setLogin({

@@ -1,7 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: process.env.REACT_APP_BASE_URL,
+        prepareHeaders: (headers, { getState })=>{
+            const state = getState();
+            if (state){
+                headers.set('authorization', `Bearer ${state.token}`)
+                return headers
+            }
+        }
+    }),
     reducerPath: "adminApi",
     tagTypes: [
         "User",
@@ -17,8 +26,6 @@ export const api = createApi({
         getProfile: build.query({
             query: (id) => `general/profile/${id}`,
             providesTags: ["Profile"],
-            //const token = useSelector((state) => state.token);
-            //headers: { Authorization: `Bearer ${token}` },
         }),
         getProducts: build.query({
             query: () => "client/products",

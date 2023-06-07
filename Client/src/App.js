@@ -1,4 +1,4 @@
-import {CssBaseline, ThemeProvider} from "@mui/material";
+import {CssBaseline, Switch, ThemeProvider} from "@mui/material";
 import {createTheme} from "@mui/material/styles";
 import {useSelector} from "react-redux";
 import {themeSettings} from "./theme";
@@ -32,6 +32,7 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline/>
             <Routes>
+                {/*<Switch></Switch>*/}
                 <Route path="/" element={user=== null ? <Login /> : <Navigate to="/dashboard" replace/>} />
                 <Route element={<Layout/>}>
                     <Route path="/dashboard"  element={user != null? <Dashboard /> : <Navigate to="/" replace/>}/>
