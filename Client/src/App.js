@@ -38,7 +38,7 @@ function App() {
                     <Route path="/dashboard"  element={user != null? <Dashboard /> : <Navigate to="/" replace/>}/>
                     <Route path="/profile" element={user != null? <Profile /> : <Navigate to="/" replace/> } />
                       {/*element={mode.userId != null? <Dashboard /> : <Navigate to="/" replace/>}*/}
-                      {/*<Route path="/products" element={mode.userId != null? <Products /> : <Navigate to="/" replace/>}  />*/}
+                    <Route path="/products" element={user != null? <Products /> : <Navigate to="/" replace/>}  />
                       {/*<Route path="/customers" element={mode.userId != null? <Customers /> : <Navigate to="/" replace/>} />*/}
                       {/*<Route path="/transactions" element={mode.userId != null? <Transactions/> : <Navigate to="/" replace/>}/>*/}
                       {/*<Route path="/overview" element={mode.userId != null? <Overview /> : <Navigate to="/" replace/>} />*/}

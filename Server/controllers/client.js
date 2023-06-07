@@ -2,6 +2,7 @@ import Product from "../models/Product.js";
 import ProductStat from "../models/ProductStat.js";
 import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
+import Catalog from "../models/Catalog.js";
 
 export const getProducts = async (req, res) => {
     try {
@@ -24,6 +25,93 @@ export const getProducts = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
+
+export  const patchProduct = async (req, res) => {
+    try {
+        req.body.map(async (product)=>{
+
+            const imagesPaths = product.imagesPath != null? product.map((paths)=>{
+                return {path, bigPath} = paths;
+            }): null;
+            const {
+                id,
+                code,
+                name,
+                unit,
+                quantity,
+                price,
+                description,
+                category,
+                rating,
+                factory,
+                group,
+            } = product;
+
+            const foundProduct = Product.findOne({id: id})
+            if(!foundProduct)
+                Product.deleteOne(foundProduct);
+
+            const newProduct = new Product({
+                id,
+                code,
+                name,
+                unit,
+                quantity,
+                price,
+                description,
+                category,
+                rating,
+                factory,
+                group,
+                imagesPath: imagesPaths
+            });
+            const savednewProduct = await newProduct.save();
+        });
+
+        res.status(200).json({message: 'successful'})
+    }
+    catch (error){
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getCatalogs = async  (req, res)=>{
+    try {
+        const catalogs = await Catalog.find();
+
+        res.status(200).json(catalogs);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+export const patchCatalog = async (req, res)=>{
+    try {
+        req.body.child.map(async (catalog)=>{
+
+            const {
+                id,
+                name,
+                child,
+            } = catalog;
+
+            const foundCatalog = Catalog.findOne({id: id})
+            if(!foundCatalog)
+                Catalog.deleteOne(foundCatalog);
+
+            const newCatalog= new Catalog({
+                id,
+                name,
+                child,
+            });
+            const savedCatalog = await newCatalog.save();
+        });
+
+        res.status(200).json({message: 'successful'})
+    }
+    catch (error){
+        res.status(404).json({ message: error.message });
+    }
+}
 
 export const getCustomers = async (req, res) => {
     try {
