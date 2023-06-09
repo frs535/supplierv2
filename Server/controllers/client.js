@@ -6,21 +6,24 @@ import Catalog from "../models/Catalog.js";
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
 
-        const productsWithStats = await Promise.all(
-            products.map(async (product) => {
-                const stat = await ProductStat.find({
-                    productId: product._id,
-                });
-                return {
-                    ...product._doc,
-                    stat,
-                };
-            })
-        );
+        const { id } = req.query;
+        const products = id? await Product.find({"searchId" : {$regex : id}}) : await Product.find();
 
-        res.status(200).json(productsWithStats);
+        //Product.find({"username" : {$regex : "son"});
+        // const productsWithStats = await Promise.all(
+        //     products.map(async (product) => {
+        //         const stat = await ProductStat.find({
+        //             productId: product._id,
+        //         });
+        //         return {
+        //             ...product._doc,
+        //             stat,
+        //         };
+        //     })
+        // );
+
+        res.status(200).json(products);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -28,47 +31,11 @@ export const getProducts = async (req, res) => {
 
 export  const patchProduct = async (req, res) => {
     try {
-        req.body.map(async (product)=>{
 
-            const imagesPaths = product.imagesPath != null? product.map((paths)=>{
-                return {path, bigPath} = paths;
-            }): null;
-            const {
-                id,
-                code,
-                name,
-                unit,
-                quantity,
-                price,
-                description,
-                category,
-                rating,
-                factory,
-                group,
-            } = product;
+        await Product.deleteMany();
+        const savedProduct = await Product.insertMany(req.body);
 
-            const foundProduct = Product.findOne({id: id})
-            if(!foundProduct)
-                Product.deleteOne(foundProduct);
-
-            const newProduct = new Product({
-                id,
-                code,
-                name,
-                unit,
-                quantity,
-                price,
-                description,
-                category,
-                rating,
-                factory,
-                group,
-                imagesPath: imagesPaths
-            });
-            const savednewProduct = await newProduct.save();
-        });
-
-        res.status(200).json({message: 'successful'})
+        res.status(200).json({savedProduct: savedProduct.length})
     }
     catch (error){
         res.status(404).json({ message: error.message });
@@ -86,10 +53,11 @@ export const getCatalogs = async  (req, res)=>{
 }
 export const patchCatalog = async (req, res)=>{
     try {
-        req.body.child.map(async (catalog)=>{
+        req.body.map(async (catalog)=>{
 
             const {
                 id,
+                code,
                 name,
                 child,
             } = catalog;
@@ -100,6 +68,7 @@ export const patchCatalog = async (req, res)=>{
 
             const newCatalog= new Catalog({
                 id,
+                code,
                 name,
                 child,
             });

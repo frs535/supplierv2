@@ -8,16 +8,60 @@ const ProductSchema = new mongoose.Schema({
         min: 32,
         unique: true,
     },
-    code:String,
+    article:String,
     name: String,
     unit:String,
-    quantity: Number,
-    price: Number,
+    unitReport: {
+        type: String,
+        default: ""
+    },
+    quantity: {
+        type: Number,
+        default:0
+    },
+    price: {
+        type:Number,
+        default: 0
+    },
+    priceReport:{
+            type: Number,
+            default:0
+    },
+    currency:{
+        type: String,
+        default: "RUB",
+    },
     description: String,
     category: String,
-    rating: Number,
-    factory: Number,
+    rating: {
+        type: Number,
+        default: 0
+    },
+    factory: {
+        type: String,
+        default: "",
+    },
     group: String,
+    weight:{
+        type:Number,
+        default: 0
+    },
+    length:{
+        type:Number,
+        default: 0
+    },
+    volume:{
+        type: Number,
+        default:0
+        },
+    area:{
+        type: Number,
+        default:0
+    },
+    searchId:{
+        type:String,
+        default:""
+    },
     imagesPath: [
         {
             path: {
@@ -28,6 +72,7 @@ const ProductSchema = new mongoose.Schema({
                 type: String,
                 default:"",
             },
+            default: []
         },
         ],
 },

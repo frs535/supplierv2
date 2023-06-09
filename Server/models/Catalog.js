@@ -8,7 +8,14 @@ const CatalogSchema = new mongoose.Schema({
         min: 32,
         unique: true,
     },
-    name: String,
+    code: {
+        type: String,
+        default: ""
+    },
+    name:{
+        type: String,
+        default: ""
+    },
     child:[],
 });
 

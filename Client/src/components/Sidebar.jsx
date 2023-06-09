@@ -35,61 +35,64 @@ import profileImage from "assets/profile.jpeg";
 
 const navItems = [
     {
-        text: "Dashboard",
+        text: "Общее",
+        nav: "dashboard",
         icon: <HomeOutlined />,
     },
     {
-        text: "Client Facing",
+        text: "Заказы",
+        nav: null,
         icon: null,
     },
     {
-        text: "Products",
+        text: "Товар",
+        nav: "products",
         icon: <ShoppingCartOutlined />,
     },
-    {
-        text: "Customers",
-        icon: <Groups2Outlined />,
-    },
-    {
-        text: "Transactions",
-        icon: <ReceiptLongOutlined />,
-    },
-    {
-        text: "Geography",
-        icon: <PublicOutlined />,
-    },
-    {
-        text: "Sales",
-        icon: null,
-    },
-    {
-        text: "Overview",
-        icon: <PointOfSaleOutlined />,
-    },
-    {
-        text: "Daily",
-        icon: <TodayOutlined />,
-    },
-    {
-        text: "Monthly",
-        icon: <CalendarMonthOutlined />,
-    },
-    {
-        text: "Breakdown",
-        icon: <PieChartOutlined />,
-    },
-    {
-        text: "Management",
-        icon: null,
-    },
-    {
-        text: "Admin",
-        icon: <AdminPanelSettingsOutlined />,
-    },
-    {
-        text: "Performance",
-        icon: <TrendingUpOutlined />,
-    },
+    // {
+    //     text: "Customers",
+    //     icon: <Groups2Outlined />,
+    // },
+    // {
+    //     text: "Transactions",
+    //     icon: <ReceiptLongOutlined />,
+    // },
+    // {
+    //     text: "Geography",
+    //     icon: <PublicOutlined />,
+    // },
+    // {
+    //     text: "Sales",
+    //     icon: null,
+    // },
+    // {
+    //     text: "Overview",
+    //     icon: <PointOfSaleOutlined />,
+    // },
+    // {
+    //     text: "Daily",
+    //     icon: <TodayOutlined />,
+    // },
+    // {
+    //     text: "Monthly",
+    //     icon: <CalendarMonthOutlined />,
+    // },
+    // {
+    //     text: "Breakdown",
+    //     icon: <PieChartOutlined />,
+    // },
+    // {
+    //     text: "Management",
+    //     icon: null,
+    // },
+    // {
+    //     text: "Admin",
+    //     icon: <AdminPanelSettingsOutlined />,
+    // },
+    // {
+    //     text: "Performance",
+    //     icon: <TrendingUpOutlined />,
+    // },
 ];
 
 const Sidebar = ({
@@ -132,7 +135,7 @@ const Sidebar = ({
                             <FlexBetween color={theme.palette.secondary.main}>
                                 <Box display="flex" alignItems="center" gap="0.5rem">
                                     <Typography variant="h4" fontWeight="bold">
-                                        ECOMVISION
+                                        ПОРТАЛ
                                     </Typography>
                                 </Box>
                                 {!isNonMobile && (
@@ -143,7 +146,7 @@ const Sidebar = ({
                             </FlexBetween>
                         </Box>
                         <List>
-                            {navItems.map(({ text, icon }) => {
+                            {navItems.map(({ text, icon, nav }) => {
                                 if (!icon) {
                                     return (
                                         <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -151,7 +154,7 @@ const Sidebar = ({
                                         </Typography>
                                     );
                                 }
-                                const lcText = text.toLowerCase();
+                                const lcText = nav.toLowerCase();
 
                                 return (
                                     <ListItem key={text} disablePadding>
