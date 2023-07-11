@@ -3,31 +3,38 @@ import Form from "./LoginForm";
 
 const Login = () =>{
   const theme = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 1200px)");
   return (
-      <Box>
+      <Box
+          sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              p: 1,
+              m: 1,
+              borderRadius: 1,
+              alignContent: 'center',
+          }}>
         <Box
-            width="100%"
             backgroundColor={theme.palette.background.alt}
             p="1rem 6%"
             textAlign="center"
         >
           <Typography fontWeight="bold" fontSize="32px" color="primary">
-            Supplier
+            Поставщик
           </Typography>
         </Box>
 
         <Box
-            width={isNonMobileScreens ? "50%" : "93%"}
+            width={isNonMobileScreens ? "93%" : "50%"}
             p="2rem"
             m="2rem auto"
             borderRadius="1.5rem"
             backgroundColor={theme.palette.background.alt}
         >
           <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-            Welcome to Supplier, the supplier for goods!
+              Добропожаловать на портал клиента!
           </Typography>
-          <Form />
+          <Form/>
         </Box>
       </Box>
   );

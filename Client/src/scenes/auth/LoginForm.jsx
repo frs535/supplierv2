@@ -55,6 +55,7 @@ const LoginForm = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
+    const [message, setMessage] = useState("");
 
     const register = async (values, onSubmitProps) => {
         // this allows us to send form info with image
@@ -88,9 +89,12 @@ const LoginForm = () => {
         const loggedIn = await loggedInResponse.json();
 
         if (loggedInResponse.status != 200){
+            setMessage("Не правильеый логин или пароль");
             console.error(loggedIn.msg);
             return;
         }
+
+        setMessage("");
 
         onSubmitProps.resetForm();
         if (loggedIn) {
@@ -247,24 +251,29 @@ const LoginForm = () => {
                             sx={{
                                 m: "2rem 0",
                                 p: "1rem",
-                                backgroundColor: palette.primary.main,
+                                backgroundColor: palette.primary.light,
                                 color: palette.background.alt,
-                                "&:hover": { color: palette.primary.main },
+                                "&:hover": { color: palette.neutral.main },
                             }}
                         >
                             {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
                         <Typography
+                            sx={{
+                                color: palette.primary.red,
+                                }}>{message}</Typography>
+                        <Typography
                             onClick={() => {
+                                setMessage("");
                                 setPageType(isLogin ? "register" : "login");
                                 resetForm();
                             }}
                             sx={{
                                 textDecoration: "underline",
-                                color: palette.primary.main,
+                                color: palette.primary.blue,
                                 "&:hover": {
                                     cursor: "pointer",
-                                    color: palette.primary.light,
+                                    color: palette.secondary.blue,
                                 },
                             }}
                         >

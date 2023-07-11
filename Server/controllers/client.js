@@ -6,7 +6,6 @@ import Catalog from "../models/Catalog.js";
 
 export const getProducts = async (req, res) => {
     try {
-
         const { id } = req.query;
         const products = id? await Product.find({"searchId" : {$regex : id}}) : await Product.find();
 
@@ -24,6 +23,18 @@ export const getProducts = async (req, res) => {
         // );
 
         res.status(200).json(products);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+export const getProduct = async (req, res) => {
+    try {
+
+        const { id } = req.query;
+        const product = await Product.findOne({"id": id});
+
+        res.status(200).json(product);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -52,6 +63,10 @@ export const getCatalogs = async  (req, res)=>{
     }
 }
 export const patchCatalog = async (req, res)=>{
+
+    await Product.deleteMany();
+    await Catalog.deleteMany();
+
     try {
         req.body.map(async (catalog)=>{
 

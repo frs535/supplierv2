@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import  {useSelector} from "react-redux";
 import Navbar from "components/Navbar";
 import Sidebar from "components/Sidebar";
-
+import CartMenu from "components/CartMenu";
 
 const Layout = ()=> {
     const isNonMobile = useMediaQuery("(min-width: 600px)");
@@ -12,22 +12,23 @@ const Layout = ()=> {
     const user = useSelector((state) => state.user);
 
     return(
-        <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
-            <Sidebar
-                user = {user|| {}}
-                isNonMobile={isNonMobile}
-                drawerWidth="250px"
-                isSidebarOpen={isSidebarOpen}
-                setIsSidebarOpen={setIsSidebarOpen}
-            />
-            <Box flexGrow={1}>
-                <Navbar
+            <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
+                <Sidebar
                     user = {user|| {}}
+                    isNonMobile={isNonMobile}
+                    drawerWidth="250px"
                     isSidebarOpen={isSidebarOpen}
-                    setIsSidebarOpen={setIsSidebarOpen}/>
-                <Outlet/>
+                    setIsSidebarOpen={setIsSidebarOpen}
+                />
+                <Box flexGrow={1}>
+                    <Navbar
+                        user = {user|| {}}
+                        isSidebarOpen={isSidebarOpen}
+                        setIsSidebarOpen={setIsSidebarOpen}/>
+                    <Outlet/>
+                </Box>
+                <CartMenu />
             </Box>
-        </Box>
     )
 }
 

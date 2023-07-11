@@ -1,91 +1,27 @@
 import React, {useEffect, useState} from "react";
-import {
-    Box,
-    Card,
-    CardActions,
-    CardContent,
-    Collapse,
-    Button,
-    Typography,
-    Rating,
-    useTheme,
-    useMediaQuery, Grid,
-} from "@mui/material";
-import Header from "components/Header";
-import { useGetProductsQuery, useGetCatalogsQuery } from "state/api";
-import HierarchyTreeView from "../../components/HierarchyTreeView";
-import {DataGrid, GridLogicOperator} from "@mui/x-data-grid";
+import { useTheme, Grid } from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import TreeItem from "@mui/lab/TreeItem";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {Outlet, useNavigate} from "react-router-dom";
 
-const columns = [
-    {
-        field: "article",
-        headerName: "Артикул",
-        headerAlign: "left",
-        align: "left",
-        flex: 0.25
-    },
-    {
-        field: "name",
-        headerName: "Товар",
-        headerAlign: "left",
-        align: "left",
-        flex: 1.5
-    },
-    {
-        field: "unit",
-        headerName: "Упак",
-        headerAlign: "left",
-        align: "left",
-        flex: 0.2
-    },
-    {
-        field: "quantity",
-        headerName: "Кол.",
-        type: 'number',
-        headerAlign: "left",
-        align: "left",
-        flex: 0.2
-    },
-    {
-        field: "price",
-        headerName: "Цена",
-        type: 'number',
-        headerAlign: "left",
-        align: "left",
-        flex: 0.3
-    },
-    {
-        field: "unitReport",
-        headerName: "Упак",
-        headerAlign: "left",
-        align: "left",
-        flex: 0.3
-    },
-    {
-        field: "priceReport",
-        headerName: "Цена",
-        headerAlign: "left",
-        align: "left",
-        flex: 0.3
-    },
-];
+import {decreaseCount, increaseCount, setCatalog, setItems} from "state";
 
 const Products = () =>{
     const theme = useTheme();
-    const [selected, setSelected] = useState([]);
+    const [selected, setSelected] = useState("");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [filterModel, setFilterModel] = useState({
         items: [
         ],
     });
 
-    const [catalog, setCatalog] = useState(null);
-    const [products, setProducts] = useState([]);
+    const catalog = useSelector((state)=>state.catalog);
+    const items = useSelector((state)=>state.items);
     const token = useSelector((state)=>state.token);
 
     const getCatalog = async () => {
@@ -94,26 +30,20 @@ const Products = () =>{
             headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
-        setCatalog(data);
+        dispatch(setCatalog(data));
+        await getProducts();
     };
 
-    const getProducts = async ({id}) => {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}client/products?id=${id}`, {
+    const getProducts = async () => {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}client/products`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });
-        setProducts([]);
+
         const data = await response.json();
-        setProducts(data);
+        dispatch(setItems(data));
     };
 
-    const handleSelect = (event, nodeId) => {
-        setSelected(nodeId);
-
-        getProducts({id:nodeId});
-
-        //setFilterModel({items:[{ field: 'group', operator: 'contains', value: '' + nodeId}]});
-    };
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
             {Array.isArray(nodes.child)
@@ -141,7 +71,7 @@ const Products = () =>{
                     defaultExpandIcon={<ChevronRightIcon />}
                     sx={{ height: 900, flexGrow: 1, minWidth:50, maxWidth: 300, overflowY: 'auto' }}
                     selected={selected}
-                    onNodeSelect={handleSelect}
+                    onNodeSelect={(event, nodeId) => navigate(`group/${nodeId}`)}
                 >
                     {catalog? catalog.map(item=>{
                         return renderTree(item)
@@ -174,23 +104,7 @@ const Products = () =>{
                           color: `${theme.palette.secondary[200]} !important`,
                       },
                   }}>
-                <DataGrid
-                    sx={{ height: 900, flexGrow: 1, minWidth:50, overflowY: 'auto' }}
-                    columns={columns}
-                    rows={products}
-                    filterModel={filterModel}
-                    rowSelection
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 20,
-                            },
-                        },
-                    }}
-                    pageSizeOptions={[5]}
-                    //checkboxSelection
-                    disableRowSelectionOnClick
-                />
+                <Outlet/>
             </Grid>
         </Grid>
     )

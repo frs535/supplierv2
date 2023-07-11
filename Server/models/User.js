@@ -4,13 +4,11 @@ const UserSchema = new mongoose.Schema(
     {
         firstName: {
             type: String,
-            required: true,
             min: 2,
             max: 100,
         },
         lastName: {
             type: String,
-            required: true,
             min: 2,
             max: 100,
         },
@@ -18,13 +16,13 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required: false,
             max: 50,
-            unique: true,
+            //unique: true,
         },
         phoneNumber: {
             type: String,
             required: false,
             max: 50,
-            unique: true,
+            //unique: true,
         },
         password: {
             type: String,
@@ -43,6 +41,16 @@ const UserSchema = new mongoose.Schema(
             enum: ["user", "admin"],
             default: "user",
         },
+        partnerId : {
+            type: String,
+            required: true,
+            default: ""
+        },
+        partnerName: {
+            type: String,
+            required: true,
+            default: ""
+        }
     },
     { timestamps: true }
 );

@@ -45,8 +45,7 @@ root.render(
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistStore(store)}>
                 <DevSupport ComponentPreviews={ComponentPreviews}
-                            useInitialHook={useInitial}
-                >
+                            useInitialHook={useInitial}>
                     <App/>
                 </DevSupport>
             </PersistGate>

@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  api:
+    platform: linux/amd64
+    build: ./
+    container_name: arf535/supplier
+    ports:
+      - '5001:5001'
+    volumes:
+      - ./docker:/app
+      - ./app/node_modules
+#      - ./:/usr/src/app
+#      - /usr/src/app/node_modules
+#      - ./your-host-app:/usr/src/app # named volume
+#      - /usr/src/app/node_modules # anonymous volume for node_modules only

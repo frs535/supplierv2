@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import user from "../models/User.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -14,16 +15,20 @@ export const register = async (req, res) => {
             picturePath,
             occupation,
             city,
-            role
+            role,
+            partnerId,
+            partnerName,
+            rewrite
         } = req.body;
 
-        const curUser = await User.findOne({
-            $or: [
-                {email: email},
-                {phoneNumber: phoneNumber}
-            ]});
+        if (!email && !phoneNumber)
+            return res.status(500).json({ error: "Email or phone number is required" });
 
-        if(curUser)
+        const corUser = (email) ?await  User.findOne({email: email}):await  User.findOne({phoneNumber: phoneNumber});
+
+        if(corUser && rewrite)
+            await User.deleteOne(corUser);
+        else if(corUser && !rewrite)
             return res.status(400).json({ error: `User already exists with email: ${email} or/and phone number: ${phoneNumber}`});
 
         const salt = await bcrypt.genSalt();
@@ -39,6 +44,9 @@ export const register = async (req, res) => {
             occupation,
             city,
             role,
+            partnerId,
+            partnerName,
+            rewrite
         });
         const savedUser = await newUser.save();
 

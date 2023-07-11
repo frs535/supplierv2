@@ -6,10 +6,11 @@ import {
     Search,
     SettingsOutlined,
     ArrowDropDownOutlined,
+    ShoppingBagOutlined,
 } from "@mui/icons-material";
 import FlexBetween from "components/FlexBetween";
-import { useDispatch } from "react-redux";
-import {setLogin, setLogout, setMode} from "state";
+import { useDispatch, useSelector } from "react-redux";
+import {setLogin, setLogout, setMode, setIsCartOpen} from "state";
 import profileImage from "assets/profile.jpeg";
 import {
     AppBar,
@@ -22,12 +23,14 @@ import {
     Menu,
     MenuItem,
     useTheme,
+    Badge,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({user, isSidebarOpen, setIsSidebarOpen, }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
+    const cart = useSelector((state) => state.cart);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const isOpen = Boolean(anchorEl);
@@ -87,6 +90,28 @@ const Navbar = ({user, isSidebarOpen, setIsSidebarOpen, }) => {
                     <IconButton onClick={() => navigate("/profile")}>
                         <SettingsOutlined sx={{ fontSize: "25px" }} />
                     </IconButton>
+
+                    <Badge
+                        badgeContent={cart.length}
+                        color="secondary"
+                        invisible={cart.length === 0}
+                        sx={{
+                            "& .MuiBadge-badge": {
+                                right: 5,
+                                top: 5,
+                                padding: "0 4px",
+                                height: "14px",
+                                minWidth: "13px",
+                            },
+                        }}
+                    >
+                        <IconButton
+                            onClick={() => dispatch(setIsCartOpen({}))}
+                            sx={{ color: "black" }}
+                        >
+                            <ShoppingBagOutlined />
+                        </IconButton>
+                    </Badge>
 
                     <FlexBetween>
                         <Button

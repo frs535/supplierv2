@@ -40,7 +40,7 @@ const navItems = [
         icon: <HomeOutlined />,
     },
     {
-        text: "Заказы",
+        text: "Главное",
         nav: null,
         icon: null,
     },
@@ -48,6 +48,11 @@ const navItems = [
         text: "Товар",
         nav: "products",
         icon: <ShoppingCartOutlined />,
+    },
+    {
+        text: "Заказы",
+        nav: "Orders",
+        icon: <ReceiptLongOutlined />,
     },
     // {
     //     text: "Customers",

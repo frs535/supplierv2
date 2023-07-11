@@ -1,8 +1,10 @@
 import express from "express";
-import {getProducts, getCustomers, getTransactions, patchProduct, patchCatalog, getCatalogs} from "../controllers/client.js";
+import {getProducts, getProduct, getCustomers, getTransactions, patchProduct, patchCatalog, getCatalogs} from "../controllers/client.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
+
+router.get("/product",verifyToken, getProduct);
 
 router.get("/products",verifyToken, getProducts);
 router.patch("/products", verifyToken, patchProduct)
