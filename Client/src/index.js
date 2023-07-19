@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import {configureStore} from "@reduxjs/toolkit";
-import globalReducer from "state";
+import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import globalReducer from "state/index";
 import {Provider} from "react-redux";
 import {setupListeners} from "@reduxjs/toolkit/query";
-import {api} from "state/api";
+import {clientApi} from "state/api";
 
 /* Auth */
 //import { authReducer } from "./state";
@@ -25,16 +25,21 @@ import {PersistGate} from "redux-persist/integration/react";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
 
-//
-const persistConfig = {key: "root", storage, version: 1, global: globalReducer, [api.reducerPath]: api.reducer}; //global: globalReducer,
-const persistedReducer = persistReducer(persistConfig, globalReducer);
+
+const rootReducer = combineReducers({
+    global: globalReducer,
+    [clientApi.reducerPath]: clientApi.reducer,
+});
+
+const persistConfig = {key: "root", storage, version: 1}; //global: globalReducer, [clientApi.reducerPath]: clientApi.reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefault) => getDefault({
         serializableCheck: {
             ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
-    }).concat(api.middleware),
+    }).concat(clientApi.middleware),
 });
 
 setupListeners(store.dispatch);

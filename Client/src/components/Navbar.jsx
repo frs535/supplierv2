@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 const Navbar = ({user, isSidebarOpen, setIsSidebarOpen, }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
-    const cart = useSelector((state) => state.cart);
+    const cart = useSelector((state) => state.global.cart);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const isOpen = Boolean(anchorEl);

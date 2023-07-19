@@ -22,8 +22,8 @@ const CartMenu = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const cart = useSelector((state) => state.cart);
-	const isCartOpen = useSelector((state) => state.isCartOpen);
+	const cart = useSelector((state) => state.global.cart);
+	const isCartOpen = useSelector((state) => state.global.isCartOpen);
 
 	const totalPrice = cart.reduce((total, item) => {
 		return 555; //total + item.count * item?.attributes?.price;

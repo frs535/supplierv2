@@ -1,23 +1,22 @@
 import {DataGrid} from "@mui/x-data-grid";
-import React, {useEffect, useState} from "react";
-import {Box, Button, IconButton, Typography, useTheme} from "@mui/material";
+import {Box, IconButton, Typography, useTheme} from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {useNavigate, useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
-import SaveIcon from '@mui/icons-material/Save';
+import {useDispatch, useSelector} from "react-redux";
 
 import {decreaseCount, increaseCount} from "state";
+import {useGetProductsQuery} from "../state/api";
 
 const ProductGrid = ()=> {
+	const { data=[], isLoading, isFetching, isError } = useGetProductsQuery();
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const { groupId } = useParams();
-	const items = useSelector((state)=>state.items);
-	const cart	= useSelector(state => state.cart);
-	const rows= items.filter(item => {return item.searchId.includes(groupId)});
+	const cart	= useSelector(state => state.global.cart);
+	const dispatch = useDispatch();
 
 	function getCount({item})  {
 		const result = cart.filter(it=>{ return it.id === item.id });
@@ -25,6 +24,15 @@ const ProductGrid = ()=> {
 
 		return  0;//result[0];
 	};
+
+	function decrease(item){
+		dispatch(decreaseCount(item, Math.max(getCount(item) - 1, 0)));
+
+	}
+
+	function increase(item){
+		dispatch(increaseCount(item, getCount(item) + 1));
+	}
 
 	const columns = [
 		{
@@ -93,15 +101,14 @@ const ProductGrid = ()=> {
 					mr="20px"
 					p="2px 5px"
 				>
-					<IconButton onClick={row => decreaseCount(row, (Math.max(getCount(row) - 1, 0)))}>
-						{/**/}
+					<IconButton onClick={()=>decrease(p.row)}>
 						<RemoveIcon />
 					</IconButton>
 					<Typography sx={{ p: "0 5px" }}>
-						{/*{count}*/}
+						{getCount(p)}
 					</Typography>
-					<IconButton onClick={row => increaseCount(row, getCount(row) + 1)}>
-						<AddIcon />
+					<IconButton onClick={()=>increase(p.row)}>
+						<AddIcon/>
 					</IconButton>
 					<IconButton onClick={()=> navigate(`/product/${p.id}`)}>
 						<InfoOutlinedIcon/>
@@ -111,11 +118,18 @@ const ProductGrid = ()=> {
 		},
 	];
 
-	return (Array.isArray(rows) && rows.length!=0?
-			<DataGrid
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
+	if (isError) {
+		return <div>Error: </div>;
+	}
+
+	return (<DataGrid
 			sx={{ height: 900, flexGrow: 1, minWidth:50, overflowY: 'auto' }}
 			columns={columns}
-			rows={rows}
+			rows={data.filter(item => {return item.searchId.includes(groupId)})}
 			initialState={{
 				pagination: {
 					paginationModel: {
@@ -127,14 +141,7 @@ const ProductGrid = ()=> {
 			disableRowSelectionOnClick={true}
 			disableMultipleSelection={true}
 			getRowId={(row) => row._id}
-		/>:
-			<Box display="flex" height="100vh" width="100vw"
-				sx={{
-					width: "100%",
-					height: "100%",
-					backgroundColor: 'primary.neutral',
-				}}>Выберите группу</Box>
-	)
+		/>);
 }
 
 export default ProductGrid;

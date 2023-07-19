@@ -7,42 +7,12 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet, useNavigate} from "react-router-dom";
 
-import {decreaseCount, increaseCount, setCatalog, setItems} from "state";
+import { useGetCatalogsQuery } from "state/api";
 
 const Products = () =>{
+    const { data=[], isLoading, isFetching, isError } = useGetCatalogsQuery();
     const theme = useTheme();
-    const [selected, setSelected] = useState("");
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    const [filterModel, setFilterModel] = useState({
-        items: [
-        ],
-    });
-
-    const catalog = useSelector((state)=>state.catalog);
-    const items = useSelector((state)=>state.items);
-    const token = useSelector((state)=>state.token);
-
-    const getCatalog = async () => {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}client/catalog`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        dispatch(setCatalog(data));
-        await getProducts();
-    };
-
-    const getProducts = async () => {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}client/products`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const data = await response.json();
-        dispatch(setItems(data));
-    };
 
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
@@ -52,12 +22,18 @@ const Products = () =>{
         </TreeItem>
     );
 
-    useEffect(() => {
-        getCatalog();
-    }, []);
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error: </div>;
+    }
 
     return(
-        <Grid container spacing={2}
+        <Grid
+            className={isFetching ? 'posts--disabled' : ''}
+            container spacing={2}
               sx={{
                   "& .scrollbar-thumb": {
                       backgroundColor: "green",
@@ -70,12 +46,11 @@ const Products = () =>{
                     defaultExpanded={['root']}
                     defaultExpandIcon={<ChevronRightIcon />}
                     sx={{ height: 900, flexGrow: 1, minWidth:50, maxWidth: 300, overflowY: 'auto' }}
-                    selected={selected}
                     onNodeSelect={(event, nodeId) => navigate(`group/${nodeId}`)}
                 >
-                    {catalog? catalog.map(item=>{
+                    {data.map(item=>{
                         return renderTree(item)
-                    }) : <>Loading...</> }
+                    })}
                 </TreeView>
             </Grid>
             <Grid item xs={9}

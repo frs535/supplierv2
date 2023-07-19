@@ -1,22 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const api = createApi({
+export const clientApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: process.env.REACT_APP_BASE_URL,
         prepareHeaders: (headers, { getState })=>{
             const state = getState();
             if (state){
-                headers.set('authorization', `Bearer ${state.token}`)
+                headers.set('authorization', `Bearer ${state.global.token}`)
                 return headers
             }
         }
     }),
-    reducerPath: "adminApi",
+    reducerPath: "clientApi",
     tagTypes: [
         "User",
         "Profile",
         "Products",
-        "Catalog",
+        "Catalogs",
         "Customers",
         "Sales",
         "Admins",
@@ -29,12 +29,16 @@ export const api = createApi({
             providesTags: ["Profile"],
         }),
         getProducts: build.query({
-            query: (id) => `client/products/${id}`,
+            query: () => `client/products`,
             providesTags: ["Products"],
         }),
         getCatalogs: build.query({
             query: () => `client/catalog`,
-            providesTags: ["Catalog"],
+            providesTags: ["Catalogs"],
+            // providesTags: (result, error, arg) =>
+            //     result
+            //         ? [...result.map(({ id }) => ({ type: 'Catalogs', id })), 'Catalogs']
+            //         : ['Catalogs'],
         }),
         getCustomers: build.query({
             query: () => "client/customers",
@@ -77,4 +81,4 @@ export const {
     useGetAdminsQuery,
     useGetUserPerformanceQuery,
     useGetDashboardQuery,
-} = api
+} = clientApi

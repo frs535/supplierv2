@@ -35,9 +35,9 @@ const ScrollToTop = () => {
 };
 
 function App() {
-    const mode = useSelector((state) => state.mode); //state.mode
+    const mode = useSelector((state) => state.global.mode); //state.mode
     const theme = useMemo(()=>createTheme(themeSettings(mode)), [mode]);
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.global.user);
 
   return (
       <div className="app">

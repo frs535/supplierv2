@@ -8,13 +8,13 @@ const initialState = {
     post: [],
     //e commerce
     isCartOpen: false,
-    catalog: [],
+    //catalog: [],
     cart: [],
-    items: [],
+    //items: [],
 };
 
 export const globalSlice = createSlice({
-    initialState, //auth,
+    initialState,
     name: "global",
     reducers: {
         setMode: (state) => {
@@ -39,6 +39,7 @@ export const globalSlice = createSlice({
             });
             state.posts = updatePosts;
         },
+
         //E COMMERCE
         setCatalog: (state, action)=>{
             state.catalog = action.payload;
@@ -53,7 +54,16 @@ export const globalSlice = createSlice({
             state.cart = state.cart.filter((item) => item.id !== action.payload.id);
         },
         increaseCount: (state, action) => {
-            state.cart = state.cart.map((item) => {
+            const result = state.cart.filter(item=>{ return item.id === action.payload.id });
+            if (result.length ===0)
+            {
+                state.cart = [...state.cart, action.payload];
+                return;
+                // state.cart.push(action.payload);
+                // action.payload.count = 1;
+            }
+
+            state.global.cart = state.cart.map((item) => {
                 if (item.id === action.payload.id) {
                     item.count++;
                 }
@@ -61,7 +71,7 @@ export const globalSlice = createSlice({
             });
         },
         decreaseCount: (state, action) => {
-            state.cart = state.cart.map((item) => {
+            state.global.cart = state.cart.map((item) => {
                 if (item.id === action.payload.id && item.count > 1) {
                     item.count--;
                 }
@@ -70,7 +80,7 @@ export const globalSlice = createSlice({
         },
 
         setIsCartOpen: (state) => {
-            state.isCartOpen = !state.isCartOpen;
+            state.global.isCartOpen = !state.isCartOpen;
         },
     },
 });

@@ -1,7 +1,6 @@
 import { useSelector} from "react-redux";
-import Label from "../../components/Label";
 import {Box, TextField, useTheme} from "@mui/material";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 import Accordion from '@mui/material/Accordion';
@@ -10,14 +9,15 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {DataGrid} from "@mui/x-data-grid";
+import {useGetProfileQuery} from "../../state/api";
 
 const Profile = () =>{
     const theme = useTheme();
-    const user = useSelector((state) => state.user);
-    const id = user._id;
-    const [profile, setProfile] = useState(null);
-    const token = useSelector((state)=>state.token);
+    const id = useSelector((state) => state.global.user._id);
+    const user = useSelector((state) => state.global.user);
     const [expanded, setExpanded] = useState(false);
+
+    const { data, isLoading, isFetching, isError } = useGetProfileQuery(id);
 
     const columns = [
         {
@@ -32,26 +32,24 @@ const Profile = () =>{
         },
     ];
 
-    const getProfile = async () => {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}general/profile/${id}`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        setProfile(data);
-    };
-
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    useEffect(() => {
-        getProfile();
-    }, []);
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError || data === null) {
+        return <div>Error: </div>;
+    }
+
+    if (data ===null){
+        return <div>Нет данных</div>;
+    }
 
     return (
         <Box m="1.5rem 2.5rem" sx={{ flexDirection: 'column'}}>
-            {profile ? (
                 <Box>
                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary
@@ -60,7 +58,7 @@ const Profile = () =>{
                             id="panel1bh-header"
                         >
                             <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                                {profile.companyName}
+                                {data.companyName}
                             </Typography>
                             <Typography sx={{ color: 'text.secondary' }}>Как с нами связаться</Typography>
                         </AccordionSummary>
@@ -73,7 +71,7 @@ const Profile = () =>{
                                 <TextField
                                     id="outlined-read-only-input"
                                     label="Телефон (общий)"
-                                    defaultValue={profile.phoneNumber}
+                                    defaultValue={data.phoneNumber}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -81,7 +79,7 @@ const Profile = () =>{
                                 <TextField
                                     id="outlined-read-only-input"
                                     label="Менеджер"
-                                    defaultValue={profile.managerName}
+                                    defaultValue={data.managerName}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -89,7 +87,7 @@ const Profile = () =>{
                                 <TextField
                                     id="outlined-read-only-input"
                                     label="Телефон менеджера"
-                                    defaultValue={profile.managerPhone}
+                                    defaultValue={data.managerPhone}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -97,7 +95,7 @@ const Profile = () =>{
                                 <TextField
                                     id="outlined-read-only-input"
                                     label="Электронная почта"
-                                    defaultValue={profile.managerEmail}
+                                    defaultValue={data.managerEmail}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -143,7 +141,7 @@ const Profile = () =>{
                                     },
                                 }}
                                 getRowId={(row) => row.address}
-                                rows={profile.deliveryAddress || []}
+                                rows={data.deliveryAddress || []}
                                 columns={columns}
                             />
                         </AccordionDetails>
@@ -211,10 +209,6 @@ const Profile = () =>{
                         </AccordionDetails>
                     </Accordion>
                 </Box>
-            ) : (
-                <>Loading...</>
-                )
-            }
         </Box>
     );
 };

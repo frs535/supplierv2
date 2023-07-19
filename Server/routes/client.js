@@ -7,10 +7,10 @@ const router = express.Router();
 router.get("/product",verifyToken, getProduct);
 
 router.get("/products",verifyToken, getProducts);
-router.patch("/products", verifyToken, patchProduct)
+router.patch("/products", verifyToken, patchProduct);
 
 router.get("/catalog",verifyToken, getCatalogs);
-router.patch("/catalog", verifyToken, patchCatalog)
+router.patch("/catalog", verifyToken, patchCatalog);
 
 router.get("/customers",verifyToken, getCustomers);
 router.get("/transactions",verifyToken, getTransactions);
