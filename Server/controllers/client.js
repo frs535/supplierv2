@@ -3,6 +3,8 @@ import ProductStat from "../models/ProductStat.js";
 import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
 import Catalog from "../models/Catalog.js";
+import Price from "../models/Price.js";
+import Order from "../models/Order.js";
 
 export const getProducts = async (req, res) => {
     try {
@@ -79,7 +81,7 @@ export const patchCatalog = async (req, res)=>{
 
             const foundCatalog = Catalog.findOne({id: id})
             if(!foundCatalog)
-                Catalog.deleteOne(foundCatalog);
+                await Catalog.deleteOne(foundCatalog);
 
             const newCatalog= new Catalog({
                 id,
@@ -105,6 +107,63 @@ export const getCustomers = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
+
+export const getPrice = async (req, res) =>{
+    try {
+        const { id } = req.params;
+
+        const price = await Price.findOne({partnerId : id});
+        if (!price)
+        {
+            res.status(404).json({ message: "Price list not found" });
+            return;
+        }
+
+        res.status(200).json(price);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+export const postPrice = async (req, res)=>{
+    try {
+        const { partnerId } = req.body;
+
+        const oldPrice = await Price.findOne({partnerId: partnerId});
+        if (oldPrice)
+        {
+            const { price }= req.body;
+            const updResult = await Price.updateOne({_id: oldPrice._id}, {$set: {price: price}});
+            res.status(200).json(updResult);
+        }
+        else
+        {
+            const newPrice = new Price(req.body);
+            const savedPrice = await newPrice.save();
+            res.status(200).json(savedPrice);
+        }
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+export  const getOrders = async (req, res) =>{
+    try {
+        const orders = await Order.find();
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const postOrder = async (req, res) =>{
+    try {
+        const newOrder = new Price(req.body);
+        const savedOrder = await newOrder.save();
+        res.status(200).json(savedOrder);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
 
 export const getTransactions = async (req, res) => {
     try {

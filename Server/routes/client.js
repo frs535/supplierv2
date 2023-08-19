@@ -1,5 +1,17 @@
 import express from "express";
-import {getProducts, getProduct, getCustomers, getTransactions, patchProduct, patchCatalog, getCatalogs} from "../controllers/client.js";
+import {
+    getProducts,
+    getProduct,
+    getCustomers,
+    getTransactions,
+    patchProduct,
+    patchCatalog,
+    getCatalogs,
+    getPrice,
+    postPrice,
+    getOrders,
+    postOrder
+} from "../controllers/client.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -11,6 +23,12 @@ router.patch("/products", verifyToken, patchProduct);
 
 router.get("/catalog",verifyToken, getCatalogs);
 router.patch("/catalog", verifyToken, patchCatalog);
+
+router.get("/price/:id", verifyToken, getPrice);
+router.post("/price", verifyToken, postPrice);
+
+router.get("orders", verifyToken, getOrders);
+router.post("orders", verifyToken, postOrder);
 
 router.get("/customers",verifyToken, getCustomers);
 router.get("/transactions",verifyToken, getTransactions);

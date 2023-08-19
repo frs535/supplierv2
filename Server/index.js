@@ -38,6 +38,11 @@ import OverallStat from "./models/OverallStat.js";
      dataOverallStat,
      dataAffiliateStat,
  } from "./data/index.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import ApiKeys from "./models/ApiKeys.js";
+import {deleteImages, getImages, postImage} from "./controllers/images.js";
+import fs from 'fs';
 
 /* CONFIGURATION */
 const __filename = fileURLToPath(import.meta.url);
@@ -65,7 +70,10 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 /* FILE STORAGE */
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "public/assets");
+        const { id } = req.params
+        const path = `public/assets/${id}`
+        fs.mkdirSync(path, { recursive: true })
+        return cb(null, path)
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -73,9 +81,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+//app.use(upload.single("file"));
+
 /* ROUTES WITH FILES */
-app.post("/auth/register", upload.single("picture"), register);
-app.post("/posts", verifyToken, upload.single("picture"), createPost);  //VERIFY TOKEN!!!!
+//app.post("/auth/register", upload.single("picture"), register); //Картинку надо вставлять вместе с методом вставки
+//app.post("/posts", verifyToken, upload.single("picture"), createPost);  //VERIFY TOKEN!!!!
+app.post("/images/:id", verifyToken, upload.single("file"), postImage);
+app.get("/images/:id/:type", verifyToken, upload.single("file"), getImages);//VERIFY TOKEN!!!!
+app.delete("/images/:id", verifyToken, deleteImages);
 
 /* ROUTES */
 app.use("/client", clientRoutes);
@@ -97,7 +110,25 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => {
-        app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+        app.listen(PORT,  async () => {
+
+            console.log(`Server port: ${PORT}`);
+
+            const apiKeys = await ApiKeys.findOne({});
+
+            if (apiKeys) return;
+
+            const token = jwt.sign({ id: 0, login: "Admin", role: "admin" }, process.env.JWT_SECRET);
+
+            const newApiKey = new ApiKeys(
+                    {
+                        Key: token,
+                        blocked : false
+                    }
+                );
+            const  res  = await newApiKey.save();
+            console.log(`Server API KEY: ${token}`);
+        });
 
         /* ONLY ADD DATA ONE TIME */
         // AffiliateStat.insertMany(dataAffiliateStat);

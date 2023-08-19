@@ -1,35 +1,30 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import user from "../models/User.js";
+import Users from "../routes/users.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
     try {
         const {
+            password,
             firstName,
             lastName,
-            email,
-            phoneNumber,
-            password,
-            picturePath,
+            login,
             occupation,
             city,
             role,
-            partnerId,
-            partnerName,
+            companyId,
+            blocked,
             rewrite
         } = req.body;
 
-        if (!email && !phoneNumber)
-            return res.status(500).json({ error: "Email or phone number is required" });
-
-        const corUser = (email) ?await  User.findOne({email: email}):await  User.findOne({phoneNumber: phoneNumber});
+        const corUser = await  User.findOne({login: login});
 
         if(corUser && rewrite)
             await User.deleteOne(corUser);
         else if(corUser && !rewrite)
-            return res.status(400).json({ error: `User already exists with email: ${email} or/and phone number: ${phoneNumber}`});
+            return res.status(400).json({ error: `User already exists with login: ${login}`});
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
@@ -37,16 +32,13 @@ export const register = async (req, res) => {
         const newUser = new User({
             firstName,
             lastName,
-            email,
-            phoneNumber,
-            password: passwordHash,
-            picturePath,
+            login,
             occupation,
             city,
             role,
-            partnerId,
-            partnerName,
-            rewrite
+            companyId,
+            blocked,
+            password: passwordHash,
         });
         const savedUser = await newUser.save();
 
@@ -57,15 +49,30 @@ export const register = async (req, res) => {
     }
 };
 
+export const changePassword = async (req, res)=>{
+    try {
+        const { login, companyId, password } = req.body;
+
+        const user = await User.findOne({login: login, companyId: companyId});
+
+        if (!user) return res.status(400).json({ msg: "User does not exist." });
+
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        const updateUser = await  User.updateOne({_id: user._id}, {$set:{password: passwordHash}});
+
+        delete user.password;
+        res.status(200).json({ updateUser });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 /* LOGGING IN */
 export const login = async (req, res) => {
     try {
         const { login, password } = req.body;
-        const user = await User.findOne({
-            $or: [
-                {email: login},
-                {phoneNumber: login}
-            ]});
+        const user = await User.findOne({login: login});
 
         if (!user) return res.status(400).json({ msg: "User does not exist. " });
 
@@ -75,6 +82,18 @@ export const login = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
         delete user.password;
         res.status(200).json({ token, user });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const getUsers = async  (req, res)=>{
+    try {
+        const { id } = req.params;
+
+        const user = await User.find({companyId: id});
+
+        res.status(200).json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

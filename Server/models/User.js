@@ -12,13 +12,7 @@ const UserSchema = new mongoose.Schema(
             min: 2,
             max: 100,
         },
-        email: {
-            type: String,
-            required: false,
-            max: 50,
-            //unique: true,
-        },
-        phoneNumber: {
+        login: {
             type: String,
             required: false,
             max: 50,
@@ -29,27 +23,21 @@ const UserSchema = new mongoose.Schema(
             required: true,
             min: 5,
         },
-        picturePath:{
-            type: String,
-            default: "",
-        },
         city: String,
         occupation: String,
-        transactions: Array,
         role: {
             type: String,
             enum: ["user", "admin"],
             default: "user",
         },
-        partnerId : {
+        companyId : {
             type: String,
             required: true,
             default: ""
         },
-        partnerName: {
-            type: String,
-            required: true,
-            default: ""
+        blocked: {
+            type: Boolean,
+            default: false
         }
     },
     { timestamps: true }
