@@ -17,7 +17,7 @@ const Profile = () =>{
     const user = useSelector((state) => state.global.user);
     const [expanded, setExpanded] = useState(false);
 
-    const { data, isLoading, isFetching, isError } = useGetProfileQuery(id);
+    const { data, error, isLoading, isFetching, isError } = useGetProfileQuery(id);
 
     const columns = [
         {
@@ -40,8 +40,12 @@ const Profile = () =>{
         return <div>Loading...</div>;
     }
 
-    if (isError || data === null) {
-        return <div>Error: </div>;
+    if (isError) {
+        return
+        (<div>
+            <div>{error.status}</div>
+            <div>{error.data.message}</div>
+        </div>);
     }
 
     if (data ===null){

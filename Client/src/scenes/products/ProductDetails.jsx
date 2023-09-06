@@ -42,7 +42,7 @@ const ProductDetails = () => {
 		return
 		(<div>
 			<div>{error.status}</div>
-			<div>{error.error}</div>
+			<div>{error.data.message}</div>
 		</div>);
 	}
 

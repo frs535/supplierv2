@@ -4,6 +4,7 @@ import Transaction from "../models/Transaction.js";
 import Profile from "../models/Profile.js";
 import Partner from "../models/Partner.js";
 import Settings from "../models/Settings.js";
+import Image from "../models/Image.js";
 
 export const getPartners = async (req, res)=>{
     try {
@@ -151,45 +152,13 @@ export  const postSettings = async (req, res)=>{
 
 export const getDashboardStats = async (req, res) => {
     try {
-        // hardcoded values
-        const currentMonth = "November";
-        const currentYear = 2021;
-        const currentDay = "2021-11-15";
 
-        /* Recent Transactions */
-        const transactions = await Transaction.find()
-            .limit(50)
-            .sort({ createdOn: -1 });
+        const settings = await Settings.findOne();
+        const partner = await  Partner.findOne({id: req.user.partnerId});
+        const image = await Image.findOne({id: partner?.manager?.id, destination: "manager"});
+        const logo = await Image.findOne({id: "00000000-0000-0000-0000-000000000000", destination: "logo"});
 
-        /* Overall Stats */
-        const overallStat = await OverallStat.find({ year: currentYear });
-
-        const {
-            totalCustomers,
-            yearlyTotalSoldUnits,
-            yearlySalesTotal,
-            monthlyData,
-            salesByCategory,
-        } = overallStat[0];
-
-        const thisMonthStats = overallStat[0].monthlyData.find(({ month }) => {
-            return month === currentMonth;
-        });
-
-        const todayStats = overallStat[0].dailyData.find(({ date }) => {
-            return date === currentDay;
-        });
-
-        res.status(200).json({
-            totalCustomers,
-            yearlyTotalSoldUnits,
-            yearlySalesTotal,
-            monthlyData,
-            salesByCategory,
-            thisMonthStats,
-            todayStats,
-            transactions,
-        });
+        res.status(200).json({partner, settings, image, logo});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
