@@ -43,6 +43,7 @@ import jwt from "jsonwebtoken";
 import ApiKeys from "./models/ApiKeys.js";
 import {deleteImages, getImages, postImage} from "./controllers/images.js";
 import fs from 'fs';
+import Price from "./models/Price.js";
 
 /* CONFIGURATION */
 const __filename = fileURLToPath(import.meta.url);

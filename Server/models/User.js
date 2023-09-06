@@ -30,10 +30,9 @@ const UserSchema = new mongoose.Schema(
             enum: ["user", "admin"],
             default: "user",
         },
-        companyId : {
+        partnerId : {
             type: String,
-            required: true,
-            default: ""
+            required: true
         },
         blocked: {
             type: Boolean,

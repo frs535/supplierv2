@@ -7,34 +7,55 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
-import {decreaseCount, increaseCount} from "state";
-import {useGetProductsQuery} from "../state/api";
+import {decreaseCount, increaseCount, setValueToCart} from "state"; //getQuantity
+import {useGetPriceQuery, useGetProductsQuery} from "../state/api";
+
+import {
+	GridColDef,
+	GridRowsProp,
+	GridCellEditStopParams,
+	GridCellEditStopReasons,
+	MuiEvent,
+} from '@mui/x-data-grid';
+import React from "react";
 
 const ProductGrid = ()=> {
-	const { data=[], isLoading, isFetching, isError } = useGetProductsQuery();
+	const id = useSelector(state => state.global.user.partnerId);
+	const { groupId } = useParams();
+	const { data=[], error, isLoading, isFetching, isError } = useGetProductsQuery({id, groupId});
+
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const { groupId } = useParams();
 	const cart	= useSelector(state => state.global.cart);
 	const dispatch = useDispatch();
 
-	function getCount({item})  {
-		const result = cart.filter(it=>{ return it.id === item.id });
-		if (result.length=== 0) return 0;
-
-		return  0;//result[0];
-	};
-
 	function decrease(item){
-		dispatch(decreaseCount(item, Math.max(getCount(item) - 1, 0)));
-
+		dispatch(decreaseCount(item));
 	}
 
 	function increase(item){
-		dispatch(increaseCount(item, getCount(item) + 1));
+		dispatch(increaseCount(item));
 	}
 
 	const columns = [
+		{
+			field: "images",
+			headerName: "",
+			sortable: false,
+			flex: 0.2,
+			renderCell: (p) => {
+				return (p.row.images.length > 0 ?
+						<img
+							alt={p.row.images[0].description}
+							width="100%"
+							height="80%"
+							loading="lazy"
+							src={`http://95.216.198.114:5001/${p.row.images[0].url256}`}
+							style={{ objectFit: "contain" }}
+						/>:
+				"")
+			},
+		},
 		{
 			field: "article",
 			headerName: "Артикул",
@@ -51,7 +72,7 @@ const ProductGrid = ()=> {
 		},
 		{
 			field: "quantity",
-			headerName: "Кол.",
+			headerName: "Cклад",
 			type: 'number',
 			headerAlign: "left",
 			align: "left",
@@ -73,20 +94,14 @@ const ProductGrid = ()=> {
 			flex: 0.3
 		},
 		{
-			field: "unitReport",
-			headerName: "Упак",
+			field: "order",
+			headerName: "К заказу",
+			type: 'number',
+			editable: true,
 			headerAlign: "left",
 			align: "left",
 			flex: 0.3
 		},
-		{
-			field: "priceReport",
-			headerName: "Цена",
-			headerAlign: "left",
-			align: "left",
-			flex: 0.3
-		},
-
 		{
 			field: "action",
 			headerName: "Action",
@@ -101,15 +116,6 @@ const ProductGrid = ()=> {
 					mr="20px"
 					p="2px 5px"
 				>
-					<IconButton onClick={()=>decrease(p.row)}>
-						<RemoveIcon />
-					</IconButton>
-					<Typography sx={{ p: "0 5px" }}>
-						{getCount(p)}
-					</Typography>
-					<IconButton onClick={()=>increase(p.row)}>
-						<AddIcon/>
-					</IconButton>
 					<IconButton onClick={()=> navigate(`/product/${p.id}`)}>
 						<InfoOutlinedIcon/>
 					</IconButton>
@@ -123,24 +129,34 @@ const ProductGrid = ()=> {
 	}
 
 	if (isError) {
-		return <div>Error: </div>;
+		return(<div>
+			<div>{error.status}</div>
+			<div>{error.data?.message}</div>
+		</div>);
 	}
 
 	return (<DataGrid
+			loading={isLoading}
 			sx={{ height: 900, flexGrow: 1, minWidth:50, overflowY: 'auto' }}
 			columns={columns}
-			rows={data.filter(item => {return item.searchId.includes(groupId)})}
-			initialState={{
-				pagination: {
-					paginationModel: {
-						pageSize: 25,
-					},
-				}
+			rows={data}
+			onRowEditCommit={(p, e)=>{
+				console.log(p);
 			}}
-			disableVirtualization={true}
-			disableRowSelectionOnClick={true}
-			disableMultipleSelection={true}
-			getRowId={(row) => row._id}
+			onCellEditStop={(params, event) => {
+				const value = Number(event.target.value);
+				if (value === Number.NaN) return;
+
+				if (params.row.order === null)
+					params.row.order = 0;
+
+				dispatch(setValueToCart({item: params.row, value, images: params.row?.images}));
+			}}
+			onProcessRowUpdateError={(error)=>
+			{
+				console.log(error);
+			}}
+			getRowId={(row) => row.id}
 		/>);
 }
 

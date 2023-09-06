@@ -2,82 +2,102 @@ import {Box, Button, IconButton, Typography, useTheme} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Item from "../../components/Item";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { addToCart, decreaseCount, increaseCount, removeFromCart } from "state";
+import {addToCart, decreaseCount, increaseCount, removeFromCart, setValueToCart, getQuantity} from "state";
 import {useDispatch, useSelector} from "react-redux";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import Rating from '@mui/material/Rating';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+
+import { useGetProductQuery } from "state/api";
 
 const ProductDetails = () => {
 	const dispatch = useDispatch();
 	const { itemId } = useParams();
-	const [value, setValue] = useState("description");
-	const [count, setCount] = useState(1);
-	const [item, setItem] = useState(null);
+	const [currentTab, setCurrentTab] = useState("description");
+	//const [item, setItem] = useState(null);
+	const [image, setImage] = useState(null);
 	const [items, setItems] = useState([]);
 	const theme = useTheme();
-	const token = useSelector((state)=>state.token);
+	const cart = useSelector((state) => state.global.cart);
 
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
+	const  startCount = cart.filter(item=>{ return item.id === itemId})
+		.reduce((acc, item)=>acc + item.order, 0);
 
-	async function getItem() {
-		const item = await fetch(
+	const [count, setCount] = useState(startCount);
 
-			`${process.env.REACT_APP_BASE_URL}client/product?id=${itemId}`, {
-				method: "GET",
-				headers: { Authorization: `Bearer ${token}` },
-			}
-		);
-		const itemJson = await item.json();
-		setItem(itemJson);
+	const { data, error , isLoading, isFetching, isError } = useGetProductQuery( itemId);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
 	}
 
-	async function getItems() {
-		const items = await fetch(
-			`${process.env.REACT_APP_BASE_URL}api/items?populate=image`,
-			{
-				method: "GET",
-			}
-		);
-		const itemsJson = await items.json();
-		setItems(itemsJson.data);
+	if (isError) {
+		return
+		(<div>
+			<div>{error.status}</div>
+			<div>{error.error}</div>
+		</div>);
 	}
-
-	useEffect(() => {
-		getItem();
-		//getItems();
-	}, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<Box width="80%" m="80px auto">
-			<Box display="flex" flexWrap="wrap" columnGap="40px">
+		<Box width="80%" m="40px auto">
+			<Box display="flex" flexWrap="wrap" columnGap="20px">
 				{/* IMAGES */}
-				<Box flex="1 1 40%" mb="40px">
+				<Box flex="1 1 40%" mb="0px">
+					{/* RATING */}
+					{data?.product?.rating === 0 ?
+						<Typography component="legend" sx={{ ml: "15px" }}>Рэйтинг еще не задан</Typography>:
+						""}
+					<Rating sx={{ ml: "15px" }}
+						name="simple-controlled"
+						value={data? data?.product?.rating: 0}
+						readOnly
+					/>
 					<img
-						alt={item?.name}
+						alt={image? image.description: data?.images[0].description}
 						width="100%"
-						height="100%"
-						//src={`http://localhost:2000${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
+						height="80%"
+						loading="lazy"
+						src={
+							`http://95.216.198.114:5001/${image? image.url256: data?.images[0].url256}`
+							}
 						style={{ objectFit: "contain" }}
+					/>
+					<Pagination count={data?.images.length}
+								variant="outlined"
+								color="primary"
+								onChange={(evt, number)=>{
+									setImage(data?.images[number-1]);
+									}}
+								sx={{ ml: "15px" }}
 					/>
 				</Box>
 
 				{/* ACTIONS */}
 				<Box flex="1 1 50%" mb="40px">
 					<Box display="flex" justifyContent="space-between">
-						<Box>Home/Item</Box>
-						<Box>Prev Next</Box>
+						{/*<Box>Home/Item</Box>*/}
+						{/*<Box>Prev Next</Box>*/}
 					</Box>
 
-					<Box m="65px 0 25px 0">
-						<Typography variant="h3">{item?.attributes?.name}</Typography>
-						<Typography>${item?.attributes?.price}</Typography>
+					<Box m="5px 0 25px 0">
+						<Typography variant="h3">{data?.product?.name}</Typography>
+
+						<Typography variant="h6" sx={{ mt: "10px" }}>АРТИКУЛ {data?.product?.article}</Typography>
+
+						{/* PRICE */}
+						<Typography variant="h4" sx={{ mt: "20px" }}> Цена: </Typography>
+						<Typography variant="h4"> ₽ {data?.defPrice.value}</Typography>
+
 						<Typography sx={{ mt: "20px" }}>
-							{item?.attributes?.longDescription}
+							{data?.product.description}
 						</Typography>
 					</Box>
 
@@ -89,57 +109,75 @@ const ProductDetails = () => {
 							mr="20px"
 							p="2px 5px"
 						>
-							<IconButton >
-								{/*onClick={() => dispatch(decreaseCount(item, Math.max(count - 1, 0)))}*/}
-								<RemoveIcon />
-							</IconButton>
-							<Typography sx={{ p: "0 5px" }}>{count}</Typography>
-							<IconButton>
-								{/*onClick={() => dispatch(increaseCount(item, count + 1))}*/}
-								<AddIcon />
-							</IconButton>
+							<TextField
+								label="Количество"
+								type="number"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								value={count}
+								InputProps={{
+									endAdornment: <InputAdornment position="end">{data?.defPrice.unit.name}</InputAdornment>,
+									inputMode: 'numeric',
+									pattern: '[0-9]*'
+								}}
+								size="small"
+								onChange={event => {
+									setCount(event.target.value);
+
+									let value = Number(event.target.value);
+									if (value == Number.NaN)
+										value = 0;
+
+									dispatch(setValueToCart({item: data.product, value, images: data.images}));
+								}}
+							/>
 						</Box>
-						<Button
-							sx={{
-								backgroundColor: "#222222",
-								color: "white",
-								borderRadius: 0,
-								minWidth: "150px",
-								padding: "10px 40px",
-							}}
-							onClick={() => dispatch(addToCart({ item: { ...item, count } }))}
-						>
-							ADD TO CART
-						</Button>
+						{/*<Button*/}
+						{/*	sx={{*/}
+						{/*		backgroundColor: "#222222",*/}
+						{/*		color: "white",*/}
+						{/*		borderRadius: 0,*/}
+						{/*		minWidth: "150px",*/}
+						{/*		padding: "10px 40px",*/}
+						{/*	}}*/}
+						{/*	onClick={() => dispatch(addToCart({ item: { ...data?.catalog, count } }))}*/}
+						{/*>*/}
+						{/*	ADD TO CART*/}
+						{/*</Button>*/}
 					</Box>
 					<Box>
 						<Box m="20px 0 5px 0" display="flex">
 							<FavoriteBorderOutlinedIcon />
-							<Typography sx={{ ml: "5px" }}>ADD TO WISHLIST</Typography>
+							<Typography sx={{ ml: "5px" }}>Добавить в избранное</Typography>
 						</Box>
-						<Typography>CATEGORIES: {item?.attributes?.category}</Typography>
+						<Typography>КАТЕГОРИЯ: {data?.product.category}</Typography>
 					</Box>
 				</Box>
 			</Box>
 
 			{/* INFORMATION */}
-			<Box m="20px 0">
-				<Tabs value={value} onChange={handleChange}>
-					<Tab label="DESCRIPTION" value="description" />
-					<Tab label="REVIEWS" value="reviews" />
+			<Box m="10px 0">
+				<Tabs value={currentTab} onChange={(event, newValue) => {
+					 	setCurrentTab(newValue);
+					 }}>
+					<Tab label="ОПИСАНИЕ" currentTab="description" />
+					<Tab label="ХАРАКТЕРИСТИКИ" currentTab="characteristics" />
+					<Tab label="ОТЗЫВЫ" currentTab="reviews" />
 				</Tabs>
 			</Box>
 			<Box display="flex" flexWrap="wrap" gap="15px">
-				{value === "description" && (
-					<div>{item?.attributes?.longDescription}</div>
+				{currentTab === "description" && (
+					<div>{data?.product?.description}</div>
 				)}
-				{value === "reviews" && <div>reviews</div>}
+				{currentTab === "characteristics" && <div>Характеристики продукции</div>}
+				{currentTab === "reviews" && <div>Отзывы по продукту пока отсутствуют</div>}
 			</Box>
 
 			{/* RELATED ITEMS */}
 			<Box mt="50px" width="100%">
 				<Typography variant="h3" fontWeight="bold">
-					Related Products
+					Сопутствующие товары
 				</Typography>
 				<Box
 					mt="20px"

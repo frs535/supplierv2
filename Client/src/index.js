@@ -25,7 +25,6 @@ import {PersistGate} from "redux-persist/integration/react";
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
 
-
 const rootReducer = combineReducers({
     global: globalReducer,
     [clientApi.reducerPath]: clientApi.reducer,

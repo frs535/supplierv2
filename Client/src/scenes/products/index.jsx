@@ -10,7 +10,7 @@ import {Outlet, useNavigate} from "react-router-dom";
 import { useGetCatalogsQuery } from "state/api";
 
 const Products = () =>{
-    const { data=[], isLoading, isFetching, isError } = useGetCatalogsQuery();
+    const { data=[], error, isLoading, isFetching, isError } = useGetCatalogsQuery();
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -27,7 +27,11 @@ const Products = () =>{
     }
 
     if (isError) {
-        return <div>Error: </div>;
+        return
+        (<div>
+            <div>{error.status}</div>
+            <div>{error.error}</div>
+        </div>);
     }
 
     return(
@@ -43,8 +47,8 @@ const Products = () =>{
                 <TreeView
                     aria-label="rich object"
                     defaultCollapseIcon={<ExpandMoreIcon />}
-                    defaultExpanded={['root']}
                     defaultExpandIcon={<ChevronRightIcon />}
+                    defaultExpanded={['root']}
                     sx={{ height: 900, flexGrow: 1, minWidth:50, maxWidth: 300, overflowY: 'auto' }}
                     onNodeSelect={(event, nodeId) => navigate(`group/${nodeId}`)}
                 >

@@ -7,74 +7,47 @@ const ProductSchema = new mongoose.Schema({
         max: 32,
         min: 32,
         unique: true,
+        //index: { unique: true}
     },
     article:String,
     name: String,
-    unit:String,
-    unitReport: {
-        type: String,
-        default: ""
-    },
-    quantity: {
-        type: Number,
-        default:0
-    },
-    price: {
-        type:Number,
-        default: 0
-    },
-    priceReport:{
-            type: Number,
-            default:0
-    },
-    currency:{
-        type: String,
-        default: "RUB",
-    },
-    description: String,
     category: String,
-    rating: {
-        type: Number,
-        default: 0
-    },
-    factory: {
-        type: String,
-        default: "",
-    },
+    rating: Number,
+    factory: String,
     group: String,
-    weight:{
-        type:Number,
-        default: 0
-    },
-    length:{
-        type:Number,
-        default: 0
-    },
-    volume:{
-        type: Number,
-        default:0
+    description: String,
+    weight: Number,
+    length: Number,
+    volume: Number,
+    area: Number,
+    weightName: String,
+    volumeName: String,
+    lengthName: String,
+    areaName: String,
+    storeUnit: {
+        name: {
+            type: String,
+            required: true
         },
-    area:{
-        type: Number,
-        default:0
+        id:{
+            type: String,
+            required: true
+        }
     },
-    searchId:{
-        type:String,
-        default:""
+    tax: {
+        value: String,
+        name: String
     },
-    imagesPath: [
+    searchId: {
+        type: String,
+        required: true
+    },
+    attributes: [
         {
-            path: {
-                type: String,
-                default:"",
-            },
-            bigPath: {
-                type: String,
-                default:"",
-            },
-            default: []
-        },
-        ],
+            name: String,
+            id: String
+        }
+    ],
 },
     { timestamps: true }
 );

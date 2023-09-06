@@ -9,8 +9,12 @@ import {
 	increaseCount,
 	removeFromCart,
 	setIsCartOpen,
+	clearBag, setValueToCart,
 } from "state";
 import { useNavigate } from "react-router-dom";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import React from "react";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -26,7 +30,7 @@ const CartMenu = () => {
 	const isCartOpen = useSelector((state) => state.global.isCartOpen);
 
 	const totalPrice = cart.reduce((total, item) => {
-		return 555; //total + item.count * item?.attributes?.price;
+		return total + item.order * item.catalog.price;
 	}, 0);
 
 	return (
@@ -52,7 +56,7 @@ const CartMenu = () => {
 				<Box padding="30px" overflow="auto" height="100%">
 					{/* HEADER */}
 					<FlexBox mb="15px">
-						<Typography variant="h3">SHOPPING BAG ({cart.length})</Typography>
+						<Typography variant="h3">КОРЗИНА ({cart.length})</Typography>
 						<IconButton onClick={() => dispatch(setIsCartOpen({}))}>
 							<CloseIcon />
 						</IconButton>
@@ -61,74 +65,73 @@ const CartMenu = () => {
 					{/* CART LIST */}
 					<Box>
 						{cart.map((item) => (
-							<Button>TEST</Button>
-							// <Box key={`${item?.attributes?.name}-${item.id}`}>
-							// 	<FlexBox p="15px 0">
-							// 		<Box flex="1 1 40%">
-							// 			<img
-							// 				alt={item?.name}
-							// 				width="123px"
-							// 				height="164px"
-							// 				src={`http://localhost:2000${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
-							// 			/>
-							// 		</Box>
-							// 		<Box flex="1 1 60%">
-							// 			<FlexBox mb="5px">
-							// 				<Typography fontWeight="bold">
-							// 					{item?.attributes?.name}
-							// 				</Typography>
-							// 				<IconButton
-							// 					onClick={() =>
-							// 						dispatch(removeFromCart({ id: item.id }))
-							// 					}
-							// 				>
-							// 					<CloseIcon />
-							// 				</IconButton>
-							// 			</FlexBox>
-							// 			<Typography>{item.attributes.shortDescription}</Typography>
-							// 			<FlexBox m="15px 0">
-							// 				<Box
-							// 					display="flex"
-							// 					alignItems="center"
-							// 					border={`1.5px solid ${theme.palette.grey[500]}`}
-							// 				>
-							// 					<IconButton
-							// 						onClick={() =>
-							// 							dispatch(decreaseCount({ id: item.id }))
-							// 						}
-							// 					>
-							// 						<RemoveIcon />
-							// 					</IconButton>
-							// 					<Typography>{item.count}</Typography>
-							// 					<IconButton
-							// 						onClick={() =>
-							// 							dispatch(increaseCount({ id: item.id }))
-							// 						}
-							// 					>
-							// 						<AddIcon />
-							// 					</IconButton>
-							// 				</Box>
-							// 				<Typography fontWeight="bold">
-							// 					${item.attributes.price}
-							// 				</Typography>
-							// 			</FlexBox>
-							// 		</Box>
-							// 	</FlexBox>
-							// 	<Divider />
-							// </Box>
+							// <Button>TEST</Button>
+							<Box key={`${item?.catalog?.name}-${item.id}`}>
+								<FlexBox p="15px 0">
+									<Box flex="1 1 40%">
+										<img
+											alt={item?.catalog?.name}
+											width="123px"
+											height="164px"
+											// src={`http://localhost:2000${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
+											src={
+												`http://95.216.198.114:5001/${item?.images[0]?.url256}`
+											}
+										/>
+									</Box>
+									<Box flex="1 1 60%">
+										<FlexBox mb="5px">
+											<Typography fontWeight="bold">
+												{item?.catalog?.name}
+											</Typography>
+											<IconButton
+												onClick={() =>
+													dispatch(removeFromCart({ id: item.id }))
+												}
+											>
+												<CloseIcon />
+											</IconButton>
+										</FlexBox>
+										<TextField
+											label="Количество"
+											type="number"
+											InputLabelProps={{
+												shrink: true,
+											}}
+											value={item?.order}
+											InputProps={{
+												endAdornment: <InputAdornment position="end">{item.catalog.unit}</InputAdornment>,
+												inputMode: 'numeric',
+												pattern: '[0-9]*'
+											}}
+											size="small"
+											onChange={event => {
+
+												let value = Number(event.target.value);
+												if (value == Number.NaN)
+													value = 0;
+
+												dispatch(setValueToCart({item: item.catalog, value, images: item.images}));
+											}}
+										/>
+									</Box>
+								</FlexBox>
+								<Divider />
+							</Box>
 						))}
 					</Box>
 
 					{/* ACTIONS */}
 					<Box m="20px 0">
 						<FlexBox m="20px 0">
-							<Typography fontWeight="bold">SUBTOTAL</Typography>
-							<Typography fontWeight="bold">${totalPrice}</Typography>
+							<Typography variant="h3" fontWeight="bold">ИТОГО</Typography>
+							<Typography variant="h3" fontWeight="bold">{new Intl.NumberFormat('ru-RU', {style: 'currency', currency: 'RUB'}).format(totalPrice)}</Typography>
 						</FlexBox>
 						<Button
+							disabled={cart.length ===0}
 							sx={{
 								backgroundColor: theme.palette.primary[400],
-								color: "white",
+								color: theme.palette.secondary.main,
 								borderRadius: 0,
 								minWidth: "100%",
 								padding: "20px 40px",
@@ -139,7 +142,22 @@ const CartMenu = () => {
 								dispatch(setIsCartOpen({}));
 							}}
 						>
-							CHECKOUT
+							Оформить
+						</Button>
+						<Button
+							// disabled={cart.length ===0}
+							sx={{
+							backgroundColor: theme.palette.primary[400],
+							color: theme.palette.secondary.main,
+							borderRadius: 0,
+							minWidth: "100%",
+							padding: "20px 40px",
+							m: "20px 0",
+						}}
+								onClick={() => {
+									dispatch(clearBag());
+								}}>
+							Очистить корзину
 						</Button>
 					</Box>
 				</Box>

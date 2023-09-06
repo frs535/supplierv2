@@ -7,6 +7,12 @@ const resizeFile = (path, destination, filename, width, height) =>
 
         const newPath = `${destination}/${width}_${height}_${filename}`;
 
+        if (destination.startsWith("public")) {
+            destination = destination.slice(7, path.length).trimEnd();
+        }
+
+        const returnPath = `${destination}/${width}_${height}_${filename}`;
+
         let inStream = fs.createReadStream(path);
         let outStream = fs.createWriteStream(newPath, {flags: "w"});
 
@@ -18,7 +24,7 @@ const resizeFile = (path, destination, filename, width, height) =>
                 //     if (err) console.log(err);
                 //     console.log(`Deleted file ${path}`)
                 // });
-                resolve(newPath);
+                resolve(returnPath);
             });
 
         inStream.pipe(transform).pipe(outStream);
@@ -73,7 +79,7 @@ export const postImage = async (req, res) => {
 
 export const getImages = async (req, res) => {
     try {
-        const { id, type }  = req.params;
+        const { id, type }  = req.query;
         const images = await Image.find({id: id, destination: type}).sort({updatedAt: -1});
         res.status(200).json(images);
     } catch (err) {

@@ -1,76 +1,60 @@
 import mongoose from "mongoose";
+import { nanoid } from 'nanoid'
 
 const priceSchema = new mongoose.Schema(
     {
+        // id: {
+        //     type: String,
+        //     required: true,
+        //     default: () => nanoid(36),
+        //     index: { unique: true },
+        // },
         partnerId: {
             type: String,
-            required: true,
-            unique: true
+            index: true,
         },
-        companyId: String,
-        price:[
+        catalogId: {
+            type: String,
+            required: true,
+            index: true,
+        },
+        companyId: {
+            type: String,
+            default: "",
+            index: true,
+        },
+        prices:[
             {
-                catalogId: {
-                    type: String,
-                    required: true,
-                    unique: true,
-                }, //catalogId
-                warehouseId: {
-                    type: String,
-                    required: true
-                }, //warehouseId
-                costs:[
-                    {
-                        priority: {
-                            type: Number,
-                            unique: true,
-                            required: true,
-                        },
-                        value: {
-                            type: Number,
-                            required: true
-                        }, //value
-                        quantity: {
-                            type: Number,
-                            default: 0
-                        },
-                        includeTax: {
-                          type: Boolean,
-                          default: true
-                        }, //includeTax
-                        order: {
-                            type: Boolean,
-                            default: true
-                        },
-                        currency: {
-                            type: String,
-                            required: true
-                        }, //currency
-                        unit: {
-                            id: {
-                                type: String,
-                                required: true
-                            },
-                            name: {
-                                type: String,
-                                required: true
-                            }
-                        },
-                        multiple: {
-                            type: Number,
-                            default: 1
-                        },
-                        priceTypeId: {
-                            type: String,
-                            required: true
-                        },
+                priority: Number,
+                value: {
+                    type: Number,
+                    default: 0
+                },
+                includeTax :{
+                    type: Boolean,
+                    default: false
+                },
+                currency: String,
+                unit: {
+                    id: {
+                        type: String,
+                        required: true
+                    },
+                    name: {
+                        type: String,
+                        required: true
                     }
-                ],
+                },
+                multiple: {
+                    type: Number,
+                    default: 1
+                },
+                priceTypeId: String
             }
-        ],
+        ]
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
-const Price = mongoose.model("Price", priceSchema);
+const Price = mongoose.model("Price", priceSchema,);
 export default Price;

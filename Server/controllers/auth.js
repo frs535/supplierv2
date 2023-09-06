@@ -14,7 +14,7 @@ export const register = async (req, res) => {
             occupation,
             city,
             role,
-            companyId,
+            partnerId,
             blocked,
             rewrite
         } = req.body;
@@ -36,7 +36,7 @@ export const register = async (req, res) => {
             occupation,
             city,
             role,
-            companyId,
+            partnerId,
             blocked,
             password: passwordHash,
         });
@@ -51,9 +51,9 @@ export const register = async (req, res) => {
 
 export const changePassword = async (req, res)=>{
     try {
-        const { login, companyId, password } = req.body;
+        const { login, partnerId, password } = req.body;
 
-        const user = await User.findOne({login: login, companyId: companyId});
+        const user = await User.findOne({login: login, partnerId: partnerId});
 
         if (!user) return res.status(400).json({ msg: "User does not exist." });
 
@@ -74,13 +74,24 @@ export const login = async (req, res) => {
         const { login, password } = req.body;
         const user = await User.findOne({login: login});
 
-        if (!user) return res.status(400).json({ msg: "User does not exist. " });
+        if (!user) return res.status(400).json({ msg: "User does not exist."});
+
+        if (user.blocked) return res.status(400).json({ msg: "User is blocked."});
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        delete user.password;
+        const token = jwt.sign({
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            login: user.login,
+            city: user.city,
+            occupation: user.occupation,
+            partnerId: user.partnerId
+        }, process.env.JWT_SECRET);
+        // delete user.password;
+        user.password = "";
         res.status(200).json({ token, user });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -91,7 +102,7 @@ export const getUsers = async  (req, res)=>{
     try {
         const { id } = req.params;
 
-        const user = await User.find({companyId: id});
+        const user = await User.find({partnerId: id});
 
         res.status(200).json(user);
     } catch (err) {

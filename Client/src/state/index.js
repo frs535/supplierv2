@@ -6,11 +6,13 @@ const initialState = {
     user: null,
     token: null,
     post: [],
+
     //e commerce
     isCartOpen: false,
     //catalog: [],
     cart: [],
     //items: [],
+    price: []
 };
 
 export const globalSlice = createSlice({
@@ -53,35 +55,78 @@ export const globalSlice = createSlice({
         removeFromCart: (state, action) => {
             state.cart = state.cart.filter((item) => item.id !== action.payload.id);
         },
-        increaseCount: (state, action) => {
-            const result = state.cart.filter(item=>{ return item.id === action.payload.id });
-            if (result.length ===0)
+        setValueToCart: (state, action)=>{
+
+            if(action.payload.value < 0) return;
+
+            const cart = state.cart.find((item)=> item? item.id === action.payload.item.id : false);
+
+            if (action.payload.value === 0 && !cart) return;
+
+            if (!cart)
             {
-                state.cart = [...state.cart, action.payload];
+                state.cart = [...state.cart, {
+                    catalog:action.payload.item,
+                    id: action.payload.item.id,
+                    order: action.payload.value,
+                    images: action.payload.images
+                }];
                 return;
-                // state.cart.push(action.payload);
-                // action.payload.count = 1;
             }
 
-            state.global.cart = state.cart.map((item) => {
-                if (item.id === action.payload.id) {
-                    item.count++;
+            if (action.payload.value ===0)
+            {
+                const index = state.cart.indexOf(cart);
+                if (index > -1) { // only splice array when item is found
+                    state.cart.splice(index, 1); // 2nd parameter means remove one item only
                 }
-                return item;
-            });
+                return;
+            }
+
+            console.log(`Before ${cart.order}`);
+            cart.order = action.payload.value;
+            console.log(`After ${cart.order}`);
+        },
+        increaseCount: (state, action) => {
+            const result = state.cart.filter(item=>{ return item.catalog.id === action.payload.id });
+
+            //action.payload.order = action.payload.order + 1;
+            if (result.length ===0)
+            {
+                state.cart.push({quantity: 1, catalog: action.payload});
+                return;
+            }
+
+            result[0].quantity = action.payload.order;
         },
         decreaseCount: (state, action) => {
-            state.global.cart = state.cart.map((item) => {
-                if (item.id === action.payload.id && item.count > 1) {
-                    item.count--;
-                }
-                return item;
-            });
+
+            if (action.payload.order<=0) return;
+
+            action.payload.order = action.payload.order - 1;
+
+            const result = state.cart.filter(item=>{ return item.catalog.id === action.payload.id });
+            if (result.length === 0) return;
+
+            result[0].quantity = action.payload.order;
+        },
+
+        getQuantity: (state, action) =>{
+            const result = state.cart.filter(item=>{ return item.id === action.payload.id });
+            if (!result) return 0;
+
+            return  result.reduce((accumulator, currentValue) => accumulator + currentValue.order, 0);
+        },
+
+        clearBag: (state)=>
+        {
+            state.cart = []
         },
 
         setIsCartOpen: (state) => {
-            state.global.isCartOpen = !state.isCartOpen;
+            state.isCartOpen = !state.isCartOpen;
         },
+
     },
 });
 
@@ -95,6 +140,9 @@ export const {
     removeFromCart,
     addToCart,
     setItems,
-    setCatalog,} = globalSlice.actions;
+    setCatalog,
+    clearBag,
+    setValueToCart,
+    getQuantity,} = globalSlice.actions;
 
 export default globalSlice.reducer;

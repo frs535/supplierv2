@@ -5,26 +5,44 @@ import Transaction from "../models/Transaction.js";
 import Catalog from "../models/Catalog.js";
 import Price from "../models/Price.js";
 import Order from "../models/Order.js";
+import Stock from "../models/Stock.js";
+import Image from "../models/Image.js";
 
 export const getProducts = async (req, res) => {
     try {
-        const { id } = req.query;
-        const products = id? await Product.find({"searchId" : {$regex : id}}) : await Product.find();
+        const { partnerId } = req.user;
+        if (!partnerId) return  res.status(404).json({ message: "Unknown partner" });
 
-        //Product.find({"username" : {$regex : "son"});
-        // const productsWithStats = await Promise.all(
-        //     products.map(async (product) => {
-        //         const stat = await ProductStat.find({
-        //             productId: product._id,
-        //         });
-        //         return {
-        //             ...product._doc,
-        //             stat,
-        //         };
-        //     })
-        // );
+        const { groupId } = req.query;
 
-        res.status(200).json(products);
+        const products = groupId? await Product.find({"searchId" : {$regex : groupId}}) : await Product.find();
+
+        const result = await Promise.all(products.map(async product=>{
+            const prices = await Price.findOne({partnerId, catalogId: product.id})
+                .then(doc=> doc?.prices);
+
+            const defPrice = prices && prices.length > 0 ? prices[0] : {value: 0, unit: { id: "", name: ""}};
+
+            const stock = await Stock.find({catalogId: product.id,});
+            const quantity =  stock.reduce((acc, cur) => { return acc + cur.quantity }, 0);
+
+            const images = await Image.find({id: product.id, destination: "product"}).sort({updatedAt: -1});
+
+            return {
+                id: product.id,
+                name: product.name,
+                article: product.article,
+                quantity: quantity,
+                unit: defPrice.unit.name,
+                price: defPrice.value,
+                prices,
+                stock,
+                order: 0,
+                images
+            }
+        }));
+
+        res.status(200).json(result);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -32,11 +50,25 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
     try {
+        const { partnerId } = req.user;
+        if (!partnerId) return  res.status(404).json({ message: "Unknown partner" });
 
         const { id } = req.query;
-        const product = await Product.findOne({"id": id});
+        if (!id) return res.status(404).json({ message: "Unknown product id" });
 
-        res.status(200).json(product);
+        const product = await Product.findOne({"id": id});
+        if (!product) return res.status(404).json({ message: "Product not found" });
+
+        const prices = await Price.findOne({partnerId, catalogId: product.id})
+            .then(doc=> doc.prices);
+
+        const defPrice = prices.length > 0 ? prices[0] : {value: 0, unit: { id: "", name: ""}};
+
+        const stock = await Stock.find({catalogId: product.id,});
+
+        const images = await Image.find({id, destination: "product"}).sort({updatedAt: -1});
+
+        res.status(200).json({product,  stock, prices, defPrice, images});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -57,6 +89,7 @@ export  const patchProduct = async (req, res) => {
 
 export const getCatalogs = async  (req, res)=>{
     try {
+
         const catalogs = await Catalog.find();
 
         res.status(200).json(catalogs);
@@ -110,9 +143,9 @@ export const getCustomers = async (req, res) => {
 
 export const getPrice = async (req, res) =>{
     try {
-        const { id } = req.params;
+        const { id, companyId } = req.params;
 
-        const price = await Price.findOne({partnerId : id});
+        const price = await Price.find({partnerId : id, companyId});
         if (!price)
         {
             res.status(404).json({ message: "Price list not found" });
@@ -126,9 +159,14 @@ export const getPrice = async (req, res) =>{
 }
 export const postPrice = async (req, res)=>{
     try {
-        const { partnerId } = req.body;
+        const { partnerId, companyId,  catalogId} = req.body;
 
-        const oldPrice = await Price.findOne({partnerId: partnerId});
+        const oldPrice = await Price.findOne({
+            partnerId,
+            companyId,
+            catalogId
+        });
+
         if (oldPrice)
         {
             const { price }= req.body;
@@ -145,6 +183,29 @@ export const postPrice = async (req, res)=>{
         res.status(404).json({ message: error.message });
     }
 };
+
+export const getStock = async (req, res)=>{
+    try {
+        const stock = await Stock.find();
+        res.status(200).json(stock);
+    }
+    catch (error)
+    {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const postStock = async (req, res)=>{
+    try {
+        await Stock.deleteMany();
+        const savedStock = await Stock.insertMany(req.body);
+        res.status(200).json(savedStock);
+    }
+    catch (error)
+    {
+        res.status(404).json({ message: error.message });
+    }
+}
 
 export  const getOrders = async (req, res) =>{
     try {
