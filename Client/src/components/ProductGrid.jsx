@@ -18,6 +18,8 @@ import {
 	MuiEvent,
 } from '@mui/x-data-grid';
 import React from "react";
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+
 
 const ProductGrid = ()=> {
 	const id = useSelector(state => state.global.user.partnerId);
@@ -42,18 +44,25 @@ const ProductGrid = ()=> {
 			field: "images",
 			headerName: "",
 			sortable: false,
+			cellClassName: 'actions',
 			flex: 0.2,
 			renderCell: (p) => {
-				return (p.row.images.length > 0 ?
-						<img
-							alt={p.row.images[0].description}
-							width="100%"
-							height="80%"
-							loading="lazy"
-							src={`http://95.216.198.114:5001/${p.row.images[0].url256}`}
-							style={{ objectFit: "contain" }}
-						/>:
-				"")
+				return (
+					<IconButton onClick={()=> navigate(`/product/${p.id}`)}>
+						{
+							p.row.images.length > 0 ?
+								<img
+									alt={p.row.images[0].description}
+									width="100%"
+									height="80%"
+									loading="lazy"
+									src={`http://95.216.198.114:5001/${p.row.images[0].url256}`}
+									// style={{ objectFit: "contain" }}
+								/>:
+								<HideImageOutlinedIcon/>
+						}
+					</IconButton>
+				)
 			},
 		},
 		{
@@ -61,7 +70,7 @@ const ProductGrid = ()=> {
 			headerName: "Артикул",
 			headerAlign: "left",
 			align: "left",
-			flex: 0.25
+			flex: 0.3
 		},
 		{
 			field: "name",
@@ -76,7 +85,7 @@ const ProductGrid = ()=> {
 			type: 'number',
 			headerAlign: "left",
 			align: "left",
-			flex: 0.2
+			flex: 0.3
 		},
 		{
 			field: "unit",
@@ -100,28 +109,28 @@ const ProductGrid = ()=> {
 			editable: true,
 			headerAlign: "left",
 			align: "left",
-			flex: 0.3
+			flex: 0.3,
 		},
-		{
-			field: "action",
-			headerName: "Action",
-			sortable: false,
-			cellClassName: 'actions',
-			flex: 0.5,
-			renderCell: (p)=> {
-				return (<Box
-					display="flex"
-					alignItems="center"
-					border={`1.5px solid ${theme.palette.neutral[300]}`}
-					mr="20px"
-					p="2px 5px"
-				>
-					<IconButton onClick={()=> navigate(`/product/${p.id}`)}>
-						<InfoOutlinedIcon/>
-					</IconButton>
-				</Box>)
-			},
-		},
+		// {
+		// 	field: "action",
+		// 	headerName: "Action",
+		// 	sortable: false,
+		// 	cellClassName: 'actions',
+		// 	flex: 0.5,
+		// 	renderCell: (p)=> {
+		// 		return (<Box
+		// 			display="flex"
+		// 			alignItems="center"
+		// 			border={`1.5px solid ${theme.palette.neutral[300]}`}
+		// 			mr="20px"
+		// 			p="2px 5px"
+		// 		>
+		// 			<IconButton onClick={()=> navigate(`/product/${p.id}`)}>
+		// 				<InfoOutlinedIcon/>
+		// 			</IconButton>
+		// 		</Box>)
+		// 	},
+		// },
 	];
 
 	if (isLoading) {
@@ -140,22 +149,15 @@ const ProductGrid = ()=> {
 			sx={{ height: 900, flexGrow: 1, minWidth:50, overflowY: 'auto' }}
 			columns={columns}
 			rows={data}
-			onRowEditCommit={(p, e)=>{
-				console.log(p);
-			}}
-			onCellEditStop={(params, event) => {
-				const value = Number(event.target.value);
-				if (value === Number.NaN) return;
-
-				if (params.row.order === null)
-					params.row.order = 0;
-
-				dispatch(setValueToCart({item: params.row, value, images: params.row?.images}));
-			}}
-			onProcessRowUpdateError={(error)=>
-			{
-				console.log(error);
-			}}
+			// onCellEditStop={(params, event) => {
+			// 	const value = Number(event.target.value);
+			// 	if (value === Number.NaN) return;
+			//
+			// 	if (params.row.order === null)
+			// 		params.row.order = 0;
+			//
+			// 	dispatch(setValueToCart({item: params.row, value, images: params.row?.images}));
+			// }}
 			getRowId={(row) => row.id}
 		/>);
 }

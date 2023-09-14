@@ -209,7 +209,8 @@ export const postStock = async (req, res)=>{
 
 export  const getOrders = async (req, res) =>{
     try {
-        const orders = await Order.find();
+        const { id } = req.query;
+        const orders = await Order.find(id? {id}: {});
         res.status(200).json(orders);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -218,7 +219,7 @@ export  const getOrders = async (req, res) =>{
 
 export const postOrder = async (req, res) =>{
     try {
-        const newOrder = new Price(req.body);
+        const newOrder = new Order(req.body);
         const savedOrder = await newOrder.save();
         res.status(200).json(savedOrder);
     } catch (error) {

@@ -9,7 +9,7 @@ import {Outlet, useNavigate} from "react-router-dom";
 
 import { useGetCatalogsQuery } from "state/api";
 
-const Products = () =>{
+const Index = () =>{
     const { data=[], error, isLoading, isFetching, isError } = useGetCatalogsQuery();
     const theme = useTheme();
     const navigate = useNavigate();
@@ -89,4 +89,4 @@ const Products = () =>{
     )
 };
 
-export default Products;
+export default Index;

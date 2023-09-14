@@ -17,6 +17,7 @@ import Admin from "scenes/admin";
 import Performance from "scenes/performance";
 import Footer from "./components/Footer";
 import ProductDetails from "scenes/products/ProductDetails";
+import {Checkout} from "./scenes/checkout/Checkout";
 
 /* Login */
 import Login from "scenes/auth";
@@ -55,6 +56,7 @@ function App() {
                         <Route path="group/:groupId" element={<ProductGrid />} />
                     </Route>
                     <Route path="product/:itemId" element={<ProductDetails />} />
+                    <Route path="/checkout" element={<Checkout />} />
                       {/*<Route path="/customers" element={mode.userId != null? <Customers /> : <Navigate to="/" replace/>} />*/}
                       {/*<Route path="/transactions" element={mode.userId != null? <Transactions/> : <Navigate to="/" replace/>}/>*/}
                       {/*<Route path="/overview" element={mode.userId != null? <Overview /> : <Navigate to="/" replace/>} />*/}

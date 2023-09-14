@@ -29,11 +29,16 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccordionDetails from "@mui/material/AccordionDetails";
+import {setWarehouses, setTypeofPrice, setPartner} from "../../state";
+import { useDispatch } from "react-redux";
 
 const Dashboard = () => {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+    const dispatch = useDispatch();
+
     const { data, error, isLoading , isError} = useGetDashboardQuery();
+
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -47,6 +52,11 @@ const Dashboard = () => {
         </div>);
     }
 
+    if (data){
+        dispatch(setWarehouses(data.settings.warehauses))
+        dispatch(setTypeofPrice(data.settings.priceOfTypes))
+        dispatch(setPartner(data.partner))
+    }
     return (
         <Box sx={{ mt: "40px", ml: "20px", mr: "20px", flexGrow: 1 }}>
             <Grid container rowSpacing={2} columnSpacing={2} m={2}>

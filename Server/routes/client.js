@@ -32,8 +32,8 @@ router.post("/price", verifyToken, postPrice);
 router.get("/stock", verifyToken, getStock);
 router.post("/stock", verifyToken, postStock);
 
-router.get("orders", verifyToken, getOrders);
-router.post("orders", verifyToken, postOrder);
+router.get("/orders", verifyToken, getOrders);
+router.post("/orders", verifyToken, postOrder);
 
 router.get("/customers",verifyToken, getCustomers);
 router.get("/transactions",verifyToken, getTransactions);

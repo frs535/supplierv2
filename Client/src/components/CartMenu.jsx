@@ -30,7 +30,7 @@ const CartMenu = () => {
 	const isCartOpen = useSelector((state) => state.global.isCartOpen);
 
 	const totalPrice = cart.reduce((total, item) => {
-		return total + item.order * item.catalog.price;
+		return total + item.order * item.price.value;
 	}, 0);
 
 	return (
@@ -111,7 +111,7 @@ const CartMenu = () => {
 												if (value == Number.NaN)
 													value = 0;
 
-												dispatch(setValueToCart({item: item.catalog, value, images: item.images}));
+												dispatch(setValueToCart({item: item.catalog, value, images: item.images, wh: item.wh, price: item.price}));
 											}}
 										/>
 									</Box>

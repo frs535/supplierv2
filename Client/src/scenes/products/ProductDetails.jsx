@@ -1,4 +1,4 @@
-import {Box, Button, IconButton, Typography, useTheme} from "@mui/material";
+import {Box, Button, Divider, Grid, IconButton, Typography, useTheme} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useParams } from "react-router-dom";
@@ -16,6 +16,13 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { useGetProductQuery } from "state/api";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+import { DataGrid } from '@mui/x-data-grid';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ProductDetails = () => {
 	const dispatch = useDispatch();
@@ -26,13 +33,70 @@ const ProductDetails = () => {
 	const [items, setItems] = useState([]);
 	const theme = useTheme();
 	const cart = useSelector((state) => state.global.cart);
+	const warehouses = useSelector((state) => state.global.warehouses);
+	const typeofPrice = useSelector((state) => state.global.typeofPrice);
 
 	const  startCount = cart.filter(item=>{ return item.id === itemId})
 		.reduce((acc, item)=>acc + item.order, 0);
 
-	const [count, setCount] = useState(startCount);
+	const [count, setCount] = useState([]);
 
 	const { data, error , isLoading, isFetching, isError } = useGetProductQuery( itemId);
+
+	const columns = [
+		{
+			field: 'warehouse',
+			headerName: 'Склад',
+			flex: 0.6,
+		},
+		{
+			field: 'stock',
+			headerName: 'Остаток',
+			flex: 0.3,
+		},
+		{
+			field: 'toOrder',
+			headerName: 'К заказу',
+			description: 'Укажите количество для заказа со склада',
+			sortable: false,
+			flex: 0.4,
+			renderCell: (item)=> {
+				return (
+					<Box display="flex" alignItems="center" minHeight="50px">
+						<Box
+							display="flex"
+							alignItems="center"
+						>
+							<TextField
+								label="К заказу"
+								type="number"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								value={item.row.toOrder}
+								InputProps={{
+									endAdornment: <InputAdornment position="end">{data?.defPrice.unit.name}</InputAdornment>,
+									inputMode: 'numeric',
+									pattern: '[0-9]*'
+								}}
+								size="small"
+								onChange={event => {
+									//setCount(event.target.value);
+
+									let value = Number(event.target.value);
+									if (value == Number.NaN)
+										value = 0;
+
+									dispatch(setValueToCart({item: data.product, value, images: data.images, wh: item.id, price: item.row.price}));
+									//const it = count.filter(i => item.warehouseId === i.warehouseId)?.count;
+								}}
+							/>
+						</Box>
+					</Box>
+				)
+			}
+		},
+	];
 
 	if (isLoading) {
 		return <div>Loading...</div>;
@@ -45,6 +109,14 @@ const ProductDetails = () => {
 			<div>{error.data.message}</div>
 		</div>);
 	}
+
+	const warehouseStock = data?.stock.map(item => ({
+		id: item.warehouseId,
+		warehouse: warehouses.find(w => w.id === item.warehouseId)?.name,
+		stock: `${item.quantity} ${data?.product.storeUnit.name}`,
+		toOrder: cart.find(card=> card.id === item.catalogId && card.wh === item.warehouseId)?.order,
+		price: data.defPrice,
+	}));
 
 	return (
 		<Box width="80%" m="40px auto">
@@ -60,24 +132,32 @@ const ProductDetails = () => {
 						value={data? data?.product?.rating: 0}
 						readOnly
 					/>
-					<img
-						alt={image? image.description: data?.images[0].description}
-						width="100%"
-						height="80%"
-						loading="lazy"
-						src={
-							`http://95.216.198.114:5001/${image? image.url256: data?.images[0].url256}`
-							}
-						style={{ objectFit: "contain" }}
-					/>
-					<Pagination count={data?.images.length}
-								variant="outlined"
-								color="primary"
-								onChange={(evt, number)=>{
-									setImage(data?.images[number-1]);
-									}}
-								sx={{ ml: "15px" }}
-					/>
+					{
+						data.images.length > 0 || image?
+							<img
+								alt={ image? image.description: data.images[0].description}
+								width="100%"
+								height="80%"
+								loading="lazy"
+								src={
+									`http://95.216.198.114:5001/${image? image.url256: data?.images[0].url256}`
+								}
+								style={{ objectFit: "contain" }}
+							/>:
+							""
+					}
+					{
+						data.images.length > 1 || image?
+							<Pagination count={data?.images.length}
+										variant="outlined"
+										color="primary"
+										onChange={(evt, number)=>{
+											setImage(data?.images[number-1]);
+										}}
+										sx={{ ml: "15px" }}
+							/>:
+							""
+					}
 				</Box>
 
 				{/* ACTIONS */}
@@ -90,68 +170,103 @@ const ProductDetails = () => {
 					<Box m="5px 0 25px 0">
 						<Typography variant="h3">{data?.product?.name}</Typography>
 
-						<Typography variant="h6" sx={{ mt: "10px" }}>АРТИКУЛ {data?.product?.article}</Typography>
+						<Typography variant="h6" sx={{ mt: "10px" }}>АРТИКУЛ: {data?.product?.article}</Typography>
 
 						{/* PRICE */}
-						<Typography variant="h4" sx={{ mt: "20px" }}> Цена: </Typography>
-						<Typography variant="h4"> ₽ {data?.defPrice.value}</Typography>
-
-						<Typography sx={{ mt: "20px" }}>
-							{data?.product.description}
-						</Typography>
+						<Typography variant="h4" sx={{ mt: "20px" }}> Цена</Typography>
+						{
+							data?.prices.map(item=>(
+								<Typography variant="h5" m="0 0 0 10px" sx={{ mt: "10px" }}>₽ {Math.round(item.value)} / {item.unit.name}</Typography>
+							))
+						}
 					</Box>
 
-					<Box display="flex" alignItems="center" minHeight="50px">
-						<Box
-							display="flex"
-							alignItems="center"
-							border={`1.5px solid ${theme.palette.neutral[300]}`}
-							mr="20px"
-							p="2px 5px"
-						>
-							<TextField
-								label="Количество"
-								type="number"
-								InputLabelProps={{
-									shrink: true,
-								}}
-								value={count}
-								InputProps={{
-									endAdornment: <InputAdornment position="end">{data?.defPrice.unit.name}</InputAdornment>,
-									inputMode: 'numeric',
-									pattern: '[0-9]*'
-								}}
-								size="small"
-								onChange={event => {
-									setCount(event.target.value);
+					{/*STOCK*/}
+					<Box m="20px 0 5px 0">
+						{
+							data?.stock.length > 0 ?
+								<Typography variant="h5">ОСТАТКИ</Typography>:
+								<Typography variant="h5" color={theme.palette.primary.blue}>НЕТ НА СКЛАДЕ</Typography>
+						}
+						<Box m="20px 0 5px 20px">
+							{
+								data?.stock.length > 0 ?
+									<DataGrid columns={columns}
+											  rows={warehouseStock}
+											  getRowId={row=> row.id}
+											  loading={data === null}
+											  slots={{
+												  loadingOverlay: LinearProgress,
+												  columnHeaders: () => null,
+											  }}
+											  hideFooter>
 
-									let value = Number(event.target.value);
-									if (value == Number.NaN)
-										value = 0;
+									</DataGrid>
+									: ""
+							}
+							{/*<Grid container spacing={2}>*/}
+							{/*	{*/}
+							{/*		data?.stock.map(item=>(*/}
+							{/*			<Grid container>*/}
+							{/*				<Grid item xs={6}>*/}
+							{/*					<Typography m="20px 0 5px 0" variant="h6"> {warehouses.find(w => w.id === item.warehouseId)?.name}</Typography>*/}
+							{/*				</Grid>*/}
+							{/*				<Grid item xs={2}>*/}
+							{/*					<Typography m="20px 0 5px 0" variant="h6"> {item?.quantity}</Typography>*/}
+							{/*				</Grid>*/}
+							{/*				<Grid item xs={4}>*/}
+							{/*					/!*QUANTITY*!/*/}
+							{/*					<Box display="flex" alignItems="center" minHeight="50px">*/}
+							{/*						<Box*/}
+							{/*							display="flex"*/}
+							{/*							alignItems="center"*/}
+							{/*							border={`1.5px solid ${theme.palette.neutral[300]}`}*/}
+							{/*						>*/}
+							{/*							<TextField*/}
+							{/*								label="К заказу"*/}
+							{/*								type="number"*/}
+							{/*								InputLabelProps={{*/}
+							{/*									shrink: true,*/}
+							{/*								}}*/}
+							{/*								value={count.filter(i => item.warehouseId === i.warehouseId)?.count}*/}
+							{/*								InputProps={{*/}
+							{/*									endAdornment: <InputAdornment position="end">{data?.defPrice.unit.name}</InputAdornment>,*/}
+							{/*									inputMode: 'numeric',*/}
+							{/*									pattern: '[0-9]*'*/}
+							{/*								}}*/}
+							{/*								size="small"*/}
+							{/*								onChange={event => {*/}
+							{/*									setCount(event.target.value);*/}
 
-									dispatch(setValueToCart({item: data.product, value, images: data.images}));
-								}}
-							/>
+							{/*									let value = Number(event.target.value);*/}
+							{/*									if (value == Number.NaN)*/}
+							{/*										value = 0;*/}
+
+							{/*									dispatch(setValueToCart({item: data.product, value, images: data.images, wh: item.warehouseId}));*/}
+							{/*									const it = count.filter(i => item.warehouseId === i.warehouseId)?.count;*/}
+							{/*									if (it) {*/}
+							{/*										count.push({warehouseId: item.warehouseId, value: value,});*/}
+							{/*									}*/}
+							{/*									else*/}
+							{/*										it.value = value;*/}
+							{/*									setCount(count);*/}
+							{/*								}}*/}
+							{/*							/>*/}
+							{/*						</Box>*/}
+							{/*					</Box>*/}
+							{/*				</Grid>*/}
+							{/*			</Grid>*/}
+							{/*		))*/}
+							{/*	}*/}
+							{/*</Grid>*/}
 						</Box>
-						{/*<Button*/}
-						{/*	sx={{*/}
-						{/*		backgroundColor: "#222222",*/}
-						{/*		color: "white",*/}
-						{/*		borderRadius: 0,*/}
-						{/*		minWidth: "150px",*/}
-						{/*		padding: "10px 40px",*/}
-						{/*	}}*/}
-						{/*	onClick={() => dispatch(addToCart({ item: { ...data?.catalog, count } }))}*/}
-						{/*>*/}
-						{/*	ADD TO CART*/}
-						{/*</Button>*/}
 					</Box>
 					<Box>
-						<Box m="20px 0 5px 0" display="flex">
-							<FavoriteBorderOutlinedIcon />
-							<Typography sx={{ ml: "5px" }}>Добавить в избранное</Typography>
-						</Box>
-						<Typography>КАТЕГОРИЯ: {data?.product.category}</Typography>
+						{/*<Box m="20px 0 5px 0" display="flex">*/}
+						{/*	<FavoriteBorderOutlinedIcon />*/}
+						{/*	<Typography sx={{ ml: "5px" }}>Добавить в избранное</Typography>*/}
+						{/*</Box>*/}
+						<Typography m="20px 0 5px 0" display="flex">КАТЕГОРИЯ: {data?.product.category}</Typography>
 					</Box>
 				</Box>
 			</Box>

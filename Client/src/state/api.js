@@ -22,7 +22,8 @@ export const clientApi = createApi({
         "Admins",
         "Performance",
         "Dashboard",
-        "Images"
+        "Images",
+        "Orders"
     ],
     endpoints: (build) => ({
         getProfile: build.query({
@@ -71,6 +72,37 @@ export const clientApi = createApi({
             //         : ['Catalogs'],
         }),
 
+        getOrder: build.query({
+            query: ({id})=>({
+                url: `client/orders/${id}`
+            }),
+            providesTags: ["Orders"],
+        }),
+
+        updateOrder: build.mutation({
+           query: ({order}) =>({
+               url: `client/orders`,
+               method: "POST",
+               body: order
+           }),
+             invalidatesTags: (result, error, {id}) => [
+                {type: "Orders", id}
+            ], //["Orders"],
+            providesTags: (result, error, arg) => [
+                //{type: "Order", id: arg} ,
+                {type: "Orders", id: "ALL"} //Если необходимо инвалидировать все теги
+            ],
+            // async onQueryStarted({id, ...body}, {dispatch, queryFulfilled}) {
+            //     const patchResult = dispatch(
+            //         clientApi.util.updateQueryData('getOrder', id, (draft) => Object.assign(draft, body)))
+            //     try {
+            //         await queryFulfilled
+            //     } catch {
+            //         patchResult.undo()
+            //     }
+            // }
+        }),
+
 
         getCustomers: build.query({
             query: () => "client/customers",
@@ -115,4 +147,6 @@ export const {
     useGetDashboardQuery,
     useGetProductImagesQuery,
     useGetProductQuery,
+    useGetOrderQuery,
+    useUpdateOrderMutation,
 } = clientApi
