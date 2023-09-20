@@ -26,6 +26,7 @@ const orderSchema = new mongoose.Schema(
         },
         status: {
             type: String,
+            enum: ["Created", " Received", " Confirmed", "InDelivery", "Closed", "HasProblems", "Canceled"],
             default: "Created"
         },
         deliveryType: {
@@ -68,6 +69,14 @@ const orderSchema = new mongoose.Schema(
                 unitQuantity: Number, //Количество упаковок
                 TAXRate:String, //Ставка НДС
                 amountTaxes: Number, //Сумма НДС
+                discountPercent: { //Процент скидки
+                    type: Number,
+                    default: 0
+                },
+                discountAmount: { //Сумма скидки
+                    type: Number,
+                    default: 0
+                },
                 warehouseId: {
                     type: String,
                     default: ""

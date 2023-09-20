@@ -74,7 +74,9 @@ export const clientApi = createApi({
 
         getOrder: build.query({
             query: ({id})=>({
-                url: `client/orders/${id}`
+                url: `client/orders/${id}`,
+                method: "GET",
+                //params: {id: id}
             }),
             providesTags: ["Orders"],
         }),

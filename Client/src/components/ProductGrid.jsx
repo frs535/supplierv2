@@ -1,25 +1,11 @@
 import {DataGrid} from "@mui/x-data-grid";
-import {Box, IconButton, Typography, useTheme} from "@mui/material";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import {IconButton, useTheme} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-
-import {decreaseCount, increaseCount, setValueToCart} from "state"; //getQuantity
-import {useGetPriceQuery, useGetProductsQuery} from "../state/api";
-
-import {
-	GridColDef,
-	GridRowsProp,
-	GridCellEditStopParams,
-	GridCellEditStopReasons,
-	MuiEvent,
-} from '@mui/x-data-grid';
+import {decreaseCount, increaseCount, setValueToCart} from "state";
+import {useGetProductsQuery} from "../state/api";
 import React from "react";
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
-
 
 const ProductGrid = ()=> {
 	const id = useSelector(state => state.global.user.partnerId);
@@ -28,7 +14,6 @@ const ProductGrid = ()=> {
 
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const cart	= useSelector(state => state.global.cart);
 	const dispatch = useDispatch();
 
 	function decrease(item){
@@ -111,26 +96,6 @@ const ProductGrid = ()=> {
 			align: "left",
 			flex: 0.3,
 		},
-		// {
-		// 	field: "action",
-		// 	headerName: "Action",
-		// 	sortable: false,
-		// 	cellClassName: 'actions',
-		// 	flex: 0.5,
-		// 	renderCell: (p)=> {
-		// 		return (<Box
-		// 			display="flex"
-		// 			alignItems="center"
-		// 			border={`1.5px solid ${theme.palette.neutral[300]}`}
-		// 			mr="20px"
-		// 			p="2px 5px"
-		// 		>
-		// 			<IconButton onClick={()=> navigate(`/product/${p.id}`)}>
-		// 				<InfoOutlinedIcon/>
-		// 			</IconButton>
-		// 		</Box>)
-		// 	},
-		// },
 	];
 
 	if (isLoading) {
@@ -149,15 +114,6 @@ const ProductGrid = ()=> {
 			sx={{ height: 900, flexGrow: 1, minWidth:50, overflowY: 'auto' }}
 			columns={columns}
 			rows={data}
-			// onCellEditStop={(params, event) => {
-			// 	const value = Number(event.target.value);
-			// 	if (value === Number.NaN) return;
-			//
-			// 	if (params.row.order === null)
-			// 		params.row.order = 0;
-			//
-			// 	dispatch(setValueToCart({item: params.row, value, images: params.row?.images}));
-			// }}
 			getRowId={(row) => row.id}
 		/>);
 }

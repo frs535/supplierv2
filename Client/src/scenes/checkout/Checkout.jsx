@@ -27,6 +27,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {useNavigate} from "react-router-dom";
 
 
 const Step1 = ()=>{
@@ -282,6 +283,7 @@ const Step4 =()=>{
 export const Checkout = () => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
@@ -320,41 +322,54 @@ export const Checkout = () => {
 
         if (activeStep === steps.length - 1)
         {
-            const  order = {
-                id: uuidv4(),
-                number: "",
-                data: new Date(),
-                deliveryType: orderDetail.delive? "delivery": "pickup",
-                deliveryAddress: orderDetail.deliveryAdress,
-                deliveryDate: orderDetail.deliveryDate,
-                wholeShip: true,
-                currencyId: "",
-                partnerId: partner.id,
-                companyId: orderDetail.organisation.id,
-                contractId: orderDetail.organisation.contractId,
-                agreementId: partner.agreementId,
-                warehouseId: "",
-                amount: cart.reduce((acc, curr)=> {
-                    return acc + curr.order * curr.price.value
-                }, 0),
-                goods: cart.map(item=>{
-                    return {
-                        productId: item.catalog.id,
-                        unitRef: item.catalog.storeUnit.id,
-                        quantity: item.order,
-                        amount: item.order * item.price.value,
-                        price: item.price.value,
-                        priceTypeId: item.price.priceTypeId,
-                        priceByUnit: item.price.value,
-                        unitQuantity: item.order,
-                        TAXRate: item.catalog.tax.name,
-                        amountTaxes: item.catalog.tax.value,
-                        warehouseId: item.wh,
-                    }
-                })
-            }
+            const warehouses = cart.map(item=>{
+                return item.wh
+            })
+            const wh = warehouses.filter((value, index, array)=> {
+                return array.indexOf(value) === index
+            })
 
-            updateOrder({ order});
+            wh.map(warehouseId=>{
+                const  order = {
+                    id: uuidv4(),
+                    number: "",
+                    data: new Date(),
+                    deliveryType: orderDetail.delive? "delivery": "pickup",
+                    deliveryAddress: orderDetail.deliveryAdress,
+                    deliveryDate: orderDetail.deliveryDate,
+                    wholeShip: true,
+                    currencyId: "",
+                    partnerId: partner.id,
+                    companyId: orderDetail.organisation.id,
+                    contractId: orderDetail.organisation.contractId,
+                    agreementId: partner.agreementId,
+                    warehouseId,
+                    amount: cart.filter(p=>p.wh===warehouseId)
+                        .reduce((acc, curr)=> {
+                        return acc + curr.wh === warehouseId ? 0: curr.order * curr.price.value
+                    }, 0),
+                    goods: cart.filter(p=>p.wh === warehouseId)
+                        .map(item=>{
+
+                        return {
+                            productId: item.catalog.id,
+                            unitRef: item.catalog.storeUnit.id,
+                            quantity: item.order,
+                            amount: item.order * item.price.value,
+                            price: item.price.value,
+                            priceTypeId: item.price.priceTypeId,
+                            priceByUnit: item.price.value,
+                            unitQuantity: item.order,
+                            TAXRate: item.catalog.tax.id,
+                            amountTaxes: item.catalog.tax.value,
+                            warehouseId: item.wh,
+                        }
+                    })
+                }
+
+                updateOrder({ order});
+            })
+
             dispatch(clearBag());
         }
     };
@@ -421,7 +436,10 @@ export const Checkout = () => {
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Перейти в начало</Button>
+                        <Button onClick={() =>{
+                            handleReset()
+                            navigate("/orders")
+                        }}>Перейти в заказы</Button>
                     </Box>
                 </React.Fragment>
             ) : (

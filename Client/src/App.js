@@ -24,6 +24,7 @@ import Login from "scenes/auth";
 import Profile from "scenes/profile";
 import state from "./state";
 import ProductGrid from "./components/ProductGrid";
+import Orders from "./scenes/orders/Orders";
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -57,6 +58,7 @@ function App() {
                     </Route>
                     <Route path="product/:itemId" element={<ProductDetails />} />
                     <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/orders" element={<Orders/>} />
                       {/*<Route path="/customers" element={mode.userId != null? <Customers /> : <Navigate to="/" replace/>} />*/}
                       {/*<Route path="/transactions" element={mode.userId != null? <Transactions/> : <Navigate to="/" replace/>}/>*/}
                       {/*<Route path="/overview" element={mode.userId != null? <Overview /> : <Navigate to="/" replace/>} />*/}

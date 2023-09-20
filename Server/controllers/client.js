@@ -7,6 +7,7 @@ import Price from "../models/Price.js";
 import Order from "../models/Order.js";
 import Stock from "../models/Stock.js";
 import Image from "../models/Image.js";
+import e from "express";
 
 export const getProducts = async (req, res) => {
     try {
@@ -209,8 +210,22 @@ export const postStock = async (req, res)=>{
 
 export  const getOrders = async (req, res) =>{
     try {
-        const { id } = req.query;
-        const orders = await Order.find(id? {id}: {});
+        const { id, status } = req.query;
+
+        let filter;
+        if (id !== undefined && status !== undefined)
+            filter = {id, status};
+        else if (id === undefined && status !== undefined)
+            filter = {status};
+        else if (id !== undefined && status === undefined)
+            filter = {id};
+        else
+            filter = {};
+
+        if (req.user.role !== "admin")
+            filter.partnerId = req.user.partnerId;
+
+        const orders = await Order.find(filter);
         res.status(200).json(orders);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -219,9 +234,13 @@ export  const getOrders = async (req, res) =>{
 
 export const postOrder = async (req, res) =>{
     try {
-        const newOrder = new Order(req.body);
-        const savedOrder = await newOrder.save();
-        res.status(200).json(savedOrder);
+
+        const { id } = req.body;
+
+        const result = await Order.replaceOne({id}, req.body, {upsert: true});
+
+        //const savedOrder = await newOrder.save();
+        res.status(200).json(result);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }

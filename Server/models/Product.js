@@ -36,7 +36,8 @@ const ProductSchema = new mongoose.Schema({
     },
     tax: {
         value: String,
-        name: String
+        name: String,
+        id: String
     },
     searchId: {
         type: String,
