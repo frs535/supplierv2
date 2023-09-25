@@ -9,10 +9,11 @@ import {
     getCatalogs,
     getPrice,
     postPrice,
+    getOrder,
     getOrders,
     postOrder,
     getStock,
-    postStock
+    postStock,
 } from "../controllers/client.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -32,6 +33,7 @@ router.post("/price", verifyToken, postPrice);
 router.get("/stock", verifyToken, getStock);
 router.post("/stock", verifyToken, postStock);
 
+router.get("/order/:id", verifyToken, getOrder);
 router.get("/orders", verifyToken, getOrders);
 router.post("/orders", verifyToken, postOrder);
 

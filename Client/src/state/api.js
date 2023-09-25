@@ -72,13 +72,22 @@ export const clientApi = createApi({
             //         : ['Catalogs'],
         }),
 
-        getOrder: build.query({
-            query: ({id})=>({
-                url: `client/orders/${id}`,
+        getOrders: build.query({
+            query: ({ page, pageSize, sort })=>({
+                url: `client/orders`,
                 method: "GET",
-                //params: {id: id}
+                params: { page, pageSize, sort },
             }),
-            providesTags: ["Orders"],
+            providesTags: ['Orders'],
+        }),
+
+        getOrder: build.query({
+            query: (id) => ({
+                url: `client/order/${id}`,
+                method: "GET",
+                params: {id: id}
+            }),
+            providesTags: ['Order'],
         }),
 
         updateOrder: build.mutation({
@@ -88,7 +97,7 @@ export const clientApi = createApi({
                body: order
            }),
              invalidatesTags: (result, error, {id}) => [
-                {type: "Orders", id}
+                {type: "Orders, Order", id: `${result.id}_${result.updatedAt}`}
             ], //["Orders"],
             providesTags: (result, error, arg) => [
                 //{type: "Order", id: arg} ,
@@ -150,5 +159,6 @@ export const {
     useGetProductImagesQuery,
     useGetProductQuery,
     useGetOrderQuery,
+    useGetOrdersQuery,
     useUpdateOrderMutation,
 } = clientApi

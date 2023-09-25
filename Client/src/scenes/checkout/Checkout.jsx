@@ -289,6 +289,7 @@ export const Checkout = () => {
     const [skipped, setSkipped] = useState(new Set());
     const cart = useSelector((state) => state.global.cart);
     const warehouses = useSelector((state) => state.global.warehouses);
+    const typeofPrice = useSelector((state) => state.global.typeofPrice);
 
     const partner = useSelector((state) => state.global.partner);
     const orderDetail = useSelector((state) => state.global.orderDetail);
@@ -330,6 +331,7 @@ export const Checkout = () => {
             })
 
             wh.map(warehouseId=>{
+                let i = 0
                 const  order = {
                     id: uuidv4(),
                     number: "",
@@ -344,20 +346,25 @@ export const Checkout = () => {
                     contractId: orderDetail.organisation.contractId,
                     agreementId: partner.agreementId,
                     warehouseId,
+                    deliveryComment: orderDetail.deliverComment,
+                    comment: orderDetail.comment,
                     amount: cart.filter(p=>p.wh===warehouseId)
                         .reduce((acc, curr)=> {
                         return acc + curr.wh === warehouseId ? 0: curr.order * curr.price.value
                     }, 0),
                     goods: cart.filter(p=>p.wh === warehouseId)
                         .map(item=>{
-
                         return {
+                            rowNumber: ++i,
                             productId: item.catalog.id,
+                            productName: item.catalog.name,
                             unitRef: item.catalog.storeUnit.id,
+                            unitName: item.catalog.storeUnit.name,
                             quantity: item.order,
                             amount: item.order * item.price.value,
                             price: item.price.value,
                             priceTypeId: item.price.priceTypeId,
+                            priceTypeName: typeofPrice.find(w => w.id === item.price.priceTypeId)?.name,
                             priceByUnit: item.price.value,
                             unitQuantity: item.order,
                             TAXRate: item.catalog.tax.id,

@@ -208,25 +208,52 @@ export const postStock = async (req, res)=>{
     }
 }
 
-export  const getOrders = async (req, res) =>{
+export  const getOrder = async (req, res) =>{
     try {
-        const { id, status } = req.query;
+        const { id } = req.query;
 
-        let filter;
-        if (id !== undefined && status !== undefined)
-            filter = {id, status};
-        else if (id === undefined && status !== undefined)
-            filter = {status};
-        else if (id !== undefined && status === undefined)
-            filter = {id};
-        else
-            filter = {};
+        let filter = {id};
 
         if (req.user.role !== "admin")
             filter.partnerId = req.user.partnerId;
 
-        const orders = await Order.find(filter);
+        const orders = await Order.findOne(filter);
         res.status(200).json(orders);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export  const getOrders = async (req, res) =>{
+    try {
+        const {page = 0, pageSize = 10, sort = null,  status } = req.query;
+
+        const generateSort = () => {
+            const sortParsed = JSON.parse(sort);
+            const sortFormatted = {
+                [sortParsed.field]: (sortParsed.sort = "asc" ? 1 : -1),
+            };
+
+            return sortFormatted;
+        };
+
+        const sortFormatted = Boolean(sort) ? generateSort() : {updatedAt: -1};
+
+        let filter = {}
+        if (status !== undefined)
+            filter = {status};
+
+        if (req.user.role !== "admin")
+            filter.partnerId = req.user.partnerId;
+
+        const orders = await Order.find(filter)
+            .sort(sortFormatted)
+            .skip(page * pageSize)
+            .limit(pageSize);
+
+        const total = await Order.countDocuments(filter);
+
+        res.status(200).json({orders, total});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -240,7 +267,7 @@ export const postOrder = async (req, res) =>{
         const result = await Order.replaceOne({id}, req.body, {upsert: true});
 
         //const savedOrder = await newOrder.save();
-        res.status(200).json(result);
+        res.status(200).json({id, updatedAt: new Date()});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }

@@ -1,17 +1,27 @@
 import Header from "../../components/Header";
 import {Box, IconButton, Link, useTheme} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
-import {useGetOrderQuery} from "state/api";
-import React from "react";
+import {useGetOrdersQuery} from "state/api";
+import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {string} from "yup";
+import Button from '@mui/material/Button';
 export const Orders = () => {
 
-    const navigate = useNavigate();
-    const theme = useTheme();
-    const dispatch = useDispatch();
+    const warehouses = useSelector((state) => state.global.warehouses);
+    const [sort, setSort] = useState({});
 
-    const { data=[], error, isLoading, isFetching, isError } = useGetOrderQuery({id:""});
+    const [paginationModel, setPaginationModel] = React.useState({
+        page: 0,
+        pageSize: 10,
+    });
+
+    const { data=[], error, refetch, isLoading, isFetching, isError } = useGetOrdersQuery({
+        page: paginationModel.page,
+        pageSize: paginationModel.pageSize,
+        sort: JSON.stringify(sort),
+    });
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -22,6 +32,34 @@ export const Orders = () => {
             <div>{error.status}</div>
             <div>{error.data?.message}</div>
         </div>);
+    }
+
+    const getStatus = status=>{
+        let localStatus = ""
+        switch (status) {
+            case 'Created':
+                return 'Создан'
+                break;
+            case 'Received':
+                return 'Получен'
+                break;
+            case 'Confirmed':
+                return 'Подтвержден'
+                break;
+            case 'InDelivery':
+                return 'В доставке'
+                break;
+            case 'Closed':
+                return "Закрыт"
+                break;
+            case 'Canceled':
+                return 'Отменен'
+                break;
+            case 'HasProblems':
+                return 'Есть проблемы'
+            default:
+                return 'Не определен'
+        }
     }
 
     const renderCell = (row, rowData)=>{
@@ -46,8 +84,8 @@ export const Orders = () => {
             type: 'Date',
             headerAlign: "left",
             align: "left",
-            flex: 1,
-            renderCell: (p)=>renderCell(p.row, p.row.data)
+            flex: 1,//`${p.row.data.day}/${p.row.data.month}/${p.row.data.year}`
+            renderCell: (p)=>renderCell(p.row, new Date(p.row.data).toLocaleDateString("ru-Ru"))
         },
         {
             field: "status",
@@ -56,25 +94,47 @@ export const Orders = () => {
             headerAlign: "left",
             align: "left",
             flex: 1,
-            renderCell: (p)=>renderCell(p.row, p.row.status)
+            renderCell: (p)=>renderCell(p.row, getStatus(p.row.status))
+        },
+        {
+            field: "warehouse",
+            headerName: "Склад",
+            type: 'string',
+            headerAlign: "left",
+            align: "left",
+            flex: 1,
+            renderCell: (p)=>renderCell(p.row, warehouses.find(w=>w.id === p.row.warehouseId)?.name)
         },
         {
             field: "amount",
             headerName: "Сумма",
             headerAlign: "left",
             align: "left",
-            flex: 1
+            flex: 1,
+            renderCell: (p)=>renderCell(p.row, new Intl.NumberFormat('ru-Ru', {
+                style: 'currency',
+                currency: 'RUR',
+            }).format(p.row.amount))
         },
     ];
 
     return (
         <Box>
-            <Header title="Заказы" subtitle="Отображаются все ваши заказы"></Header>
+            <Header title="Заказы" subtitle="Ваши сформированные заказы"></Header>
+            <Button variant="contained" onClick={()=>{refetch()}}>Обновить</Button>
             <DataGrid loading={isLoading}
-                      sx={{ height: 900, flexGrow: 1, minWidth:50, overflowY: 'auto' }}
+                      sx={{ flexGrow: 1, minWidth:50, overflowY: 'auto' }}
                       columns={columns}
-                      rows={data}
-                      getRowId={(row) => row.id}/>
+                      rows={data.orders}
+                      rowCount={(data && data.total) || 0}
+                      getRowId={(row) => row.id}
+                      pagination
+                      paginationMode="server"
+                      sortingMode="server"
+                      pageSizeOptions={[10, 20, 50]}
+                      paginationModel={paginationModel}
+                      onPaginationModelChange={setPaginationModel}
+                      onSortModelChange={(newSortModel) => setSort(...newSortModel)}/>
         </Box>
     )
 }

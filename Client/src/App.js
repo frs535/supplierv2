@@ -18,13 +18,14 @@ import Performance from "scenes/performance";
 import Footer from "./components/Footer";
 import ProductDetails from "scenes/products/ProductDetails";
 import {Checkout} from "./scenes/checkout/Checkout";
+import Orders from "./scenes/orders/Orders";
+import Order from "./scenes/orders/Order";
 
 /* Login */
 import Login from "scenes/auth";
 import Profile from "scenes/profile";
 import state from "./state";
 import ProductGrid from "./components/ProductGrid";
-import Orders from "./scenes/orders/Orders";
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -59,6 +60,7 @@ function App() {
                     <Route path="product/:itemId" element={<ProductDetails />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/orders" element={<Orders/>} />
+                    <Route path="/orders/:id" element={<Order/>} />
                       {/*<Route path="/customers" element={mode.userId != null? <Customers /> : <Navigate to="/" replace/>} />*/}
                       {/*<Route path="/transactions" element={mode.userId != null? <Transactions/> : <Navigate to="/" replace/>}/>*/}
                       {/*<Route path="/overview" element={mode.userId != null? <Overview /> : <Navigate to="/" replace/>} />*/}
