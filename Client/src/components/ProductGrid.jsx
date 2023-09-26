@@ -41,7 +41,7 @@ const ProductGrid = ()=> {
 									width="100%"
 									height="80%"
 									loading="lazy"
-									src={`http://95.216.198.114:5001/${p.row.images[0].url256}`}
+									src={`${process.env.REACT_APP_BASE_URL}${p.row.images[0].url256}`}
 									// style={{ objectFit: "contain" }}
 								/>:
 								<HideImageOutlinedIcon/>

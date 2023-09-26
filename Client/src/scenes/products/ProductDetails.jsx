@@ -135,9 +135,7 @@ const ProductDetails = () => {
 								width="100%"
 								height="80%"
 								loading="lazy"
-								src={
-									`http://95.216.198.114:5001/${image? image.url256: data?.images[0].url256}`
-								}
+								src={`${process.env.REACT_APP_BASE_URL}${image? image.url256: data?.images[0].url256}`}
 								style={{ objectFit: "contain" }}
 							/>:
 							""

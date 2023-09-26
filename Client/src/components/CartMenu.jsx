@@ -75,7 +75,7 @@ const CartMenu = () => {
 											height="164px"
 											// src={`http://localhost:2000${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
 											src={
-												`http://95.216.198.114:5001/${item?.images[0]?.url256}`
+												`${process.env.REACT_APP_BASE_URL}${item?.images[0]?.url256}`
 											}
 										/>
 									</Box>

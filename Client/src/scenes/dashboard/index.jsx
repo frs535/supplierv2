@@ -68,7 +68,7 @@ const Dashboard = () => {
                                 component="img"
                                 alt="manager"
                                 height="140"
-                                image={`http://95.216.198.114:5001/${data?.image?.url256}`}
+                                image={`${process.env.REACT_APP_BASE_URL}${data?.image?.url256}`}
                                 sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
                             />
                             :""}
@@ -93,7 +93,7 @@ const Dashboard = () => {
                                 component="img"
                                 alt="manager"
                                 height="100"
-                                image={`http://95.216.198.114:5001/${data?.logo?.url256}`}
+                                image={`${process.env.REACT_APP_BASE_URL}${data?.logo?.url256}`}
                                 sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
                             />
                             :""}
