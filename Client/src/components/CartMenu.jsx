@@ -29,6 +29,8 @@ const CartMenu = () => {
 	const cart = useSelector((state) => state.global.cart);
 	const isCartOpen = useSelector((state) => state.global.isCartOpen);
 
+	const warehouses = useSelector((state) => state.global.warehouses);
+
 	const totalPrice = cart.reduce((total, item) => {
 		return total + item.order * item.price.value;
 	}, 0);
@@ -65,7 +67,6 @@ const CartMenu = () => {
 					{/* CART LIST */}
 					<Box>
 						{cart.map((item) => (
-							// <Button>TEST</Button>
 							<Box key={`${item?.catalog?.name}-${item.id}`}>
 								<FlexBox p="15px 0">
 									<Box flex="1 1 40%">
@@ -73,24 +74,23 @@ const CartMenu = () => {
 											alt={item?.catalog?.name}
 											width="123px"
 											height="164px"
-											// src={`http://localhost:2000${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
-											src={
-												`${process.env.REACT_APP_BASE_URL}${item?.images[0]?.url256}`
-											}
+											src={`${process.env.REACT_APP_BASE_URL}${item?.images[0]?.url256}`}
 										/>
 									</Box>
 									<Box flex="1 1 60%">
 										<FlexBox mb="5px">
-											<Typography fontWeight="bold">
+											<Typography>
 												{item?.catalog?.name}
 											</Typography>
 											<IconButton
-												onClick={() =>
-													dispatch(removeFromCart({ id: item.id }))
-												}
-											>
+												onClick={() => dispatch(removeFromCart({ id: item.id }))}>
 												<CloseIcon />
 											</IconButton>
+										</FlexBox>
+										<FlexBox mb="9px">
+											<Typography fontWeight="bold">
+												{`Склад ${warehouses.find(w => w.id === item.wh)?.name}`}
+											</Typography>
 										</FlexBox>
 										<TextField
 											label="Количество"
@@ -130,8 +130,8 @@ const CartMenu = () => {
 						<Button
 							disabled={cart.length ===0}
 							sx={{
-								backgroundColor: theme.palette.primary[400],
-								color: theme.palette.secondary.main,
+								backgroundColor: "primary",
+								color: "secondary",
 								borderRadius: 0,
 								minWidth: "100%",
 								padding: "20px 40px",
@@ -145,10 +145,9 @@ const CartMenu = () => {
 							Оформить
 						</Button>
 						<Button
-							// disabled={cart.length ===0}
 							sx={{
-							backgroundColor: theme.palette.primary[400],
-							color: theme.palette.secondary.main,
+							backgroundColor: "primary",
+							color: "secondary",
 							borderRadius: 0,
 							minWidth: "100%",
 							padding: "20px 40px",

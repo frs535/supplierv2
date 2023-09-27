@@ -26,6 +26,7 @@ import Login from "scenes/auth";
 import Profile from "scenes/profile";
 import state from "./state";
 import ProductGrid from "./components/ProductGrid";
+import SignIn from "scenes/auth/SignIn";
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -49,7 +50,7 @@ function App() {
               <CssBaseline/>
               {/*<ScrollToTop/>*/}
               <Routes>
-                <Route path="/" element={user=== null ? <Login /> : <Navigate to="/dashboard" replace/>} />
+                <Route path="/" element={user=== null ? <SignIn /> : <Navigate to="/dashboard" replace/>} />
                 <Route element={<Layout/>}>
                     <Route path="/dashboard"  element={user != null? <Dashboard /> : <Navigate to="/" replace/>}/>
                     <Route path="/profile" element={user != null? <Profile /> : <Navigate to="/" replace/> } />

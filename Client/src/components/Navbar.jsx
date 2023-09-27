@@ -46,11 +46,6 @@ const Navbar = ({user, isSidebarOpen, setIsSidebarOpen, }) => {
         );
     };
 
-    // const handleSettings = () =>
-    // {
-    //
-    // }
-
     return (
         <AppBar
             sx={{
@@ -59,7 +54,11 @@ const Navbar = ({user, isSidebarOpen, setIsSidebarOpen, }) => {
                 boxShadow: "none",
             }}
         >
-            <Toolbar sx={{ justifyContent: "space-between" }}>
+            <Toolbar
+                sx={{
+                    justifyContent: "space-between",
+                    bgcolor: 'background.paper'}}
+            >
                 {/* LEFT SIDE */}
                 <FlexBetween>
                     <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -93,7 +92,7 @@ const Navbar = ({user, isSidebarOpen, setIsSidebarOpen, }) => {
 
                     <Badge
                         badgeContent={cart.length}
-                        color="secondary"
+                        color="primary"
                         invisible={cart.length === 0}
                         sx={{
                             "& .MuiBadge-badge": {

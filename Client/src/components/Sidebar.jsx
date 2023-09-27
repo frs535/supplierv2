@@ -54,50 +54,6 @@ const navItems = [
         nav: "Orders",
         icon: <ReceiptLongOutlined />,
     },
-    // {
-    //     text: "Customers",
-    //     icon: <Groups2Outlined />,
-    // },
-    // {
-    //     text: "Transactions",
-    //     icon: <ReceiptLongOutlined />,
-    // },
-    // {
-    //     text: "Geography",
-    //     icon: <PublicOutlined />,
-    // },
-    // {
-    //     text: "Sales",
-    //     icon: null,
-    // },
-    // {
-    //     text: "Overview",
-    //     icon: <PointOfSaleOutlined />,
-    // },
-    // {
-    //     text: "Daily",
-    //     icon: <TodayOutlined />,
-    // },
-    // {
-    //     text: "Monthly",
-    //     icon: <CalendarMonthOutlined />,
-    // },
-    // {
-    //     text: "Breakdown",
-    //     icon: <PieChartOutlined />,
-    // },
-    // {
-    //     text: "Management",
-    //     icon: null,
-    // },
-    // {
-    //     text: "Admin",
-    //     icon: <AdminPanelSettingsOutlined />,
-    // },
-    // {
-    //     text: "Performance",
-    //     icon: <TrendingUpOutlined />,
-    // },
 ];
 
 const Sidebar = ({
@@ -137,7 +93,7 @@ const Sidebar = ({
                 >
                     <Box width="100%">
                         <Box m="1.5rem 2rem 2rem 3rem">
-                            <FlexBetween color={theme.palette.secondary.main}>
+                            <FlexBetween color="secondary">
                                 <Box display="flex" alignItems="center" gap="0.5rem">
                                     <Typography variant="h4" fontWeight="bold">
                                         ПОРТАЛ
@@ -201,42 +157,42 @@ const Sidebar = ({
                         </List>
                     </Box>
 
-                    <Box position="absolute" bottom="2rem">
-                        <Divider />
-                        <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
-                            <Box
-                                component="img"
-                                alt="profile"
-                                src={profileImage}
-                                height="40px"
-                                width="40px"
-                                borderRadius="50%"
-                                sx={{ objectFit: "cover" }}
-                            />
-                            <Box textAlign="left">
-                                <Typography
-                                    fontWeight="bold"
-                                    fontSize="0.9rem"
-                                    sx={{ color: theme.palette.secondary[100] }}
-                                >
-                                    {user.firstName}
-                                </Typography>
-                                <Typography
-                                    fontSize="0.8rem"
-                                    sx={{ color: theme.palette.secondary[200] }}
-                                >
-                                    {user.occupation}
-                                </Typography>
-                            </Box>
-                            <SettingsOutlined
-                                sx={{
-                                    color: theme.palette.secondary[300],
-                                    fontSize: "25px ",
-                                }}
+                    {/*<Box position="absolute" bottom="2rem">*/}
+                    {/*    <Divider />*/}
+                    {/*    <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">*/}
+                    {/*        <Box*/}
+                    {/*            component="img"*/}
+                    {/*            alt="profile"*/}
+                    {/*            src={profileImage}*/}
+                    {/*            height="40px"*/}
+                    {/*            width="40px"*/}
+                    {/*            borderRadius="50%"*/}
+                    {/*            sx={{ objectFit: "cover" }}*/}
+                    {/*        />*/}
+                    {/*        <Box textAlign="left">*/}
+                    {/*            <Typography*/}
+                    {/*                fontWeight="bold"*/}
+                    {/*                fontSize="0.9rem"*/}
+                    {/*                sx={{ color: theme.palette.secondary[100] }}*/}
+                    {/*            >*/}
+                    {/*                {user.firstName}*/}
+                    {/*            </Typography>*/}
+                    {/*            <Typography*/}
+                    {/*                fontSize="0.8rem"*/}
+                    {/*                sx={{ color: theme.palette.secondary[200] }}*/}
+                    {/*            >*/}
+                    {/*                {user.occupation}*/}
+                    {/*            </Typography>*/}
+                    {/*        </Box>*/}
+                    {/*        <SettingsOutlined*/}
+                    {/*            sx={{*/}
+                    {/*                color: theme.palette.secondary[300],*/}
+                    {/*                fontSize: "25px ",*/}
+                    {/*            }}*/}
 
-                            />
-                        </FlexBetween>
-                    </Box>
+                    {/*        />*/}
+                    {/*    </FlexBetween>*/}
+                    {/*</Box>*/}
                 </Drawer>
             )}
         </Box>

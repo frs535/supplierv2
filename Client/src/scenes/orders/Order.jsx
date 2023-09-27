@@ -143,31 +143,38 @@ export const Order = () => {
     const order = data;
 
     return (
-        <Box>
-            <Header title= {`Заказ № ${order.number === ""? "<>": order.number} /${new Date(order.data).toLocaleDateString("ru-Ru")}`} subtitle={`Статус: ${getStatus(order.status)}`}></Header>
-            <Box sx={{ width: '100%' }}>
+        <Box sx={{ m:"10px"}}>
+            <Header title= {`Заказ № ${order.number === ""? "<>": order.number} /${new Date(order.data).toLocaleDateString("ru-Ru")}`} subtitle=""></Header>
+            <Box>
+                <Typography component="h1" variant="h4" color="secondary">{`Статус: ${getStatus(order.status)}`}</Typography>
+            </Box>
+            <Box sx={{ mt:"10px", width: '100%' }}>
+                <Box>
+                    <Typography component="h1" variant="h5">Заказ оформлен {partner?.companies.find(w=>w.id === order.companyId)?.name}</Typography>
+                    <Typography component="h1" variant="h5">Дата готовности {new Date(order.deliveryDate).toLocaleDateString("ru-Ru")}</Typography>
+                </Box>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={currentTab} onChange={(event, newValue)=>{setCurrentTab(newValue)}}>
-                        <Tab label="Основное"/>
                         <Tab label={`Товары (${order.goods.length})`}/>
+                        <Tab label="Дополнительно"/>
                     </Tabs>
                 </Box>
-                {currentTab === 0 &&
+                {currentTab === 1 &&
                     <Box>
                         <Typography>Заказ оформлен {partner?.companies.find(w=>w.id === order.companyId)?.name}</Typography>
-                        <Typography>Сумма заказа {order.amount}</Typography>
                         <Typography>Тип доставки {order.deliveryType === "delivery"? 'Самовывоз': 'Доставка'}</Typography>
-                        <Typography>Дата готовности {order.deliveryDate}</Typography>
                         <Typography>Склад {warehouses.find(w=>w.id === order.warehouseId)?.name}</Typography>
                     </Box>
                 }
-                {currentTab === 1 &&
+                {currentTab === 0 &&
                     <Box sx={{m: "10px"}}>
                         <DataGrid loading={isLoading}
-                                  sx={{ flexGrow: 1, minWidth:50, overflowY: 'auto' }}
+                                  sx={{ flexGrow: 1, minWidth:50, minHeight: 450, overflowY: 'auto' }}
                                   columns={columns}
                                   rows={order.goods}
                                   getRowId={(row) => row.rowNumber}/>
+                        <Typography component="h1" variant="h4" align="right">Сумма заказа: {order.amount}</Typography>
+
                     </Box>
                 }
             </Box>

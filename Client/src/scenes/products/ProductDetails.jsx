@@ -12,11 +12,6 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { useGetProductQuery } from "state/api";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -24,7 +19,7 @@ const ProductDetails = () => {
 	const dispatch = useDispatch();
 	const { itemId } = useParams();
 	const [currentTab, setCurrentTab] = useState("description");
-	//const [item, setItem] = useState(null);
+
 	const [image, setImage] = useState(null);
 	const [items, setItems] = useState([]);
 	const theme = useTheme();

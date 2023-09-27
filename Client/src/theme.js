@@ -196,45 +196,45 @@ export const themeSettings = (mode) => {
             ...(mode === "dark"
                 ? {
                     // palette values for dark mode
-                    primary: {
-                        // main: colors.primary[500],
-                        main: colors.grey[500],
-                        light: colors.grey[100],
-                        error: colors.redAccent[500]
-                    },
-                    secondary: {
-                        main: colors.greenAccent[500],
-                    },
-                    neutral: {
-                        dark: colors.grey[700],
-                        main: colors.grey[500],
-                        light: colors.grey[100],
-                    },
-                    background: {
-                        default: colors.grey[0],
-                        alt: colors.grey[100],
-                    },
+                    // primary: {
+                    //     // main: colors.primary[500],
+                    //     main: colors.grey[500],
+                    //     light: colors.grey[100],
+                    //     error: colors.redAccent[500]
+                    // },
+                    // secondary: {
+                    //     main: colors.greenAccent[500],
+                    // },
+                    // neutral: {
+                    //     dark: colors.grey[700],
+                    //     main: colors.grey[500],
+                    //     light: colors.grey[100],
+                    // },
+                    // background: {
+                    //     default: colors.grey[0],
+                    //     alt: colors.grey[100],
+                    // },
                 }
                 : {
                     // palette values for light mode
-                    primary: {
-                        main: colors.grey[500],
-                        light: colors.grey[100],
-                        blue: colors.blueAccent[700]
-                    },
-                    secondary: {
-                        main: colors.greenAccent[500],
-                        blue: colors.blueAccent[900],
-                    },
-                    neutral: {
-                        dark: colors.grey[700],
-                        main: colors.grey[500],
-                        light: colors.grey[100],
-                    },
-                    background: {
-                        default: colors.primary[900],
-                        alt: colors.primary[900],
-                    },
+                    // primary: {
+                    //     main: colors.grey[500],
+                    //     light: colors.grey[100],
+                    //     blue: colors.blueAccent[700]
+                    // },
+                    // secondary: {
+                    //     main: colors.greenAccent[500],
+                    //     blue: colors.blueAccent[900],
+                    // },
+                    // neutral: {
+                    //     dark: colors.grey[700],
+                    //     main: colors.grey[500],
+                    //     light: colors.grey[100],
+                    // },
+                    // background: {
+                    //     default: colors.primary[900],
+                    //     alt: colors.primary[900],
+                    // },
                 }),
         },
         typography: {
