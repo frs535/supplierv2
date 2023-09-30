@@ -2,26 +2,23 @@ version: '3.8'
 services:
   api:
     platform: linux/amd64
-    build: ./Server
-    container_name: arf535/supplier.server
+    build:
+      context: ./Server
+    container_name: supplier.server
+#    image: arf535/supplier.server
     ports:
       - '5001:5001'
     volumes:
       - ./docker:/app
       - ./app/node_modules
-#      - ./:/usr/src/app
-#      - /usr/src/app/node_modules
-#      - ./your-host-app:/usr/src/app # named volume
-#      - /usr/src/app/node_modules # anonymous volume for node_modules only
+    stdin_open: true
+    tty: true
   client:
     platform: linux/amd64
     build:
       context: ./Client
-      args:
-        REACT_APP_BASE_URL: ${BASE_URL}
-    container_name: arf535/supplier.client
-    environment:
-      - BASE_URL= "http://95.216.198.114:5001/"
+    container_name: supplier.client
+#    image: arf535/supplier.client
     ports:
       - '3000:3000'
     volumes:

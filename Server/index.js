@@ -82,13 +82,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-//app.use(upload.single("file"));
-
 /* ROUTES WITH FILES */
-//app.post("/auth/register", upload.single("picture"), register); //Картинку надо вставлять вместе с методом вставки
-//app.post("/posts", verifyToken, upload.single("picture"), createPost);  //VERIFY TOKEN!!!!
 app.post("/images/:id", verifyToken, upload.single("file"), postImage);
-app.get("/images/:id/:type", verifyToken, upload.single("file"), getImages);//VERIFY TOKEN!!!!
+app.get("/images/:id/:type", verifyToken, upload.single("file"), getImages);
 app.delete("/images/:id", verifyToken, deleteImages);
 
 /* ROUTES */
@@ -96,7 +92,6 @@ app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
-//app.use("/sales",verifyToken,  salesRoutes); //EXAMPLE VERIFY TOKEN
 
 /* ROUTES */
 app.use("/auth", authRoutes);
@@ -105,8 +100,14 @@ app.use("/posts", postRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
+const DB_URL = process.env.DB_URL;
+
+console.log(`Server will be start the port: ${PORT}`);
+console.log(`DB_URL: ${DB_URL || "Not found"}`);
+console.log(`JWT_SECRET: ${process.env.JWT_SECRET || "Not found"}`);
+
 mongoose
-    .connect(process.env.MONGO_URL, {
+    .connect(DB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
@@ -130,14 +131,6 @@ mongoose
             const  res  = await newApiKey.save();
             console.log(`Server API KEY: ${token}`);
         });
-
-        /* ONLY ADD DATA ONE TIME */
-        // AffiliateStat.insertMany(dataAffiliateStat);
-        // OverallStat.insertMany(dataOverallStat);
-        // Product.insertMany(dataProduct);
-        // ProductStat.insertMany(dataProductStat);
-        // Transaction.insertMany(dataTransaction);
-        // User.insertMany(dataUser);
     })
     .catch((error) => {
         console.log(`${error} did not connect`);
