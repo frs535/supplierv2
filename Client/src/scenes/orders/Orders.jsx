@@ -11,6 +11,7 @@ export const Orders = () => {
 
     const warehouses = useSelector((state) => state.global.warehouses);
     const [sort, setSort] = useState({});
+    const navigate = useNavigate();
 
     const [paginationModel, setPaginationModel] = React.useState({
         page: 0,
@@ -64,7 +65,10 @@ export const Orders = () => {
 
     const renderCell = (row, rowData)=>{
         return (
-            <Link href={`/Orders/${row.id}`}>{rowData}</Link>
+            <Link
+                onClick={()=>navigate(`/orders/${row.id}`)}
+                style={{ cursor: 'pointer'}}
+            >{rowData}</Link>
         )
     }
 

@@ -66,10 +66,6 @@ export const clientApi = createApi({
         getCatalogs: build.query({
             query: () => "client/catalog",
             providesTags: ["Catalogs"],
-            // providesTags: (result, error, arg) =>
-            //     result
-            //         ? [...result.map(({ id }) => ({ type: 'Catalogs', id })), 'Catalogs']
-            //         : ['Catalogs'],
         }),
 
         getOrders: build.query({

@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import {Box, Link, Typography} from "@mui/material";
 import React, {useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useGetOrderQuery} from "../../state/api";
 import {useSelector} from "react-redux";
 import {DataGrid} from "@mui/x-data-grid";
@@ -12,6 +12,7 @@ export const Order = () => {
 
     const { id } = useParams();
     const [currentTab, setCurrentTab] = useState(0);
+    const navigate = useNavigate();
 
     const { data=[], error, isLoading, isFetching, isError } = useGetOrderQuery(id);
 
@@ -60,7 +61,10 @@ export const Order = () => {
 
     const renderCell = (row, rowData)=>{
         return (
-            <Link href={`/product/${row.productId}`}>{rowData}</Link>
+            <Link
+                onClick={()=>navigate(`/product/${row.productId}`)}
+                style={{ cursor: 'pointer'}}
+            >{rowData}</Link>
         )
     }
 
