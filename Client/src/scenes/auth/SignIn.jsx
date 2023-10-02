@@ -38,7 +38,9 @@ const SignIn = () => {
             password: data.get('password'),
         }
 
-        const loggedInResponse = await fetch( `${process.env.REACT_APP_BASE_URL}auth/login`, {
+        const url = `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}`;
+
+        const loggedInResponse = await fetch( `${url}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),

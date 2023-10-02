@@ -74,7 +74,8 @@ const CartMenu = () => {
 											alt={item?.catalog?.name}
 											width="123px"
 											height="164px"
-											src={`${process.env.REACT_APP_BASE_URL}${item?.images[0]?.url256}`}
+											// src={`${process.env.REACT_APP_BASE_URL}${item?.images[0]?.url256}`}
+											src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/${item?.images[0]?.url256}`}
 										/>
 									</Box>
 									<Box flex="1 1 60%">

@@ -18,9 +18,7 @@ services:
       - DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@95.216.198.114:27017/supplier4?authSource=admin
       - PORT=5001
       - JWT_SECRET=pQe%06Wl8a05
-    build:
-      context: ./Server
-      dockerfile: Dockerfile.prod
+    image: arf535/supplier.server
     container_name: supplier.server
     ports:
       - '5001:5001'
@@ -34,9 +32,10 @@ services:
     platform: linux/amd64
     depends_on:
       - api
-    build:
-      context: ./Client
-      dockerfile: Dockerfile.prod
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BASE_URL="http://127.0.0.1:5001/"
+    image: arf535/supplier.client
     container_name: supplier.client
     ports:
       - '80:80'

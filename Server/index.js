@@ -100,14 +100,9 @@ app.use("/posts", postRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
-const DB_URL = process.env.DB_URL;
-
-console.log(`Server will be start the port: ${PORT}`);
-console.log(`DB_URL: ${DB_URL || "Not found"}`);
-console.log(`JWT_SECRET: ${process.env.JWT_SECRET || "Not found"}`);
 
 mongoose
-    .connect(DB_URL, {
+    .connect(process.env.DB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
