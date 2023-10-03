@@ -27,6 +27,7 @@ services:
     volumes:
       - /app/node_modules
       - ./Server:/app
+#      - /app/assets
     stdin_open: true
     tty: true
 
