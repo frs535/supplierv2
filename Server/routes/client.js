@@ -2,8 +2,6 @@ import express from "express";
 import {
     getProducts,
     getProduct,
-    getCustomers,
-    getTransactions,
     patchProduct,
     patchCatalog,
     getCatalogs,
@@ -36,7 +34,4 @@ router.post("/stock", verifyToken, postStock);
 router.get("/order/:id", verifyToken, getOrder);
 router.get("/orders", verifyToken, getOrders);
 router.post("/orders", verifyToken, postOrder);
-
-router.get("/customers",verifyToken, getCustomers);
-router.get("/transactions",verifyToken, getTransactions);
 export  default router;

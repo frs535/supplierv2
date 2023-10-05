@@ -7,7 +7,6 @@ import {
     StepLabel,
     Stepper,
     MenuItem,
-    Grid,
     Typography,
     Button,
     FormControlLabel,
@@ -23,7 +22,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import TextField from "@mui/material/TextField";
 import {setOrganisation, setDelive, setDeliveryAdress, setDeliveryComment, setOrderComment, setDeliveryDate, clearBag} from "state"
 import { useUpdateOrderMutation } from "state/api";
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -96,12 +95,10 @@ const Step2 =()=>{
     const orderDetail = useSelector((state) => state.global.orderDetail);
 
     const [company, setCompany] = useState(orderDetail.organisation? (partner?.companies.length? partner?.companies[0]: null): orderDetail.organisation);
-    const [delivery, setDelivery] = useState(orderDetail.delive);
+    const [delivery, setDelivery] = useState(orderDetail.delive === null? false: orderDetail.delive);
     const [adress, setAdress] = useState(orderDetail.deliveryAdress? orderDetail.deliveryAdress: partner?.deliveryAddress.length? partner?.deliveryAddress[0]: "");
     const [comment, setComment] = useState(orderDetail.deliverComment);
     const [date, setDate] = useState(dayjs(new Date())) //orderDetail.deliveryDate? orderDetail.deliveryDate: dayjs(new Date())
-
-    //TODO: Разобраться с датой и форматом
 
     return(
       <Box>
@@ -116,7 +113,7 @@ const Step2 =()=>{
                       autoWidth
                       >
                   {
-                      partner?.companies.map(company=> {
+                      Array.isArray(partner?.companies) & partner?.companies.map(company=> {
                           return <MenuItem value={company}>{company.name}</MenuItem>
                           }
                       )
@@ -156,7 +153,7 @@ const Step2 =()=>{
                                               dispatch(setDeliveryAdress(event.target.value))
                                           }}>
                                   {
-                                      partner?.deliveryAddress.map(adr => {
+                                      Array.isArray(partner?.deliveryAddress) & partner?.deliveryAddress.map(adr => {
                                           return (
                                               <FormControlLabel value={adr} control={<Radio />} label={adr} />
                                           )
@@ -244,16 +241,6 @@ const Step4 =()=>{
 
     const orderDetail = useSelector((state) => state.global.orderDetail);
     const cart = useSelector((state) => state.global.cart);
-    const warehouses = useSelector((state) => state.global.warehouses);
-
-    const cartPresenter = cart.map(item => ({
-        id: `${item.wh}${item.catalog.id}`,
-        catalog: item.catalog.name,
-        warehouse: warehouses.find(w => w.id === item.wh)?.name,
-        toOrder: `${item.order} ${item.catalog.storeUnit.name}`,
-        price: `₽ ${new Intl.NumberFormat('ru-RU', ).format(item.price.value)}`,
-        amount: `₽ ${new Intl.NumberFormat('ru-RU', ).format(item.order * item.price.value)}`
-    }));
 
     const totalPrice = cart.reduce((total, item) => {
         return total + item.order * item.price.value;
@@ -288,7 +275,6 @@ export const Checkout = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const cart = useSelector((state) => state.global.cart);
-    const warehouses = useSelector((state) => state.global.warehouses);
     const typeofPrice = useSelector((state) => state.global.typeofPrice);
 
     const partner = useSelector((state) => state.global.partner);

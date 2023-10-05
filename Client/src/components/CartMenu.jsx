@@ -1,12 +1,8 @@
-import { Box, Button, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import styled from "@emotion/styled";
 import {
-	decreaseCount,
-	increaseCount,
 	removeFromCart,
 	setIsCartOpen,
 	clearBag, setValueToCart,
@@ -23,7 +19,6 @@ const FlexBox = styled(Box)`
 `;
 
 const CartMenu = () => {
-	const theme = useTheme();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const cart = useSelector((state) => state.global.cart);
@@ -66,7 +61,7 @@ const CartMenu = () => {
 
 					{/* CART LIST */}
 					<Box>
-						{cart.map((item) => (
+						{Array.isArray(cart) & cart.map((item) => (
 							<Box key={`${item?.catalog?.name}-${item.id}`}>
 								<FlexBox p="15px 0">
 									<Box flex="1 1 40%">
@@ -101,7 +96,7 @@ const CartMenu = () => {
 											}}
 											value={item?.order}
 											InputProps={{
-												endAdornment: <InputAdornment position="end">{item.catalog.unit}</InputAdornment>,
+												endAdornment: <InputAdornment position="end">{item?.catalog.unit.toString()}</InputAdornment>,
 												inputMode: 'numeric',
 												pattern: '[0-9]*'
 											}}
@@ -109,7 +104,7 @@ const CartMenu = () => {
 											onChange={event => {
 
 												let value = Number(event.target.value);
-												if (value == Number.NaN)
+												if (Number.NaN === value)
 													value = 0;
 
 												dispatch(setValueToCart({item: item.catalog, value, images: item.images, wh: item.wh, price: item.price}));

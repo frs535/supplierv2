@@ -1,6 +1,6 @@
 import { useSelector} from "react-redux";
 import {Box, TextField, useTheme} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 
 
 import Accordion from '@mui/material/Accordion';
@@ -17,7 +17,7 @@ const Profile = () =>{
     const user = useSelector((state) => state.global.user);
     const [expanded, setExpanded] = useState(false);
 
-    const { data, error, isLoading, isFetching, isError } = useGetProfileQuery(id);
+    const { data, error, isLoading, isError } = useGetProfileQuery(id);
 
     const columns = [
         {
@@ -55,7 +55,7 @@ const Profile = () =>{
     return (
         <Box m="1.5rem 2.5rem" sx={{ flexDirection: 'column'}}>
                 <Box>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                    <Accordion expanded={'panel1' === expanded} onChange={handleChange('panel1')}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1bh-content"

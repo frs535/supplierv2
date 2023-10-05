@@ -1,25 +1,6 @@
 import React from "react";
-import FlexBetween from "components/FlexBetween";
-import Header from "components/Header";
-import {
-    DownloadOutlined,
-    Email,
-    PointOfSale,
-    PersonAdd,
-    Traffic,
-} from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    Typography,
-    useTheme,
-    useMediaQuery, Grid, Card, CardContent, CardMedia, CardHeader,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import BreakdownChart from "components/BreakdownChart";
-import OverviewChart from "components/OverviewChart";
+import { Box, Typography, Grid, Card, CardContent, CardMedia, CardHeader,} from "@mui/material";
 import { useGetDashboardQuery } from "state/api";
-import StatBox from "components/StatBox";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -33,8 +14,7 @@ import {setWarehouses, setTypeofPrice, setPartner} from "../../state";
 import { useDispatch } from "react-redux";
 
 const Dashboard = () => {
-    const theme = useTheme();
-    const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+
     const dispatch = useDispatch();
 
     const { data, error, isLoading , isError} = useGetDashboardQuery();
@@ -45,18 +25,16 @@ const Dashboard = () => {
     }
 
     if (isError) {
-        return
-        (<div>
+        return (<div>
             <div>{error.status}</div>
             <div>{error.data.message}</div>
         </div>);
     }
 
-    if (data){
-        dispatch(setWarehouses(data.settings.warehauses))
-        dispatch(setTypeofPrice(data.settings.priceOfTypes))
-        dispatch(setPartner(data.partner))
-    }
+    dispatch(setWarehouses(data.settings.warehauses))
+    dispatch(setTypeofPrice(data.settings.priceOfTypes))
+    dispatch(setPartner(data.partner))
+
     return (
         <Box sx={{ mt: "40px", ml: "20px", mr: "20px", flexGrow: 1 }}>
             <Grid container rowSpacing={2} columnSpacing={2} m={2}>
@@ -73,14 +51,14 @@ const Dashboard = () => {
                             />
                             :""}
                         <CardContent>
-                            <Typography variant="h4" sx={{ mb: "20px" }}> {data?.partner?.manager?.name}</Typography>
+                            <Typography variant="h4" sx={{ mb: "20px" }}> {data.partner?.manager?.name?.toString()}</Typography>
                             <Stack direction="row" spacing={1}>
                                 <LocalPhoneIcon/>
-                                <Typography variant="h5"> {data?.partner?.manager?.phone}</Typography>
+                                <Typography variant="h5"> {data.partner?.manager?.phone?.toString()}</Typography>
                             </Stack>
                             <Stack direction="row" spacing={1}>
                                 <AlternateEmailIcon/>
-                                <Typography variant="h5"> {data?.partner?.manager?.email}</Typography>
+                                <Typography variant="h5"> {data.partner?.manager?.email?.toString()}</Typography>
                             </Stack>
                         </CardContent>
                     </Card>
@@ -99,7 +77,7 @@ const Dashboard = () => {
                             :""}
                         <CardContent>
                             <Typography variant="h4" sx={{ mb: "10px" }}>{data?.settings?.name}</Typography>
-                            <Typography variant="h4" sx={{ mb: "10px" }}> Время работы: {data?.settings?.workTime}</Typography>
+                            <Typography variant="h4" sx={{ mb: "10px" }}> Время работы: {data?.settings?.workTime.toString()}</Typography>
                             {
                                 Array.isArray(data?.settings?.phoneNumbers)?
                                 <Accordion>
@@ -108,7 +86,7 @@ const Dashboard = () => {
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         {
-                                            data?.settings?.phoneNumbers.map(item=>
+                                            Array.isArray(data?.settings?.phoneNumbers) & data?.settings?.phoneNumbers.map(item=>
                                             {
                                                 return (
                                                     <Stack direction="row" spacing={1}>
@@ -128,7 +106,7 @@ const Dashboard = () => {
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             {
-                                                data?.settings?.emails.map(item=>
+                                                Array.isArray(data?.settings?.emails) & data?.settings?.emails.map(item=>
                                                 {
                                                     return (
                                                         <Stack direction="row" spacing={1}>
@@ -148,12 +126,12 @@ const Dashboard = () => {
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             {
-                                                data?.settings?.addresses.map(item=>
+                                                Array.isArray(data?.settings?.addresses) & data?.settings?.addresses.map(item=>
                                                 {
                                                     return (
                                                         <Stack direction="row" spacing={1}>
                                                             <BusinessIcon/>
-                                                            <Typography variant="h5"> {item}</Typography>
+                                                            <Typography variant="h5"> {item?.toString()}</Typography>
                                                         </Stack>);
                                                 })
                                             }
@@ -163,7 +141,7 @@ const Dashboard = () => {
                             <Box sx={{ mt: "10px"}}>
                                 <Stack direction="row" spacing={1}>
                                     <TelegramIcon/>
-                                    <Typography variant="h4"> {data?.settings?.telegram}</Typography>
+                                    <Typography variant="h4"> {data.settings?.telegram?.toString()}</Typography>
                                 </Stack>
                             </Box>
                         </CardContent>

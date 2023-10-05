@@ -7,8 +7,6 @@ import {
     getPartners,
     getPartner,
     postPartner,
-    // getCompanies,
-    // postCompanies,
     getSettings,
     postSettings
 } from "../controllers/general.js";

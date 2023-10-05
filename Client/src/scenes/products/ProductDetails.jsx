@@ -1,8 +1,8 @@
-import {Box, Button, Divider, Grid, IconButton, Typography, useTheme} from "@mui/material";
+import {Box, Typography, useTheme} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Item from "../../components/Item";
 import {setValueToCart} from "state";
 import {useDispatch, useSelector} from "react-redux";
@@ -25,14 +25,8 @@ const ProductDetails = () => {
 	const theme = useTheme();
 	const cart = useSelector((state) => state.global.cart);
 	const warehouses = useSelector((state) => state.global.warehouses);
-	const typeofPrice = useSelector((state) => state.global.typeofPrice);
 
-	const  startCount = cart.filter(item=>{ return item.id === itemId})
-		.reduce((acc, item)=>acc + item.order, 0);
-
-	const [count, setCount] = useState([]);
-
-	const { data, error , isLoading, isFetching, isError } = useGetProductQuery( itemId);
+	const { data, error , isLoading, isError } = useGetProductQuery( itemId);
 
 	const columns = [
 		{
@@ -130,7 +124,6 @@ const ProductDetails = () => {
 								width="100%"
 								height="80%"
 								loading="lazy"
-								//src={`${process.env.REACT_APP_BASE_URL}${image? image.url256: data?.images[0].url256}`}
 								src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/${image? image.url256: data?.images[0].url256}`}
 								style={{ objectFit: "contain" }}
 							/>:
@@ -194,68 +187,9 @@ const ProductDetails = () => {
 									</DataGrid>
 									: ""
 							}
-							{/*<Grid container spacing={2}>*/}
-							{/*	{*/}
-							{/*		data?.stock.map(item=>(*/}
-							{/*			<Grid container>*/}
-							{/*				<Grid item xs={6}>*/}
-							{/*					<Typography m="20px 0 5px 0" variant="h6"> {warehouses.find(w => w.id === item.warehouseId)?.name}</Typography>*/}
-							{/*				</Grid>*/}
-							{/*				<Grid item xs={2}>*/}
-							{/*					<Typography m="20px 0 5px 0" variant="h6"> {item?.quantity}</Typography>*/}
-							{/*				</Grid>*/}
-							{/*				<Grid item xs={4}>*/}
-							{/*					/!*QUANTITY*!/*/}
-							{/*					<Box display="flex" alignItems="center" minHeight="50px">*/}
-							{/*						<Box*/}
-							{/*							display="flex"*/}
-							{/*							alignItems="center"*/}
-							{/*							border={`1.5px solid ${theme.palette.neutral[300]}`}*/}
-							{/*						>*/}
-							{/*							<TextField*/}
-							{/*								label="К заказу"*/}
-							{/*								type="number"*/}
-							{/*								InputLabelProps={{*/}
-							{/*									shrink: true,*/}
-							{/*								}}*/}
-							{/*								value={count.filter(i => item.warehouseId === i.warehouseId)?.count}*/}
-							{/*								InputProps={{*/}
-							{/*									endAdornment: <InputAdornment position="end">{data?.defPrice.unit.name}</InputAdornment>,*/}
-							{/*									inputMode: 'numeric',*/}
-							{/*									pattern: '[0-9]*'*/}
-							{/*								}}*/}
-							{/*								size="small"*/}
-							{/*								onChange={event => {*/}
-							{/*									setCount(event.target.value);*/}
-
-							{/*									let value = Number(event.target.value);*/}
-							{/*									if (value == Number.NaN)*/}
-							{/*										value = 0;*/}
-
-							{/*									dispatch(setValueToCart({item: data.product, value, images: data.images, wh: item.warehouseId}));*/}
-							{/*									const it = count.filter(i => item.warehouseId === i.warehouseId)?.count;*/}
-							{/*									if (it) {*/}
-							{/*										count.push({warehouseId: item.warehouseId, value: value,});*/}
-							{/*									}*/}
-							{/*									else*/}
-							{/*										it.value = value;*/}
-							{/*									setCount(count);*/}
-							{/*								}}*/}
-							{/*							/>*/}
-							{/*						</Box>*/}
-							{/*					</Box>*/}
-							{/*				</Grid>*/}
-							{/*			</Grid>*/}
-							{/*		))*/}
-							{/*	}*/}
-							{/*</Grid>*/}
 						</Box>
 					</Box>
 					<Box>
-						{/*<Box m="20px 0 5px 0" display="flex">*/}
-						{/*	<FavoriteBorderOutlinedIcon />*/}
-						{/*	<Typography sx={{ ml: "5px" }}>Добавить в избранное</Typography>*/}
-						{/*</Box>*/}
 						<Typography m="20px 0 5px 0" display="flex">КАТЕГОРИЯ: {data?.product.category}</Typography>
 					</Box>
 				</Box>

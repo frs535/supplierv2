@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     mode: "light", //dark
-    //userId: null, //"63701cc1f03239b7f700000e",
     user: null,
     token: null,
     post: [],
@@ -19,7 +18,6 @@ const initialState = {
         deliveryDate: "",
         comment: ""
     },
-    //items: [],
     price: [],
     warehouses: [],
     typeofPrice: [],

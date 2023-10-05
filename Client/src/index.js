@@ -9,7 +9,6 @@ import {setupListeners} from "@reduxjs/toolkit/query";
 import {clientApi} from "state/api";
 
 /* Auth */
-//import { authReducer } from "./state";
 import {
     persistStore,
     persistReducer,

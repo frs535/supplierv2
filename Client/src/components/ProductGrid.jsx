@@ -1,8 +1,7 @@
 import {DataGrid} from "@mui/x-data-grid";
-import {IconButton, useTheme} from "@mui/material";
+import {IconButton} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {decreaseCount, increaseCount, setValueToCart} from "state";
 import {useGetProductsQuery} from "../state/api";
 import React from "react";
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
@@ -10,19 +9,9 @@ import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 const ProductGrid = ()=> {
 	const id = useSelector(state => state.global.user.partnerId);
 	const { groupId } = useParams();
-	const { data=[], error, isLoading, isFetching, isError } = useGetProductsQuery({id, groupId});
+	const { data=[], error, isLoading, isError } = useGetProductsQuery({id, groupId});
 
 	const navigate = useNavigate();
-	const theme = useTheme();
-	const dispatch = useDispatch();
-
-	function decrease(item){
-		dispatch(decreaseCount(item));
-	}
-
-	function increase(item){
-		dispatch(increaseCount(item));
-	}
 
 	const columns = [
 		{
@@ -41,7 +30,6 @@ const ProductGrid = ()=> {
 									width="100%"
 									height="80%"
 									loading="lazy"
-									// src={`${process.env.REACT_APP_BASE_URL}${p.row.images[0].url256}`}
 									src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/${p.row.images[0].url256}`}
 								/>:
 								<HideImageOutlinedIcon/>

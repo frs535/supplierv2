@@ -17,10 +17,6 @@ export const clientApi = createApi({
         "Profile",
         "Products",
         "Catalogs",
-        "Customers",
-        "Sales",
-        "Admins",
-        "Performance",
         "Dashboard",
         "Images",
         "Orders"
@@ -96,45 +92,10 @@ export const clientApi = createApi({
                 {type: "Orders, Order", id: `${result.id}_${result.updatedAt}`}
             ], //["Orders"],
             providesTags: (result, error, arg) => [
-                //{type: "Order", id: arg} ,
-                {type: "Orders", id: "ALL"} //Если необходимо инвалидировать все теги
+                {type: "Orders", id: "ALL"}
             ],
-            // async onQueryStarted({id, ...body}, {dispatch, queryFulfilled}) {
-            //     const patchResult = dispatch(
-            //         clientApi.util.updateQueryData('getOrder', id, (draft) => Object.assign(draft, body)))
-            //     try {
-            //         await queryFulfilled
-            //     } catch {
-            //         patchResult.undo()
-            //     }
-            // }
         }),
 
-
-        getCustomers: build.query({
-            query: () => "client/customers",
-            providesTags: ["Customers"],
-        }),
-        getTransactions: build.query({
-            query: ({ page, pageSize, sort, search }) => ({
-                url: "client/transactions",
-                method: "GET",
-                params: { page, pageSize, sort, search },
-            }),
-            providesTags: ["Transactions"],
-        }),
-        getSales: build.query({
-            query: () => "sales/sales",
-            providesTags: ["Sales"],
-        }),
-        getAdmins: build.query({
-            query: () => "management/admins",
-            providesTags: ["Admins"],
-        }),
-        getUserPerformance: build.query({
-            query: (id) => `management/performance/${id}`,
-            providesTags: ["Performance"],
-        }),
         getDashboard: build.query({
             query: () => "general/dashboard",
             providesTags: ["Dashboard"],

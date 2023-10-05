@@ -14,7 +14,7 @@ export const Order = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const navigate = useNavigate();
 
-    const { data=[], error, isLoading, isFetching, isError } = useGetOrderQuery(id);
+    const { data=[], error, isLoading, isError } = useGetOrderQuery(id);
 
     const warehouses = useSelector((state) => state.global.warehouses);
     const partner = useSelector((state) => state.global.partner);
@@ -24,34 +24,26 @@ export const Order = () => {
     }
 
     if (isError) {
-        return
-        (<div>
-            <div>{error.status}</div>
-            <div>{error.data.message}</div>
+        return (<div>
+            <div>{error?.status}</div>
+            <div>{error?.data.message}</div>
         </div>);
     }
 
     const getStatus = status=>{
-        let localStatus = ""
         switch (status) {
             case 'Created':
                 return 'Создан'
-                break;
             case 'Received':
                 return 'Получен'
-                break;
             case 'Confirmed':
                 return 'Подтвержден'
-                break;
             case 'InDelivery':
                 return 'В доставке'
-                break;
             case 'Closed':
                 return "Закрыт"
-                break;
             case 'Canceled':
                 return 'Отменен'
-                break;
             case 'HasProblems':
                 return 'Есть проблемы'
             default:
@@ -65,12 +57,6 @@ export const Order = () => {
                 onClick={()=>navigate(`/product/${row.productId}`)}
                 style={{ cursor: 'pointer'}}
             >{rowData}</Link>
-        )
-    }
-
-    const renderSimpleCell = (rowData)=>{
-        return(
-            <Typography>{rowData}</Typography>
         )
     }
 

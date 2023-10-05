@@ -38,6 +38,8 @@ const SignIn = () => {
             password: data.get('password'),
         }
 
+        console.log(`REACT_APP_BASE_ADRESS: ${process.env.REACT_APP_BASE_ADRESS}`);
+
         const url = `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}`;
 
         const loggedInResponse = await fetch( `${url}/auth/login`, {

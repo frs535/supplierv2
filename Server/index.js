@@ -7,8 +7,6 @@ import helmet from "helmet";
 import morgan from "morgan";
 import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
-import managementRoutes from "./routes/management.js";
-import salesRoutes from "./routes/sales.js";
 
 /* OTHER PROJECT */
 import multer from "multer";
@@ -16,34 +14,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
-import postRoutes from "./routes/posts.js";
-
-import { register } from "./controllers/auth.js";
-import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 
-// data imports
-import User from "./models/User.js";
-import Product from "./models/Product.js";
-import ProductStat from "./models/ProductStat.js";
-import Transaction from "./models/Transaction.js";
-import OverallStat from "./models/OverallStat.js";
- import AffiliateStat from "./models/AffiliateStat.js";
-
- import {
-     dataUser,
-     dataProduct,
-     dataProductStat,
-     dataTransaction,
-     dataOverallStat,
-     dataAffiliateStat,
- } from "./data/index.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ApiKeys from "./models/ApiKeys.js";
 import {deleteImages, getImages, postImage} from "./controllers/images.js";
 import fs from 'fs';
-import Price from "./models/Price.js";
 
 /* CONFIGURATION */
 const __filename = fileURLToPath(import.meta.url);
@@ -90,13 +66,10 @@ app.delete("/images/:id", verifyToken, deleteImages);
 /* ROUTES */
 app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
-app.use("/management", managementRoutes);
-app.use("/sales", salesRoutes);
 
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/posts", postRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
@@ -123,7 +96,7 @@ mongoose
                         blocked : false
                     }
                 );
-            const  res  = await newApiKey.save();
+            await newApiKey.save();
             console.log(`Server API KEY: ${token}`);
         });
     })
