@@ -88,8 +88,7 @@ const ProductDetails = () => {
 	}
 
 	if (isError) {
-		return
-		(<div>
+		return(<div>
 			<div>{error.status}</div>
 			<div>{error.data.message}</div>
 		</div>);
@@ -158,7 +157,7 @@ const ProductDetails = () => {
 						{/* PRICE */}
 						<Typography variant="h4" sx={{ mt: "20px" }}> Цена</Typography>
 						{
-							data?.prices.map(item=>(
+							Array.isArray(data?.prices) & data?.prices.map(item=>(
 								<Typography variant="h5" m="0 0 0 10px" sx={{ mt: "10px" }}>₽ {Math.round(item.value)} / {item.unit.name}</Typography>
 							))
 						}
@@ -225,7 +224,7 @@ const ProductDetails = () => {
 					columnGap="1.33%"
 					justifyContent="space-between"
 				>
-					{items.slice(0, 4).map((item, i) => (
+					{Array.isArray(items) & items.slice(0, 4).map((item, i) => (
 						<Item key={`${item.name}-${i}`} item={item} />
 					))}
 				</Box>

@@ -41,8 +41,7 @@ const Profile = () =>{
     }
 
     if (isError) {
-        return
-        (<div>
+        return(<div>
             <div>{error.status}</div>
             <div>{error.data.message}</div>
         </div>);
