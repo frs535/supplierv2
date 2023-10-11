@@ -58,18 +58,23 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+/* Default */
+app.get("/api", async (req, res)=>{
+    res.status(200).json({ message: `Server is running ${new Date()}` });
+});
+
 /* ROUTES WITH FILES */
-app.post("/images/:id", verifyToken, upload.single("file"), postImage);
-app.get("/images/:id/:type", verifyToken, upload.single("file"), getImages);
-app.delete("/images/:id", verifyToken, deleteImages);
+app.post("/api/images/:id", verifyToken, upload.single("file"), postImage);
+app.get("/api/images/:id/:type", verifyToken, upload.single("file"), getImages);
+app.delete("/api/images/:id", verifyToken, deleteImages);
 
 /* ROUTES */
-app.use("/client", clientRoutes);
-app.use("/general", generalRoutes);
+app.use("/api/client", clientRoutes);
+app.use("/api/general", generalRoutes);
 
 /* ROUTES */
-app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;

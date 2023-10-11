@@ -1,51 +1,105 @@
 version: '3.8'
 services:
-  nginx:
-    platform: linux
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - "3050:80"
 
   api:
+#    image: arf535/supplier.server:latest
     platform: linux/amd64
     environment:
       - DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@95.216.198.114:27017/supplier4?authSource=admin
       - PORT=5001
       - JWT_SECRET=pQe%06Wl8a05
+    networks:
+      - network
     build:
       context: ./Server
       dockerfile: Dockerfile.prod
     container_name: supplier.server
+    restart: unless-stopped
     ports:
       - '5001:5001'
     volumes:
       - /app/node_modules
       - ./Server:/app
-#      - /app/assets
+    #      - /app/assets
+
     stdin_open: true
     tty: true
 
   client:
+#    image: arf535/supplier.client:latest
     platform: linux/amd64
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_BASE_ADRESS="http://localhost"
+    networks:
+      - network
     depends_on:
       - api
     build:
       context: ./Client
       dockerfile: Dockerfile.prod
     container_name: supplier.client
+    restart: unless-stopped
     ports:
-      - '80:80'
+      - '3000:3000'
     volumes:
       - /app/node_modules
       - ./Client:/app
+#      - web-root:/var/www/html
+#      - web-root:/usr/share/nginx/html
     stdin_open: true
     tty: true
+
+  webserver:
+    #image: nginx:mainline-alpine
+    platform: linux
+    container_name: webserver
+#    volumes:
+#      - web-root:/usr/share/nginx/html
+#      - ./nginx-conf:/etc/nginx/conf.d
+#      - certbot-etc:/etc/letsencrypt
+#      - certbot-var:/var/lib/letsencrypt
+#      - dhparam:/etc/ssl/certs
+    depends_on:
+      - api
+      - client
+    restart: unless-stopped
+    networks:
+      - network
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+
+#  certbot:
+#    image: certbot/certbot
+#    container_name: certbot
+#    volumes:
+#      - certbot-etc:/etc/letsencrypt
+#      - certbot-var:/var/lib/letsencrypt
+#      - web-root:/var/www/html
+#    depends_on:
+#      - webserver
+#    command: certonly --webroot --webroot-path=/var/www/html --email arf@deskit.ru --agree-tos --no-eff-email --staging -d h.deskit.ru  -d www.h.deskit.ru
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/test_docker/web-root
+      o: bind
+
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/test_docker/dhparam/
+      o: bind
+
+networks:
+  network:
+    driver: bridge
