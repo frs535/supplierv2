@@ -15,7 +15,7 @@ services:
   api:
     platform: linux/amd64
     environment:
-      - DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@95.216.198.114:27017/supplier4?authSource=admin
+      - DB_URL=mongodb://mongodbuser:<password>@<ip>:<port>/<db_name>?authSource=admin
       - PORT=5001
       - JWT_SECRET=pQe%06Wl8a05
     image: arf535/supplier.server
