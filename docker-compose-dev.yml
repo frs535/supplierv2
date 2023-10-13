@@ -6,14 +6,18 @@ services:
       context: ./Server
       dockerfile: Dockerfile.dev
     container_name: supplier.server
+    environment:
+      - env_DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@95.216.198.114:27017/supplier4?authSource=admin
+      - env_PORT=5001
+      - env_JWT_SECRET=pQe%06Wl8a05
     ports:
       - '5001:5001'
-    volumes:
-      - ./app/node_modules
-      - ./Server:/app
-    #      - ./docker:/app
+#    volumes:
+#      - ./app/node_modules
+#      - ./Server:/app
     stdin_open: true
     tty: true
+
   client:
     platform: linux/amd64
     environment:
@@ -24,8 +28,8 @@ services:
     container_name: supplier.client
     ports:
       - '3000:3000'
-    volumes:
-      - ./app/node_modules
-      - ./Client:/app
+#    volumes:
+#      - ./app/node_modules
+#      - ./Client:/app
     stdin_open: true
     tty: true

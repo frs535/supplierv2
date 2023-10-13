@@ -96,7 +96,7 @@ const CartMenu = () => {
 											}}
 											value={item?.order}
 											InputProps={{
-												endAdornment: <InputAdornment position="end">{item?.catalog.unit.toString()}</InputAdornment>,
+												endAdornment: <InputAdornment position="end">{item?.catalog.unit}</InputAdornment>,
 												inputMode: 'numeric',
 												pattern: '[0-9]*'
 											}}

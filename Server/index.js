@@ -79,6 +79,8 @@ app.use("/api/users", userRoutes);
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
 
+console.log(`DB_URL= ${process.env.DB_URL}`)
+
 mongoose
     .connect(process.env.DB_URL, {
         useNewUrlParser: true,

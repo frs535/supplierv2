@@ -40,7 +40,9 @@ const SignIn = () => {
 
         console.log(`REACT_APP_BASE_ADRESS: ${process.env.REACT_APP_BASE_ADRESS}`);
 
-        const url = `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}`;
+        const port = window.location.port === "3000"? process.env.REACT_APP_BASE_PORT: window.location.port;
+        const url = `${window.location.protocol}//${window.location.hostname}:${port}`;
+        console.log(`url: ${url}`);
 
         const loggedInResponse = await fetch( `${url}/api/auth/login`, {
             method: "POST",

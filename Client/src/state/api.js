@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const clientApi = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: `${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/api`, //process.env.REACT_APP_BASE_URL,
+        baseUrl: `${window.location.protocol}//${window.location.hostname}:${window.location.port === "3000"? process.env.REACT_APP_BASE_PORT: window.location.port}/api`, //process.env.REACT_APP_BASE_URL,
         prepareHeaders: (headers, { getState })=>{
             const state = getState();
             if (state){
