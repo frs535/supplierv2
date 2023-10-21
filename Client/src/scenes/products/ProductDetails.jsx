@@ -107,23 +107,14 @@ const ProductDetails = () => {
 			<Box display="flex" flexWrap="wrap" columnGap="20px">
 				{/* IMAGES */}
 				<Box flex="1 1 40%" mb="0px">
-					{/* RATING */}
-					{data?.product?.rating === 0 ?
-						<Typography component="legend" sx={{ ml: "15px" }}>Рэйтинг еще не задан</Typography>:
-						""}
-					<Rating sx={{ ml: "15px" }}
-						name="simple-controlled"
-						value={data? data?.product?.rating: 0}
-						readOnly
-					/>
 					{
 						data.images.length > 0 || image?
 							<img
 								alt={ image? image.description: data.images[0].description}
 								width="100%"
-								height="80%"
+								height="100%"
 								loading="lazy"
-								src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/${image? image.url256: data?.images[0].url256}`}
+								src={`/${image? image.url256: data?.images[0].url512}`}
 								style={{ objectFit: "contain" }}
 							/>:
 							""
@@ -150,7 +141,16 @@ const ProductDetails = () => {
 					</Box>
 
 					<Box m="5px 0 25px 0">
+						<Typography variant="h7" color="secondary">{data?.product.category}</Typography>
+
 						<Typography variant="h3">{data?.product?.name}</Typography>
+
+						{/* RATING */}
+						<Rating sx={{mt: "20px"}}
+								name="simple-controlled"
+								value={data? data?.product?.rating: 0}
+								readOnly
+						/>
 
 						<Typography variant="h6" sx={{ mt: "10px" }}>АРТИКУЛ: {data?.product?.article}</Typography>
 
@@ -188,14 +188,11 @@ const ProductDetails = () => {
 							}
 						</Box>
 					</Box>
-					<Box>
-						<Typography m="20px 0 5px 0" display="flex">КАТЕГОРИЯ: {data?.product.category}</Typography>
-					</Box>
 				</Box>
 			</Box>
 
 			{/* INFORMATION */}
-			<Box m="10px 0">
+			<Box sx={{mt: "50px"}}>
 				<Tabs value={currentTab} onChange={(event, newValue) => {
 					 	setCurrentTab(newValue);
 					 }}>
@@ -224,7 +221,7 @@ const ProductDetails = () => {
 					columnGap="1.33%"
 					justifyContent="space-between"
 				>
-					{Array.isArray(items) & items.slice(0, 4).map((item, i) => (
+					{items.slice(0, 4).map((item, i) => (
 						<Item key={`${item.name}-${i}`} item={item} />
 					))}
 				</Box>

@@ -63,11 +63,46 @@ export const Orders = () => {
         }
     }
 
-    const renderCell = (row, rowData)=>{
+    const renderCellStatus = (row, rowData)=>{
+        let localStatus = '#76777d'
+        switch (row.status) {
+            case 'Created':
+                localStatus = '#ffffff'
+                break;
+            case 'Received':
+                localStatus = '#00bbff'
+                break;
+            case 'Confirmed':
+                localStatus = '#00ff00'
+                break;
+            case 'InDelivery':
+                localStatus = '#3051fd'
+                break;
+            case 'Closed':
+                localStatus = '#009338'
+                break;
+            case 'Canceled':
+                localStatus = '#ff0011'
+                break;
+            case 'HasProblems':
+                localStatus=  '#c17d02'
+        }
+
+
         return (
-            <Link
+            <Link color={localStatus} fontSize="bold"
                 onClick={()=>navigate(`/orders/${row.id}`)}
                 style={{ cursor: 'pointer'}}
+            >{rowData}</Link>
+        )
+    }
+
+    const renderCell = (row, rowData)=>{
+
+        return (
+            <Link color="primary.dark"
+                  onClick={()=>navigate(`/orders/${row.id}`)}
+                  style={{ cursor: 'pointer'}}
             >{rowData}</Link>
         )
     }
@@ -92,15 +127,6 @@ export const Orders = () => {
             renderCell: (p)=>renderCell(p.row, new Date(p.row.data).toLocaleDateString("ru-Ru"))
         },
         {
-            field: "status",
-            headerName: "Статус",
-            type: 'string',
-            headerAlign: "left",
-            align: "left",
-            flex: 1,
-            renderCell: (p)=>renderCell(p.row, getStatus(p.row.status))
-        },
-        {
             field: "warehouse",
             headerName: "Склад",
             type: 'string',
@@ -120,12 +146,21 @@ export const Orders = () => {
                 currency: 'RUR',
             }).format(p.row.amount))
         },
+        {
+            field: "status",
+            headerName: "Статус",
+            type: 'string',
+            headerAlign: "left",
+            align: "left",
+            flex: 1,
+            renderCell: (p)=>renderCellStatus(p.row, getStatus(p.row.status))
+        },
     ];
 
     return (
         <Box>
-            <Header title="Заказы" subtitle="Ваши сформированные заказы"></Header>
-            <Button variant="contained" onClick={()=>{refetch()}}>Обновить</Button>
+            <Header title="Ваши заказы"></Header>
+            <Button sx={{ mt: "30px", mb: "20px"}} variant="contained" onClick={()=>{refetch()}}>Обновить</Button>
             <DataGrid loading={isLoading}
                       sx={{ flexGrow: 1, minWidth:50, overflowY: 'auto' }}
                       columns={columns}

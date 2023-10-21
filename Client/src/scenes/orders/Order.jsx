@@ -1,5 +1,5 @@
 import Header from "../../components/Header";
-import {Box, Link, Typography} from "@mui/material";
+import {Box, Grid, Link, Typography, useTheme} from "@mui/material";
 import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useGetOrderQuery} from "../../state/api";
@@ -9,6 +9,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 export const Order = () => {
+
+    const theme = useTheme();
 
     const { id } = useParams();
     const [currentTab, setCurrentTab] = useState(0);
@@ -51,11 +53,38 @@ export const Order = () => {
         }
     }
 
+    const getColor = (status)=> {
+        let localStatus = '#76777d'
+        switch (status) {
+            case 'Created':
+                localStatus = '#ffffff'
+                break;
+            case 'Received':
+                localStatus = '#00bbff'
+                break;
+            case 'Confirmed':
+                localStatus = '#00ff00'
+                break;
+            case 'InDelivery':
+                localStatus = '#3051fd'
+                break;
+            case 'Closed':
+                localStatus = '#009338'
+                break;
+            case 'Canceled':
+                localStatus = '#ff0011'
+                break;
+            case 'HasProblems':
+                localStatus = '#c17d02'
+        }
+        return localStatus;
+    }
+
     const renderCell = (row, rowData)=>{
         return (
             <Link
                 onClick={()=>navigate(`/product/${row.productId}`)}
-                style={{ cursor: 'pointer'}}
+                style={{ cursor: 'pointer', color: theme.palette.primary.dark}}
             >{rowData}</Link>
         )
     }
@@ -66,6 +95,7 @@ export const Order = () => {
             headerName: "№ пп",
             type: 'number',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.1,
         },
@@ -74,6 +104,7 @@ export const Order = () => {
             headerName: "Товар",
             type: 'string',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 1,
             renderCell: (p)=>renderCell(p.row, p.row.productName)
@@ -83,6 +114,7 @@ export const Order = () => {
             headerName: "Кол.",
             type: 'number',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.2,
             // renderCell: (p)=>renderSimpleCell(new Intl.NumberFormat('ru-Ru', { maximumSignificantDigits: 3 })
@@ -93,6 +125,7 @@ export const Order = () => {
             headerName: "Упак.",
             type: 'string',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.2,
         },
@@ -101,6 +134,7 @@ export const Order = () => {
             headerName: "Цена",
             type: 'number',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.2,
         },
@@ -109,6 +143,7 @@ export const Order = () => {
             headerName: "НДС",
             type: 'number',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.2,
         },
@@ -117,6 +152,7 @@ export const Order = () => {
             headerName: "Скидка",
             type: 'number',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.2,
         },
@@ -125,6 +161,7 @@ export const Order = () => {
             headerName: "Сумма",
             type: 'number',
             headerAlign: "left",
+            headerClassName: 'styled-header-box',
             align: "left",
             flex: 0.2,
         },
@@ -134,14 +171,22 @@ export const Order = () => {
 
     return (
         <Box sx={{ m:"10px"}}>
-            <Header title= {`Заказ № ${order.number === ""? "<>": order.number} /${new Date(order.data).toLocaleDateString("ru-Ru")}`} subtitle=""></Header>
-            <Box>
-                <Typography component="h1" variant="h4" color="secondary">{`Статус: ${getStatus(order.status)}`}</Typography>
+            <Header title= {`Заказ № ${order.number === ""? "<>": order.number} от ${new Date(order.data).toLocaleDateString("ru-Ru")}`} subtitle=""></Header>
+            <Box sx={{mt: "30px"}}>
+                <Typography variant="h7" color="secondary">Статус</Typography>
+                <Typography component="h1" variant="h4" color={getColor(order.status)}>{getStatus(order.status)}</Typography>
             </Box>
-            <Box sx={{ mt:"10px", width: '100%' }}>
+
+            <Box sx={{ mt:"20px", width: '100%' }}>
                 <Box>
-                    <Typography component="h1" variant="h5">Заказ оформлен {partner?.companies.find(w=>w.id === order.companyId)?.name}</Typography>
-                    <Typography component="h1" variant="h5">Дата готовности {new Date(order.deliveryDate).toLocaleDateString("ru-Ru")}</Typography>
+                    <Typography variant="h7" color="secondary">Дата готовности</Typography>
+                    <Typography variant="h4" color="primary" sx={{mb: "20px"}}>{new Date(order.deliveryDate).toLocaleDateString("ru-Ru")}</Typography>
+
+                    <Typography variant="h7" color="secondary">Сумма заказа</Typography>
+                    <Typography variant="h4" color="primary" sx={{mb: "20px"}}>{new Intl.NumberFormat('ru-Ru', {
+                        style: 'currency',
+                        currency: 'RUR',
+                    }).format(order.amount)}</Typography>
                 </Box>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={currentTab} onChange={(event, newValue)=>{setCurrentTab(newValue)}}>
@@ -150,20 +195,29 @@ export const Order = () => {
                     </Tabs>
                 </Box>
                 {currentTab === 1 &&
-                    <Box>
-                        <Typography>Заказ оформлен {partner?.companies.find(w=>w.id === order.companyId)?.name}</Typography>
-                        <Typography>Тип доставки {order.deliveryType === "delivery"? 'Самовывоз': 'Доставка'}</Typography>
-                        <Typography>Склад {warehouses.find(w=>w.id === order.warehouseId)?.name}</Typography>
+                    <Box sx={{mt: "10px"}}>
+                        <Typography variant="h7" color="secondary">Заказ оформлен</Typography>
+                        <Typography variant="h5" color="primary" sx={{mb: "20px"}}>{partner?.companies.find(w=>w.id === order.companyId)?.name}</Typography>
+
+                        <Typography variant="h7" color="secondary">Доставка</Typography>
+                        <Typography variant="h5" color="primary" sx={{mb: "20px"}}>{order.deliveryType === "delivery"? 'Самовывоз': 'Доставка'}</Typography>
+
+                        <Typography variant="h7" color="secondary">Склад</Typography>
+                        <Typography variant="h5" color="primary" sx={{mb: "20px"}}>Склад {warehouses.find(w=>w.id === order.warehouseId)?.name}</Typography>
                     </Box>
                 }
                 {currentTab === 0 &&
-                    <Box sx={{m: "10px"}}>
+                    <Box sx={{
+                        mb: "20px",
+                        '& .styled-header-box': {
+                            color: theme.palette.primary.main,
+                        },
+                    }}>
                         <DataGrid loading={isLoading}
                                   sx={{ flexGrow: 1, minWidth:50, minHeight: 450, overflowY: 'auto' }}
                                   columns={columns}
                                   rows={order.goods}
                                   getRowId={(row) => row.rowNumber}/>
-                        <Typography component="h1" variant="h4" align="right">Сумма заказа: {order.amount}</Typography>
 
                     </Box>
                 }
