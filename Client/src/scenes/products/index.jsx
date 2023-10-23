@@ -27,11 +27,11 @@ const Index = () =>{
     }
 
     if (isError) {
-        return
-        (<div>
-            <div>{error.status}</div>
-            <div>{error.data.message}</div>
-        </div>);
+        return(
+            <div>
+                <div>{error.status}</div>
+                <div>{error.data.message}</div>
+            </div>);
     }
 
     return(

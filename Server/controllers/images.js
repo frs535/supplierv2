@@ -43,7 +43,17 @@ export const postImage = async (req, res) => {
         if (path.startsWith("public")) {
             path = path.slice(7, path.length).trimEnd();
         }
-        const image = await Image.findOne({id: id, destination: type, filename: filename});
+
+        const image = type === "logo" || type === "manager" ?
+            await Image.findOne({id: id, destination: type}):
+            await Image.findOne({id: id, destination: type, filename: filename});
+
+        // if (destination === "logo" || destination === "manager")
+        //     image = await Image.findOne({id: id, destination: type});
+        // else
+        //     image = await Image.findOne({id: id, destination: type, filename: filename});
+
+        //const image = await Image.findOne({id: id, destination: type, filename: filename});
         if (image)
         {
             await Image.updateOne({_id: image._id}, {$set:

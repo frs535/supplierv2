@@ -1,5 +1,5 @@
 import {DataGrid} from "@mui/x-data-grid";
-import {IconButton} from "@mui/material";
+import {Box, Button, IconButton, useTheme} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useGetProductsQuery} from "../state/api";
@@ -10,8 +10,29 @@ const ProductGrid = ()=> {
 	const id = useSelector(state => state.global.user.partnerId);
 	const { groupId } = useParams();
 	const { data=[], error, isLoading, isError } = useGetProductsQuery({id, groupId});
+	const theme = useTheme();
 
 	const navigate = useNavigate();
+
+	const renderCell = (text, id)=>
+	{
+		return (
+			<Button
+				sx={{
+					color: theme.palette.primary.dark,
+					display: "flex",
+					justifyContent: "space-between",
+					width: "100%",
+					overflowX: "none",
+					button: {
+						flex: "none"
+					}
+				}}
+				variant="text"
+				onClick={()=>navigate(`/product/${id}`)}
+			>{text}</Button>
+		)
+	}
 
 	const columns = [
 		{
@@ -43,14 +64,16 @@ const ProductGrid = ()=> {
 			headerName: "Артикул",
 			headerAlign: "left",
 			align: "left",
-			flex: 0.3
+			flex: 0.3,
+			renderCell: (p)=>renderCell(p.row.article, p.id),
 		},
 		{
 			field: "name",
 			headerName: "Товар",
 			headerAlign: "left",
 			align: "left",
-			flex: 1.5
+			flex: 1.5,
+			renderCell: (p)=>renderCell(p.row.name, p.id),
 		},
 		{
 			field: "quantity",
@@ -58,14 +81,16 @@ const ProductGrid = ()=> {
 			type: 'number',
 			headerAlign: "left",
 			align: "left",
-			flex: 0.3
+			flex: 0.3,
+			renderCell: (p)=>renderCell(p.row.quantity, p.id),
 		},
 		{
 			field: "unit",
 			headerName: "Упак",
 			headerAlign: "left",
 			align: "left",
-			flex: 0.2
+			flex: 0.2,
+			renderCell: (p)=>renderCell(p.row.unit, p.id),
 		},
 		{
 			field: "price",
@@ -73,17 +98,18 @@ const ProductGrid = ()=> {
 			type: 'number',
 			headerAlign: "left",
 			align: "left",
-			flex: 0.3
-		},
-		{
-			field: "order",
-			headerName: "К заказу",
-			type: 'number',
-			editable: true,
-			headerAlign: "left",
-			align: "left",
 			flex: 0.3,
+			renderCell: (p)=>renderCell(p.row.price, p.id),
 		},
+		// {
+		// 	field: "order",
+		// 	headerName: "К заказу",
+		// 	type: 'number',
+		// 	editable: true,
+		// 	headerAlign: "left",
+		// 	align: "left",
+		// 	flex: 0.3,
+		// },
 	];
 
 	if (isLoading) {

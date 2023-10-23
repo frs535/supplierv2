@@ -113,7 +113,7 @@ const Step2 =()=>{
                       autoWidth
                       >
                   {
-                      Array.isArray(partner?.companies) & partner?.companies.map(company=> {
+                      partner?.companies.map(company=> {
                           return <MenuItem value={company}>{company.name}</MenuItem>
                           }
                       )
@@ -153,7 +153,7 @@ const Step2 =()=>{
                                               dispatch(setDeliveryAdress(event.target.value))
                                           }}>
                                   {
-                                      Array.isArray(partner?.deliveryAddress) & partner?.deliveryAddress.map(adr => {
+                                      partner?.deliveryAddress.map(adr => {
                                           return (
                                               <FormControlLabel value={adr} control={<Radio />} label={adr} />
                                           )

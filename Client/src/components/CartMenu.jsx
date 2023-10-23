@@ -61,16 +61,17 @@ const CartMenu = () => {
 
 					{/* CART LIST */}
 					<Box>
-						{Array.isArray(cart) & cart.map((item) => (
+						{cart.map((item) => (
 							<Box key={`${item?.catalog?.name}-${item.id}`}>
 								<FlexBox p="15px 0">
 									<Box flex="1 1 40%">
 										<img
 											alt={item?.catalog?.name}
-											width="123px"
-											height="164px"
+											width="120px"
+											height="160px"
 											// src={`${process.env.REACT_APP_BASE_URL}${item?.images[0]?.url256}`}
-											src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/${item?.images[0]?.url256}`}
+											// src={`${window.location.protocol}//${window.location.hostname}:${process.env.REACT_APP_BASE_PORT}/${item?.images[0]?.url256}`}
+											src={`/${item?.images[0]?.url256}`}
 										/>
 									</Box>
 									<Box flex="1 1 60%">

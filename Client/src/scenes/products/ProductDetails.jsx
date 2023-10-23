@@ -155,9 +155,9 @@ const ProductDetails = () => {
 						<Typography variant="h6" sx={{ mt: "10px" }}>АРТИКУЛ: {data?.product?.article}</Typography>
 
 						{/* PRICE */}
-						<Typography variant="h4" sx={{ mt: "20px" }}> Цена</Typography>
+						<Typography variant="h4" sx={{ mt: "20px" }}>Цена</Typography>
 						{
-							Array.isArray(data?.prices) & data?.prices.map(item=>(
+							data?.prices.map(item=>(
 								<Typography variant="h5" m="0 0 0 10px" sx={{ mt: "10px" }}>₽ {Math.round(item.value)} / {item.unit.name}</Typography>
 							))
 						}

@@ -4,18 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b01feac-141e-49c1-a79b-c790672e0c9e" name="Changes" comment="Docker deploy">
-      <change afterPath="$PROJECT_DIR$/nginx/Dockerfile.dev" afterDir="false" />
+    <list default="true" id="5b01feac-141e-49c1-a79b-c790672e0c9e" name="Changes" comment="Design">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/Dockerfile.dev" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Dockerfile.dev" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/Dockerfile.prod" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Dockerfile.prod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/components/CartMenu.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/CartMenu.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/components/Copyright.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/Copyright.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/Navbar.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/components/ProductGrid.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/ProductGrid.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/scenes/auth/SignIn.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/auth/SignIn.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/scenes/checkout/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/checkout/Checkout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/scenes/dashboard/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/dashboard/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/scenes/orders/Order.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/orders/Order.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/scenes/orders/Orders.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/orders/Orders.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/scenes/products/ProductDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/products/ProductDetails.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/theme.js" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/theme.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/scenes/products/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/products/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/controllers/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/controllers/client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/controllers/images.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/controllers/images.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,26 +49,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "credentialsType com.jetbrains.nodejs.remote.NodeJSCreateRemoteSdkForm": "Docker Compose",
-    "deletionFromPopupRequiresConfirmation": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/renatakhmyarov/WebstormProjects/supplierv2/nginx",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "/usr/local/lib/node_modules/npm",
-    "settings.editor.selected.configurable": "settings.nodejs",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;credentialsType com.jetbrains.nodejs.remote.NodeJSCreateRemoteSdkForm&quot;: &quot;Docker Compose&quot;,
+    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/renatakhmyarov/WebstormProjects/supplierv2/nginx&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;/usr/local/lib/node_modules/npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -88,7 +89,7 @@
       <recent name="$PROJECT_DIR$/Client" />
     </key>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.start JavaScript">
+  <component name="RunManager" selected="Docker.prod">
     <configuration type="NodeJSConfigurationType" path-to-node="docker-compose://[/Users/renatakhmyarov/WebstormProjects/supplierv2/docker-compose-dev.yml]:webserver/node" path-to-js-file="/usr/local/lib/node_modules/пр|" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -147,6 +148,19 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="docker-compose.yml.api: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="api" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <configuration name="prod" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker_local">
       <deployment type="docker-compose.yml">
         <settings>
@@ -181,6 +195,7 @@
     <list>
       <item itemvalue="Docker.Dev" />
       <item itemvalue="Docker.prod" />
+      <item itemvalue="Docker.docker-compose.yml.api: Compose Deployment" />
       <item itemvalue="Docker.docker-compose-dev.yml.client: Compose Deployment" />
       <item itemvalue="Docker.Client/Dockerfile.dev" />
       <item itemvalue="Docker.docker-compose-dev.yml: Compose Deployment" />
@@ -190,6 +205,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.yml.api: Compose Deployment" />
         <item itemvalue="Docker.Client/Dockerfile.dev" />
         <item itemvalue="Docker.docker-compose-dev.yml: Compose Deployment" />
         <item itemvalue="Docker.docker-compose-dev.yml.client: Compose Deployment" />
@@ -216,7 +232,8 @@
       <workItem from="1697637752106" duration="7567000" />
       <workItem from="1697698355300" duration="10368000" />
       <workItem from="1697714415666" duration="11138000" />
-      <workItem from="1697805215300" duration="12668000" />
+      <workItem from="1697805215300" duration="27971000" />
+      <workItem from="1698057772529" duration="5873000" />
     </task>
     <task id="LOCAL-00001" summary="Docker deploy">
       <option name="closed" value="true" />
@@ -250,7 +267,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697550207892</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Design">
+      <option name="closed" value="true" />
+      <created>1697877517478</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1697877517478</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +283,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Docker deploy" />
-    <option name="LAST_COMMIT_MESSAGE" value="Docker deploy" />
+    <MESSAGE value="Design" />
+    <option name="LAST_COMMIT_MESSAGE" value="Design" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -266,7 +292,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/Client/src/scenes/orders/Order.jsx</url>
           <line>196</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>

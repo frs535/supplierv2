@@ -228,13 +228,13 @@ export  const getOrders = async (req, res) =>{
         const generateSort = () => {
             const sortParsed = JSON.parse(sort);
             const sortFormatted = {
-                [sortParsed.field]: (sortParsed.sort = "asc" ? 1 : -1),
+                [sortParsed.field]: sortParsed.sort = "asc" ? 1 : -1,
             };
 
             return sortFormatted;
         };
 
-        const sortFormatted = Boolean(sort) ? generateSort() : {updatedAt: -1};
+        const sortFormatted = sort !== "{}" && Boolean(sort)? generateSort() : {updatedAt: -1};
 
         let filter = {}
         if (status !== undefined)

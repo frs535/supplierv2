@@ -23,7 +23,7 @@ const Dashboard = () => {
     if (isError) {
         return (<div>
             <div>{error.status}</div>
-            <div>{error.data.message}</div>
+            <div>{error.message}</div>
         </div>);
     }
 
@@ -36,8 +36,8 @@ const Dashboard = () => {
             <Grid container spacing={2}>
                 <Grid item xs={4}>
                     {
-                        !data?.image?.url256?
-                            <img src={ `/static/${data?.image?.url256}`} width="100px"/>:
+                        data?.image?.url512?
+                            <img style={{ aspectRatio: 1, width: "100%", height: "100%" }} src={ `/${data?.image?.url512}`}/>:
                             ""
                     }
                 </Grid>
