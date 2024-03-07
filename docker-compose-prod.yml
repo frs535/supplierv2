@@ -10,7 +10,7 @@ services:
     environment:
       - MONGO_INITDB_DATABASE=supplier
       - MONGO_INITDB_ROOT_USERNAME=mongodbuser
-      - MONGO_INITDB_ROOT_PASSWORD=Zs24pS3IrU8rNRWAuZtWUx
+      - MONGO_INITDB_ROOT_PASSWORD=<password>
     volumes:
       # seeding scripts
       - ./mongo-entrypoint:/docker-entrypoint-initdb.d
@@ -24,9 +24,9 @@ services:
     image: arf535/supplier.server:latest
     platform: linux/amd64
     environment:
-      - DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@mongo:27017/supplier?authSource=admin
+      - DB_URL=mongodb://mongodbuser:<password>@mongo:27017/supplier?authSource=admin
       - PORT=5001
-      - JWT_SECRET=pQe%06Wl8a05
+      - JWT_SECRET=<JWT_SECRET>
     networks:
       - network
     depends_on:
