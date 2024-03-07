@@ -1,15 +1,36 @@
 version: '3.8'
 services:
 
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=supplier
+      - MONGO_INITDB_ROOT_USERNAME=mongodbuser
+      - MONGO_INITDB_ROOT_PASSWORD=Zs24pS3IrU8rNRWAuZtWUx
+    volumes:
+      # seeding scripts
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      # named volumes
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
+    networks:
+      - network
+
   api:
-    #    image: arf535/supplier.server:latest
+    image: arf535/supplier.server:latest
     platform: linux/amd64
     environment:
-      - DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@95.216.198.114:27017/supplier4?authSource=admin
+      - DB_URL=mongodb://mongodbuser:Zs24pS3IrU8rNRWAuZtWUx@mongo:27017/supplier?authSource=admin
       - PORT=5001
       - JWT_SECRET=pQe%06Wl8a05
     networks:
       - network
+    depends_on:
+      - mongo
     build:
       context: ./Server
       dockerfile: Dockerfile.prod
@@ -22,7 +43,7 @@ services:
     tty: true
 
   client:
-    #    image: arf535/supplier.client:latest
+    image: arf535/supplier.client:latest
     platform: linux/amd64
     environment:
       - CHOKIDAR_USEPOLLING=true
@@ -39,47 +60,31 @@ services:
     volumes:
       - web-root:/usr/share/nginx/html
       - web-config:/etc/nginx/conf.d
-    stdin_open: true
-    tty: true
-
-  webserver:
-    #image: nginx:mainline-alpine
-    platform: linux
-    container_name: webserver
-    restart: unless-stopped
-    volumes:
-      - web-root:/usr/share/nginx/html
-      - web-config:/etc/nginx/conf.d
       - photo:/var/www/app/assets
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    depends_on:
-      - api
-      - client
-    networks:
-      - network
+    stdin_open: true
+    tty: true
     ports:
       - "80:80"
       - "443:443"
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/usr/share/nginx/html
-    depends_on:
-      - webserver
-      - api
-      - client
-    networks:
-      - network
+#  certbot:
+#    image: certbot/certbot
+#    container_name: certbot
+#    volumes:
+#      - certbot-etc:/etc/letsencrypt
+#      - certbot-var:/var/lib/letsencrypt
+#      - web-root:/usr/share/nginx/html
+#    depends_on:
+#      - webserver
+#      - api
+#      - client
+#    networks:
+#      - network
 #    command: certonly --webroot --webroot-path=/usr/share/nginx/html/ --email arf@deskit.ru --agree-tos --no-eff-email --staging -d dev.deskit.ru  -d www.dev.deskit.ru
+#    command: certonly --webroot --webroot-path=/usr/share/nginx/html/ --email arf@deskit.ru --agree-tos --no-eff-email --force-renewal -d dev.deskit.ru  -d www.dev.deskit.ru
 
 volumes:
   certbot-etc:
@@ -94,6 +99,8 @@ volumes:
       o: bind
   server_node_modules:
   photo:
+  mongodb:
+  mongoconfig:
 
 networks:
   network:
