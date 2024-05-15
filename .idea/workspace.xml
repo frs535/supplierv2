@@ -4,19 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b01feac-141e-49c1-a79b-c790672e0c9e" name="Changes" comment="Design">
+    <list default="true" id="5b01feac-141e-49c1-a79b-c790672e0c9e" name="Changes" comment="Оптимизировано">
+      <change afterPath="$PROJECT_DIR$/Client/nginx.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/nginx.prod.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/Dockerfile.dev" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Dockerfile.dev" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/Dockerfile.prod" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Dockerfile.prod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Client/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/components/CartMenu.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/CartMenu.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/components/Copyright.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/Copyright.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/components/ProductGrid.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/components/ProductGrid.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/scenes/auth/SignIn.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/auth/SignIn.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/scenes/checkout/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/checkout/Checkout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/scenes/dashboard/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/dashboard/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/scenes/orders/Orders.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/orders/Orders.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/scenes/products/ProductDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/products/ProductDetails.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/scenes/products/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/scenes/products/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/controllers/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/controllers/auth.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/controllers/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/controllers/client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/controllers/images.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/controllers/images.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/controllers/management.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/controllers/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/controllers/users.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/middleware/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/middleware/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/routes/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server/routes/auth.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +41,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;frs535&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/frs535/supplierv2.git&quot;,
+    &quot;accountId&quot;: &quot;2ab9aaf5-880d-406b-9666-299644467728&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="docker://Docker:9c0faca2f0c1496b1f0ffe9aa72ffa4777d245031a76d691bba1062e7730e904:/etc/nginx/conf.d/default.conf" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -51,22 +74,30 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.start JavaScript.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;credentialsType com.jetbrains.nodejs.remote.NodeJSCreateRemoteSdkForm&quot;: &quot;Docker Compose&quot;,
     &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/renatakhmyarov/WebstormProjects/supplierv2/nginx&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/renatakhmyarov/WebstormProjects/supplierv2/Client&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;/usr/local/lib/node_modules/npm&quot;,
+    &quot;npm.dev.executor&quot;: &quot;Debug&quot;,
+    &quot;npm.start.executor&quot;: &quot;Debug&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;yaml&quot;
+    ]
   }
 }</component>
   <component name="ReactDesignerToolWindowState">
@@ -75,21 +106,24 @@
         <entry key="com.haulmont.rcb.reactComponents" value="false" />
         <entry key="com.haulmont.rcb.reactInspector" value="false" />
         <entry key="com.haulmont.rcb.storybook" value="false" />
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+        <entry key="com.intellij.reactbuddy.storybook" value="false" />
       </map>
     </option>
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Client" />
       <recent name="$PROJECT_DIR$/nginx" />
       <recent name="$PROJECT_DIR$/supplier_config" />
-      <recent name="$PROJECT_DIR$/Client" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/nginx" />
       <recent name="$PROJECT_DIR$/Client" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.prod">
+  <component name="RunManager" selected="JavaScript Debug.start JavaScript">
     <configuration type="NodeJSConfigurationType" path-to-node="docker-compose://[/Users/renatakhmyarov/WebstormProjects/supplierv2/docker-compose-dev.yml]:webserver/node" path-to-js-file="/usr/local/lib/node_modules/пр|" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -195,10 +229,10 @@
     <list>
       <item itemvalue="Docker.Dev" />
       <item itemvalue="Docker.prod" />
-      <item itemvalue="Docker.docker-compose.yml.api: Compose Deployment" />
-      <item itemvalue="Docker.docker-compose-dev.yml.client: Compose Deployment" />
       <item itemvalue="Docker.Client/Dockerfile.dev" />
       <item itemvalue="Docker.docker-compose-dev.yml: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose-dev.yml.client: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.api: Compose Deployment" />
       <item itemvalue="JavaScript Debug.start JavaScript" />
       <item itemvalue="npm.dev" />
       <item itemvalue="npm.start" />
@@ -211,6 +245,13 @@
         <item itemvalue="Docker.docker-compose-dev.yml.client: Compose Deployment" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-2e7d6887c066-JavaScript-WS-241.15989.47" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -233,7 +274,30 @@
       <workItem from="1697698355300" duration="10368000" />
       <workItem from="1697714415666" duration="11138000" />
       <workItem from="1697805215300" duration="27971000" />
-      <workItem from="1698057772529" duration="5873000" />
+      <workItem from="1698057772529" duration="7035000" />
+      <workItem from="1698163022580" duration="597000" />
+      <workItem from="1698164024326" duration="3395000" />
+      <workItem from="1698419899505" duration="6849000" />
+      <workItem from="1698843895131" duration="216000" />
+      <workItem from="1698845138874" duration="4032000" />
+      <workItem from="1698850030739" duration="4919000" />
+      <workItem from="1703238704436" duration="31000" />
+      <workItem from="1703238750110" duration="612000" />
+      <workItem from="1703242429725" duration="40000" />
+      <workItem from="1703242476266" duration="11000" />
+      <workItem from="1708005335025" duration="2843000" />
+      <workItem from="1709040256881" duration="47056000" />
+      <workItem from="1709719071876" duration="16089000" />
+      <workItem from="1710325313449" duration="64000" />
+      <workItem from="1710325406258" duration="11000" />
+      <workItem from="1710334992378" duration="30000" />
+      <workItem from="1713546247395" duration="25000" />
+      <workItem from="1713954380835" duration="10000" />
+      <workItem from="1714144466502" duration="1632000" />
+      <workItem from="1714147834288" duration="1171000" />
+      <workItem from="1715172142876" duration="730000" />
+      <workItem from="1715598879312" duration="600000" />
+      <workItem from="1715763373748" duration="133000" />
     </task>
     <task id="LOCAL-00001" summary="Docker deploy">
       <option name="closed" value="true" />
@@ -275,16 +339,53 @@
       <option name="project" value="LOCAL" />
       <updated>1697877517478</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="RC 1">
+      <option name="closed" value="true" />
+      <created>1698067436855</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1698067436855</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Оптимизировано">
+      <option name="closed" value="true" />
+      <created>1709808790832</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1709808790832</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Оптимизировано">
+      <option name="closed" value="true" />
+      <created>1709808909020</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1709808909020</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Docker deploy" />
     <MESSAGE value="Design" />
-    <option name="LAST_COMMIT_MESSAGE" value="Design" />
+    <MESSAGE value="RC 1" />
+    <MESSAGE value="Оптимизировано" />
+    <option name="LAST_COMMIT_MESSAGE" value="Оптимизировано" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -293,6 +394,26 @@
           <url>file://$PROJECT_DIR$/Client/src/scenes/orders/Order.jsx</url>
           <line>196</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Server/index.js</url>
+          <line>97</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Client/src/scenes/products/ProductDetails.jsx</url>
+          <line>74</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Client/src/components/CartMenu.jsx</url>
+          <line>142</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Client/src/components/CartMenu.jsx</url>
+          <line>141</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

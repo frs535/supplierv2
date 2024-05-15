@@ -64,7 +64,7 @@ const Step1 = ()=>{
     const cartPresenter = cart.map(item => ({
         id: `${item.wh}${item.catalog.id}`,
         catalog: item.catalog.name,
-        warehouse: warehouses.find(w => w.id === item.wh)?.name,
+        warehouse: warehouses?.find(w => w.id === item.wh)?.name,
         toOrder: `${item.order} ${item.catalog.storeUnit.name}`,
         price: `₽ ${new Intl.NumberFormat('ru-RU', ).format(item.price.value)}`,
         amount: `₽ ${new Intl.NumberFormat('ru-RU', ).format(item.order * item.price.value)}`
@@ -350,7 +350,7 @@ export const Checkout = () => {
                             amount: item.order * item.price.value,
                             price: item.price.value,
                             priceTypeId: item.price.priceTypeId,
-                            priceTypeName: typeofPrice.find(w => w.id === item.price.priceTypeId)?.name,
+                            priceTypeName: typeofPrice?.find(w => w.id === item.price.priceTypeId)?.name,
                             priceByUnit: item.price.value,
                             unitQuantity: item.order,
                             TAXRate: item.catalog.tax.id,

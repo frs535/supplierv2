@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import Users from "../routes/users.js";
+import ApiKeys from "../models/ApiKeys.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -79,7 +79,9 @@ export const login = async (req, res) => {
         if (user.blocked) return res.status(400).json({ msg: "User is blocked."});
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
+        if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
+
+        const today = new Date();
 
         const token = jwt.sign({
             id: user._id,
@@ -88,7 +90,9 @@ export const login = async (req, res) => {
             login: user.login,
             city: user.city,
             occupation: user.occupation,
-            partnerId: user.partnerId
+            partnerId: user.partnerId,
+            role: 'user',
+            received: today.toUTCString()
         }, process.env.JWT_SECRET);
         // delete user.password;
         user.password = "";
@@ -109,3 +113,34 @@ export const getUsers = async  (req, res)=>{
         res.status(500).json({ error: err.message });
     }
 };
+
+export const changeAPIKey = async (req, res)=>{
+    try {
+        let old_token = req.header("Authorization");
+        if (!old_token) {
+            return res.status(403).send("Access Denied");
+        }
+
+        if (old_token.startsWith("Bearer ")) {
+            old_token = old_token.slice(7, old_token.length).trimEnd();//.trimLeft();
+        }
+
+        var resutl = await ApiKeys.updateOne({Key: old_token}, {token: old_token, blocked: true});
+
+        const token = jwt.sign({ id: 0, login: "Admin", role: "admin" }, process.env.JWT_SECRET);
+
+        const newApiKey = new ApiKeys(
+            {
+                Key: token,
+                blocked : false
+            }
+        );
+        await newApiKey.save();
+
+        res.status(200).json({ token });
+    }
+    catch (err)
+    {
+        res.status(500).json({ error: err.message });
+    }
+}

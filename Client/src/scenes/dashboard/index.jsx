@@ -27,8 +27,8 @@ const Dashboard = () => {
         </div>);
     }
 
-    dispatch(setWarehouses(data.settings.warehauses))
-    dispatch(setTypeofPrice(data.settings.priceOfTypes))
+    dispatch(setWarehouses(data.settings?.warehauses))
+    dispatch(setTypeofPrice(data.settings?.priceOfTypes))
     dispatch(setPartner(data.partner))
 
     return (

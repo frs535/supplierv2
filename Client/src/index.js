@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
     [clientApi.reducerPath]: clientApi.reducer,
 });
 
-const persistConfig = {key: "root", storage, version: 1}; //global: globalReducer, [clientApi.reducerPath]: clientApi.reducer
+const persistConfig = {key: "root", storage, version: 1};
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
     reducer: persistedReducer,

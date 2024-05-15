@@ -35,6 +35,10 @@ export const Orders = () => {
         </div>);
     }
 
+    if (data.orders.length === 0){
+        return (<div>У вас нет пока заказов</div>)
+    }
+
     const getStatus = status=>{
         let localStatus = ""
         switch (status) {
@@ -133,7 +137,7 @@ export const Orders = () => {
             headerAlign: "left",
             align: "left",
             flex: 1,
-            renderCell: (p)=>renderCell(p.row, warehouses.find(w=>w.id === p.row.warehouseId)?.name)
+            renderCell: (p)=>renderCell(p.row, warehouses?.find(w=>w.id === p.row.warehouseId)?.name)
         },
         {
             field: "amount",

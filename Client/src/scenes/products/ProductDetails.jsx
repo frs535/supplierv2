@@ -96,7 +96,7 @@ const ProductDetails = () => {
 
 	const warehouseStock = data?.stock.map(item => ({
 		id: item.warehouseId,
-		warehouse: warehouses.find(w => w.id === item.warehouseId)?.name,
+		warehouse: warehouses?.find(w => w.id === item.warehouseId)?.name,
 		stock: `${item.quantity} ${data?.product.storeUnit.name}`,
 		toOrder: cart.find(card=> card.id === item.catalogId && card.wh === item.warehouseId)?.order,
 		price: data.defPrice,

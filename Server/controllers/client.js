@@ -33,7 +33,7 @@ export const getProducts = async (req, res) => {
                 quantity: quantity,
                 unit: defPrice.unit.name,
                 price: defPrice.value,
-                prices,
+                prices: !prices? []: prices,
                 stock,
                 order: 0,
                 images
@@ -58,15 +58,15 @@ export const getProduct = async (req, res) => {
         if (!product) return res.status(404).json({ message: "Product not found" });
 
         const prices = await Price.findOne({partnerId, catalogId: product.id})
-            .then(doc=> doc.prices);
+            .then(doc=> doc?.prices);
 
-        const defPrice = prices.length > 0 ? prices[0] : {value: 0, unit: { id: "", name: ""}};
+        const defPrice = prices && prices.length > 0 ? prices[0] : {value: 0, unit: { id: "", name: ""}};
 
         const stock = await Stock.find({catalogId: product.id,});
 
         const images = await Image.find({id, destination: "product"}).sort({updatedAt: -1});
 
-        res.status(200).json({product,  stock, prices, defPrice, images});
+        res.status(200).json({product,  stock, prices: !prices? []: prices, defPrice, images});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -95,6 +95,7 @@ export const getCatalogs = async  (req, res)=>{
         res.status(404).json({ message: error.message });
     }
 }
+
 export const patchCatalog = async (req, res)=>{
 
     await Product.deleteMany();
@@ -130,15 +131,6 @@ export const patchCatalog = async (req, res)=>{
     }
 }
 
-export const getCustomers = async (req, res) => {
-    try {
-        const customers = await User.find({ role: "user" }).select("-password");
-        res.status(200).json(customers);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
-};
-
 export const getPrice = async (req, res) =>{
     try {
         const { id, companyId } = req.params;
@@ -155,6 +147,7 @@ export const getPrice = async (req, res) =>{
         res.status(404).json({ message: error.message });
     }
 }
+
 export const postPrice = async (req, res)=>{
     try {
         const { partnerId, companyId,  catalogId} = req.body;
@@ -180,7 +173,7 @@ export const postPrice = async (req, res)=>{
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
-};
+}
 
 export const getStock = async (req, res)=>{
     try {

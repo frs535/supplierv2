@@ -91,7 +91,7 @@ mongoose
 
             console.log(`Server port: ${PORT}`);
 
-            const apiKeys = await ApiKeys.findOne({});
+            const apiKeys = await ApiKeys.findOne({blocked: false});
 
             if (apiKeys) return;
 

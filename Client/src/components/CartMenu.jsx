@@ -85,9 +85,13 @@ const CartMenu = () => {
 											</IconButton>
 										</FlexBox>
 										<FlexBox mb="9px">
-											<Typography fontWeight="bold">
-												{`Склад ${warehouses.find(w => w.id === item.wh)?.name}`}
-											</Typography>
+											{
+												warehouses?
+													<Typography fontWeight="bold">
+														{`Склад ${warehouses?.find(w => w.id === item.wh)?.name}`}
+													</Typography>: ""
+
+											}
 										</FlexBox>
 										<TextField
 											label="Количество"
